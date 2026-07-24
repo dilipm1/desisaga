@@ -7,7 +7,7 @@
     "price": 2499,
     "currency": "INR",
     "category": "Diwali",
-    "images": ["/products/diwali-hamper.jpg"],
+    "images": ["/products/diwali-hamper.svg"],
     "inStock": true,
     "featured": true,
     "tags": ["diwali", "gift", "festive", "sweets", "diya"]
@@ -20,7 +20,7 @@
     "price": 1899,
     "currency": "INR",
     "category": "Puja",
-    "images": ["/products/puja-kit.jpg"],
+    "images": ["/products/puja-kit.svg"],
     "inStock": true,
     "featured": true,
     "tags": ["puja", "worship", "brass", "thali", "ritual"]
@@ -33,7 +33,7 @@
     "price": 3499,
     "currency": "INR",
     "category": "Wedding",
-    "images": ["/products/wedding-box.jpg"],
+    "images": ["/products/wedding-box.svg"],
     "inStock": true,
     "featured": true,
     "tags": ["wedding", "mangalsutra", "sindoor", "gift", "shagun"]
@@ -46,7 +46,7 @@
     "price": 2799,
     "currency": "INR",
     "category": "Housewarming",
-    "images": ["/products/griha-pravesh.jpg"],
+    "images": ["/products/griha-pravesh.svg"],
     "inStock": true,
     "featured": false,
     "tags": ["housewarming", "griha pravesh", "ganesh", "kalash", "new home"]
@@ -59,7 +59,7 @@
     "price": 1999,
     "currency": "INR",
     "category": "Navratri",
-    "images": ["/products/navratri-pack.jpg"],
+    "images": ["/products/navratri-pack.svg"],
     "inStock": true,
     "featured": false,
     "tags": ["navratri", "durga puja", "dandiya", "garba", "festival"]
@@ -72,7 +72,7 @@
     "price": 1499,
     "currency": "INR",
     "category": "Raksha Bandhan",
-    "images": ["/products/rakhi-set.jpg"],
+    "images": ["/products/rakhi-set.svg"],
     "inStock": true,
     "featured": true,
     "tags": ["raksha bandhan", "rakhi", "siblings", "gift", "chocolate"]
@@ -85,7 +85,7 @@
     "price": 1299,
     "currency": "INR",
     "category": "Holi",
-    "images": ["/products/holi-box.jpg"],
+    "images": ["/products/holi-box.svg"],
     "inStock": true,
     "featured": false,
     "tags": ["holi", "colors", "organic", "gujiya", "festival"]
@@ -98,7 +98,7 @@
     "price": 2199,
     "currency": "INR",
     "category": "Ganesh Chaturthi",
-    "images": ["/products/ganesh-kit.jpg"],
+    "images": ["/products/ganesh-kit.svg"],
     "inStock": true,
     "featured": false,
     "tags": ["ganesh chaturthi", "ganesh", "eco-friendly", "modak", "puja"]

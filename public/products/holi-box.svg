@@ -1,0 +1,84 @@
+<svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="holiBg" x1="0" y1="0" x2="400" y2="400" gradientUnits="userSpaceOnUse">
+      <stop stopColor="#FFF7ED"/><stop stopOffset="0.3" stopColor="#FDF2F8"/><stop offset="0.7" stopColor="#F5F3FF"/><stop offset="1" stopColor="#ECFEFF"/>
+    </linearGradient>
+    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="400" height="400" fill="url(#holiBg)"/>
+  <!-- Color splash background -->
+  <g opacity="0.15">
+    <circle cx="100" cy="100" r="80" fill="#DC2626"/><circle cx="300" cy="80" r="70" fill="#3B82F6"/>
+    <circle cx="80" cy="300" r="90" fill="#22C55E"/><circle cx="320" cy="320" r="75" fill="#A855F7"/>
+    <circle cx="200" cy="200" r="100" fill="#F59E0B"/>
+  </g>
+  <!-- Color splashes -->
+  <g opacity="0.25">
+    <path d="M60 100 Q80 80 120 100 Q140 120 100 140 Q60 120 60 100Z" fill="#DC2626"/>
+    <path d="M280 80 Q310 60 340 80 Q350 110 320 120 Q280 110 280 80Z" fill="#3B82F6"/>
+    <path d="M50 280 Q70 260 100 280 Q110 310 80 320 Q50 310 50 280Z" fill="#22C55E"/>
+    <path d="M290 300 Q320 280 350 300 Q360 330 330 340 Q290 330 290 300Z" fill="#A855F7"/>
+  </g>
+  <!-- Gift Box -->
+  <g transform="translate(200, 280)">
+    <ellipse cx="0" cy="25" rx="95" ry="12" fill="#000" opacity="0.08"/>
+    <path d="M-95 0 L-95 -90 L95 -90 L95 0 Z" fill="#FEF3C7"/>
+    <path d="M-95 -90 L-95 0 L-75 0 L-75 -90 Z" fill="#FDE68A"/>
+    <path d="M-105 -90 L-10 -102 L10 -102 L105 -90 L95 0 L-95 0 Z" fill="#FEF3C7"/>
+    <path d="M-105 -90 L-10 -102 L-95 0 L-105 0 Z" fill="#FDE68A"/>
+    <!-- Colorful stripes on box -->
+    <rect x="-80" y="-70" width="160" height="8" rx="2" fill="#DC2626" opacity="0.6"/>
+    <rect x="-80" y="-55" width="160" height="8" rx="2" fill="#F59E0B" opacity="0.6"/>
+    <rect x="-80" y="-40" width="160" height="8" rx="2" fill="#22C55E" opacity="0.6"/>
+    <rect x="-80" y="-25" width="160" height="8" rx="2" fill="#3B82F6" opacity="0.6"/>
+    <rect x="-80" y="-10" width="160" height="8" rx="2" fill="#A855F7" opacity="0.6"/>
+    <!-- Ribbon -->
+    <rect x="-10" y="-90" width="20" height="100" fill="#EC4899" opacity="0.9"/>
+    <ellipse cx="0" cy="-90" rx="18" ry="9" fill="#EC4899" opacity="0.9"/>
+    <g fill="#EC4899" opacity="0.9">
+      <ellipse cx="-22" cy="-95" rx="13" ry="9" transform="rotate(-35 -22 -95)"/>
+      <ellipse cx="22" cy="-95" rx="13" ry="9" transform="rotate(35 22 -95)"/>
+      <circle cx="0" cy="-95" r="7"/>
+    </g>
+  </g>
+  <!-- Pichkari (water gun) -->
+  <g transform="translate(100, 170)">
+    <rect x="-5" y="-50" width="10" height="60" rx="4" fill="#EC4899"/>
+    <rect x="-8" y="-55" width="16" height="10" rx="3" fill="#BE185D"/>
+    <rect x="-3" y="10" width="6" height="20" rx="2" fill="#BE185D"/>
+    <path d="M-15 15 L-40 20" stroke="#EC4899" stroke-width="5" stroke-linecap="round"/>
+    <ellipse cx="-45" cy="20" rx="8" ry="6" fill="#EC4899"/>
+    <ellipse cx="-45" cy="20" rx="5" ry="3" fill="#BE185D"/>
+  </g>
+  <!-- Gujiya sweets -->
+  <g transform="translate(300, 160)">
+    <g fill="#D97706" opacity="0.85">
+      <ellipse cx="0" cy="0" rx="18" ry="12" transform="rotate(-15)"/>
+      <ellipse cx="30" cy="5" rx="16" ry="10" transform="rotate(10 30 5)"/>
+      <ellipse cx="-25" cy="8" rx="15" ry="9" transform="rotate(-5 -25 8)"/>
+    </g>
+    <g fill="#FBBF24" opacity="0.5">
+      <ellipse cx="0" cy="0" rx="8" ry="5" transform="rotate(-15)"/>
+      <ellipse cx="30" cy="5" rx="7" ry="4" transform="rotate(10 30 5)"/>
+      <ellipse cx="-25" cy="8" rx="7" ry="4" transform="rotate(-5 -25 8)"/>
+    </g>
+  </g>
+  <!-- Color powder piles -->
+  <g transform="translate(200, 80)">
+    <ellipse cx="-30" cy="0" rx="18" ry="6" fill="#DC2626" opacity="0.6"/>
+    <ellipse cx="0" cy="0" rx="18" ry="6" fill="#3B82F6" opacity="0.6"/>
+    <ellipse cx="30" cy="0" rx="18" ry="6" fill="#22C55E" opacity="0.6"/>
+    <ellipse cx="-15" cy="-6" rx="14" ry="5" fill="#F59E0B" opacity="0.6"/>
+    <ellipse cx="15" cy="-6" rx="14" ry="5" fill="#A855F7" opacity="0.6"/>
+  </g>
+  <!-- Sparkles -->
+  <g fill="#D4A017" opacity="0.5">
+    <g transform="translate(50, 50)"><path d="M0 -6 L1 -2 L6 -2 L2 1 L3 6 L0 3 L-3 6 L-2 1 L-6 -2 L-1 -2 Z" className="animate-shimmer"/></g>
+    <g transform="translate(350, 50)" style="animation-delay:0.3s"><path d="M0 -5 L0.5 -1.5 L3 -1.5 L1 0 L1.5 2.5 L0 1.5 L-1.5 2.5 L-1 0 L-3 -1.5 L-0.5 -1.5 Z" className="animate-shimmer"/></g>
+    <g transform="translate(50, 350)" style="animation-delay:0.6s"><path d="M0 -4 L0.5 -1 L2.5 -1 L0.8 0 L1 2 L0 1.5 L-1 2 L-0.8 0 L-2.5 -1 L-0.5 -1 Z" className="animate-shimmer"/></g>
+    <g transform="translate(350, 350)" style="animation-delay:0.9s"><path d="M0 -7 L1 -2.5 L5 -2.5 L2 0.5 L3 3.5 L0 2 L-3 3.5 L-2 0.5 L-5 -2.5 L-1 -2.5 Z" className="animate-shimmer"/></g>
+  </g>
+</svg>

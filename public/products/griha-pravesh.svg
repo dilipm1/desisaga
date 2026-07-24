@@ -1,0 +1,201 @@
+<svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="houseBg" x1="0" y1="0" x2="400" y2="400" gradientUnits="userSpaceOnUse">
+      <stop stopColor="#FDF8EF"/>
+      <stop offset="0.3" stopColor="#FEF3C7"/>
+      <stop offset="0.7" stopColor="#ECFDF5"/>
+      <stop offset="1" stopColor="#F0FDF4"/>
+    </linearGradient>
+    <linearGradient id="brassGold" x1="0" y1="0" x2="0" y2="1">
+      <stop stopColor="#D4A017"/>
+      <stop offset="1" stopColor="#B8860B"/>
+    </linearGradient>
+    <linearGradient id="silver" x1="0" y1="0" x2="0" y2="1">
+      <stop stopColor="#E5E7EB"/>
+      <stop offset="0.5" stopColor="#9CA3AF"/>
+      <stop offset="1" stopColor="#6B7280"/>
+    </linearGradient>
+    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  
+  <rect width="400" height="400" fill="url(#houseBg)"/>
+  
+  <!-- Subtle grid pattern -->
+  <g stroke="#D4A017" stroke-width="0.3" opacity="0.08">
+    <line x1="0" y1="0" x2="400" y2="400"/>
+    <line x1="400" y1="0" x2="0" y2="400"/>
+  </g>
+  
+  <!-- Main Ganesh Idol -->
+  <g transform="translate(200, 320)">
+    <!-- Shadow -->
+    <ellipse cx="0" cy="30" rx="50" ry="8" fill="#000" opacity="0.1"/>
+    
+    <!-- Pedestal -->
+    <ellipse cx="0" cy="15" rx="55" ry="8" fill="url(#brassGold)"/>
+    <path d="M-55 15 L-55 0 L55 0 L55 15 Z" fill="url(#brassGold)"/>
+    <path d="M-50 10 L-50 -5 L50 -5 L50 10 Z" fill="#FEF3C7"/>
+    
+    <!-- Ganesh body -->
+    <path d="M-25 40 Q-25 0 0 -10 Q25 0 25 40 L20 40 Q20 5 0 -5 Q-20 5 -20 40 Z" fill="#FEF3C7"/>
+    <path d="M-20 40 Q-20 5 0 -5 Q20 5 20 40" fill="none" stroke="url(#brassGold)" stroke-width="2"/>
+    
+    <!-- Head/Elephant face -->
+    <ellipse cx="0" cy="-15" rx="22" ry="18" fill="#FEF3C7"/>
+    <ellipse cx="0" cy="-15" rx="22" ry="18" fill="none" stroke="url(#brassGold)" stroke-width="1.5"/>
+    
+    <!-- Trunk -->
+    <path d="M0 3 Q0 10 -8 18 Q-10 22 -6 26 Q0 28 6 26 Q10 22 8 18 Q0 10 0 3" fill="#FEF3C7" stroke="url(#brassGold)" stroke-width="1.5"/>
+    <ellipse cx="0" cy="26" rx="4" ry="2" fill="#DC2626" opacity="0.8"/>
+    
+    <!-- Eyes -->
+    <ellipse cx="-8" cy="-20" rx="4" ry="3" fill="#1C1917"/>
+    <ellipse cx="8" cy="-20" rx="4" ry="3" fill="#1C1917"/>
+    <circle cx="-7" cy="-21" r="1.5" fill="#FEF3C7"/>
+    <circle cx="9" cy="-21" r="1.5" fill="#FEF3C7"/>
+    
+    <!-- Crown -->
+    <path d="M-20 -35 Q-25 -45 -10 -50 Q0 -55 10 -50 Q25 -45 20 -35" fill="url(#brassGold)"/>
+    <circle cx="0" cy="-50" r="4" fill="#DC2626" opacity="0.8"/>
+    
+    <!-- Ears -->
+    <ellipse cx="-25" cy="-15" rx="8" ry="12" fill="#FEF3C7" stroke="url(#brassGold)" stroke-width="1"/>
+    <ellipse cx="25" cy="-15" rx="8" ry="12" fill="#FEF3C7" stroke="url(#brassGold)" stroke-width="1"/>
+    
+    <!-- Tilak -->
+    <path d="M0 -28 Q-3 -22 -3 -18 Q3 -18 3 -22 Q3 -28 0 -28Z" fill="#DC2626"/>
+    
+    <!-- Hands -->
+    <path d="M-25 10 Q-35 0 -45 5" fill="none" stroke="#FEF3C7" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M25 10 Q35 0 45 5" fill="none" stroke="#FEF3C7" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M-25 5 Q-30 -5 -35 -5" fill="none" stroke="#FEF3C7" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M25 5 Q30 -5 35 -5" fill="none" stroke="#FEF3C7" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    
+    <!-- Modak in trunk -->
+    <ellipse cx="0" cy="28" rx="6" ry="8" fill="#D97706" opacity="0.9"/>
+    <ellipse cx="0" cy="26" rx="4" ry="5" fill="#FBBF24" opacity="0.6"/>
+  </g>
+  
+  <!-- Kalash -->
+  <g transform="translate(350, 220)">
+    <ellipse cx="0" cy="18" rx="22" ry="5" fill="#000" opacity="0.1"/>
+    <path d="M-22 10 Q-22 -10 0 -25 Q22 -10 22 10 L20 10 Q20 -5 0 -18 Q-20 -5 -20 10 Z" fill="url(#silver)"/>
+    <path d="M-18 10 Q-18 -5 0 -15 Q18 -5 18 10" fill="none" stroke="#FEF3C7" stroke-width="1.5" opacity="0.5"/>
+    <ellipse cx="0" cy="-25" rx="12" ry="3" fill="url(#silver)"/>
+    <ellipse cx="0" cy="-25" rx="10" ry="2" fill="none" stroke="#E5E7EB" stroke-width="1.5"/>
+    <path d="M0 -25 L0 -38" stroke="url(#silver)" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="0" cy="-38" r="5" fill="url(#silver)"/>
+    <circle cx="0" cy="-38" r="3" fill="#FEF3C7" opacity="0.7"/>
+    
+    <!-- Coconut on top -->
+    <ellipse cx="0" cy="-45" rx="12" ry="10" fill="#4A3728"/>
+    <path d="M-12 -45 Q-12 -55 0 -58 Q12 -55 12 -45 Q12 -40 0 -38 Q-12 -40 -12 -45" fill="#5D4037" opacity="0.5"/>
+    <ellipse cx="0" cy="-55" rx="8" ry="3" fill="#DC2626" opacity="0.7"/>
+    
+    <!-- Mango leaves -->
+    <g fill="#166534" opacity="0.8">
+      <path d="M-10 -30 Q-20 -25 -15 -15 Q-5 -10 -10 -30Z"/>
+      <path d="M10 -30 Q20 -25 15 -15 Q5 -10 10 -30Z"/>
+      <path d="M0 -25 Q-8 -20 0 -15 Q8 -20 0 -25Z" transform="rotate(-10)"/>
+    </g>
+    
+    <!-- Water in kalash -->
+    <ellipse cx="0" cy="5" rx="15" ry="8" fill="#3B82F6" opacity="0.3"/>
+  </g>
+  
+  <!-- Coconut separate -->
+  <g transform="translate(80, 200)">
+    <ellipse cx="0" cy="15" rx="18" ry="5" fill="#000" opacity="0.1"/>
+    <path d="M-18 8 Q-18 -10 0 -20 Q18 -10 18 8 Q18 15 0 20 Q-18 15 -18 8" fill="#4A3728"/>
+    <path d="M-15 5 Q-15 -5 0 -15 Q15 -5 15 5" fill="#5D4037" opacity="0.5"/>
+    <ellipse cx="0" cy="-18" rx="8" ry="3" fill="#DC2626" opacity="0.7"/>
+    <path d="M0 -18 L0 -25" stroke="#DC2626" stroke-width="2" stroke-linecap="round"/>
+  </g>
+  
+  <!-- Rice, Kumkum, Haldi containers -->
+  <g transform="translate(60, 120)">
+    <!-- Kumkum -->
+    <ellipse cx="0" cy="12" rx="18" ry="4" fill="#000" opacity="0.1"/>
+    <ellipse cx="0" cy="0" rx="18" ry="4" fill="url(#brassGold)"/>
+    <ellipse cx="0" cy="0" rx="14" ry="3" fill="#DC2626" opacity="0.8"/>
+    <ellipse cx="0" cy="-2" rx="11" ry="2" fill="#EF4444" opacity="0.6"/>
+    <ellipse cx="0" cy="-25" rx="18" ry="4" fill="url(#brassGold)"/>
+    <circle cx="0" cy="-28" r="4" fill="url(#brassGold)"/>
+    
+    <!-- Label -->
+    <text x="0" y="30" text-anchor="middle" font-size="11" fill="#D4A017" font-weight="600">Kumkum</text>
+  </g>
+  
+  <g transform="translate(160, 120)">
+    <!-- Haldi -->
+    <ellipse cx="0" cy="12" rx="18" ry="4" fill="#000" opacity="0.1"/>
+    <ellipse cx="0" cy="0" rx="18" ry="4" fill="url(#brassGold)"/>
+    <ellipse cx="0" cy="0" rx="14" ry="3" fill="#F59E0B"/>
+    <ellipse cx="0" cy="-2" rx="11" ry="2" fill="#FBBF24" opacity="0.7"/>
+    <ellipse cx="0" cy="-25" rx="18" ry="4" fill="url(#brassGold)"/>
+    <circle cx="0" cy="-28" r="4" fill="url(#brassGold)"/>
+    <text x="0" y="30" text-anchor="middle" font-size="11" fill="#D4A017" font-weight="600">Haldi</text>
+  </g>
+  
+  <g transform="translate(260, 120)">
+    <!-- Rice -->
+    <ellipse cx="0" cy="12" rx="18" ry="4" fill="#000" opacity="0.1"/>
+    <ellipse cx="0" cy="0" rx="18" ry="4" fill="url(#brassGold)"/>
+    <g fill="#FEF3C7" opacity="0.9">
+      <ellipse cx="-8" cy="-2" rx="2" ry="1"/>
+      <ellipse cx="-4" cy="1" rx="1.5" ry="0.8"/>
+      <ellipse cx="0" cy="-1" rx="2" ry="1"/>
+      <ellipse cx="5" cy="0" rx="1.5" ry="0.8"/>
+      <ellipse cx="8" cy="-2" rx="2" ry="1"/>
+      <ellipse cx="-6" cy="3" rx="1.5" ry="0.8"/>
+      <ellipse cx="3" cy="3" rx="2" ry="1"/>
+    </g>
+    <ellipse cx="0" cy="-25" rx="18" ry="4" fill="url(#brassGold)"/>
+    <circle cx="0" cy="-28" r="4" fill="url(#brassGold)"/>
+    <text x="0" y="30" text-anchor="middle" font-size="11" fill="#D4A017" font-weight="600">Rice</text>
+  </g>
+  
+  <!-- Toran -->
+  <g transform="translate(200, 60)">
+    <path d="M-150 0 Q-120 -15 -100 0 Q-80 -15 -60 0 Q-40 -15 -20 0 Q0 -15 20 0 Q40 -15 60 0 Q80 -15 100 0 Q120 -15 150 0" fill="none" stroke="#D4A017" stroke-width="2" opacity="0.4"/>
+    <g fill="#FF8C00" opacity="0.6">
+      <circle cx="-140" cy="-3" r="5"/><circle cx="-100" cy="-3" r="5"/><circle cx="-60" cy="-3" r="5"/>
+      <circle cx="-20" cy="-3" r="5"/><circle cx="20" cy="-3" r="5"/><circle cx="60" cy="-3" r="5"/>
+      <circle cx="100" cy="-3" r="5"/><circle cx="140" cy="-3" r="5"/>
+    </g>
+    <g fill="#FFD700" opacity="0.7">
+      <circle cx="-140" cy="-3" r="3"/><circle cx="-100" cy="-3" r="3"/><circle cx="-60" cy="-3" r="3"/>
+      <circle cx="-20" cy="-3" r="3"/><circle cx="20" cy="-3" r="3"/><circle cx="60" cy="-3" r="3"/>
+      <circle cx="100" cy="-3" r="3"/><circle cx="140" cy="-3" r="3"/>
+    </g>
+    <g fill="#166534" opacity="0.4">
+      <path d="M-145 5 Q-140 10 -135 5"/><path d="M-105 5 Q-100 10 -95 5"/>
+      <path d="M-65 5 Q-60 10 -55 5"/><path d="M-25 5 Q-20 10 -15 5"/>
+      <path d="M15 5 Q20 10 25 5"/><path d="M55 5 Q60 10 65 5"/>
+      <path d="M95 5 Q100 10 105 5"/><path d="M135 5 Q140 10 145 5"/>
+    </g>
+  </g>
+  
+  <!-- Diya -->
+  <g transform="translate(340, 300)">
+    <ellipse cx="0" cy="15" rx="18" ry="4" fill="#8B4513" opacity="0.3"/>
+    <path d="M-15 8 Q-15 15 0 15 Q15 15 15 8 L12 4 L-12 4 Z" fill="url(#brassGold)"/>
+    <ellipse cx="0" cy="4" rx="10" ry="2" fill="#CD853F"/>
+    <ellipse cx="0" cy="4" rx="8" ry="1.5" fill="#B8860B" opacity="0.6"/>
+    <line x1="0" y1="2" x2="0" y2="-6" stroke="#4A3728" stroke-width="1.5" stroke-linecap="round"/>
+    <ellipse cx="0" cy="-10" rx="6" ry="8" fill="#FF6B00" opacity="0.15" filter="url(#softGlow)"/>
+    <path d="M0 -16 Q-5 -10 -4 -6 Q4 -6 0 -16Z" fill="#FF8C00"/>
+    <path d="M0 -12 Q-3 -8 -2 -5 Q2 -5 0 -12Z" fill="#FFD700"/>
+    <ellipse cx="0" cy="-8" rx="1" ry="2" fill="#FFFACD"/>
+  </g>
+  
+  <!-- Sparkles -->
+  <g fill="#D4A017" opacity="0.5">
+    <g transform="translate(50, 50)"><path d="M0 -6 L1 -2 L6 -2 L2 1 L3 6 L0 3 L-3 6 L-2 1 L-6 -2 L-1 -2 Z" className="animate-shimmer"/></g>
+    <g transform="translate(350, 350)" style="animation-delay: 0.3s"><path d="M0 -5 L0.5 -1.5 L3 -1.5 L1 0 L1.5 2.5 L0 1.5 L-1.5 2.5 L-1 0 L-3 -1.5 L-0.5 -1.5 Z" className="animate-shimmer"/></g>
+    <g transform="translate(320, 60)" style="animation-delay: 0.6s"><path d="M0 -4 L0.5 -1 L2.5 -1 L0.8 0 L1 2 L0 1.5 L-1 2 L-0.8 0 L-2.5 -1 L-0.5 -1 Z" className="animate-shimmer"/></g>
+  </g>
+</svg>
