@@ -99,25 +99,32 @@ desisaga.com → Vercel → Next.js App
 - [x] Next.js project created
 - [x] Store pages built (6 pages)
 - [x] Sample products added (8 hampers)
-- [ ] Dev server working (port binding issue with Node.js 25)
+- [x] Night-of-the-celebration design pass (toran hero, festival calendar, dark theme)
+- [x] Dev server verified working on Node 25.9.0 (2026-08-07)
+- [x] `npm run build` verified working on Node 25.9.0
 - [ ] Deployed to Vercel
 - [ ] DNS configured
 - [ ] Stripe connected (real payments)
 
+## Design System (2026-08-07)
+- **Direction**: "Night of the celebration" — dark ritual canvas, firelight accents
+- **Type**: Rozha One (display) · Instrument Sans (body) · Space Mono (dates/countdown)
+- **Palette**: night `#1A0B0A`, ember `#2E1210`, parchment `#F7EEDC`, flame `#E9B44C`, marigold `#E8731F`, kumkum `#C2322E`, leaf `#8FAE6B`, line `#422A1C`
+- **Signature**: ToranGarland (marigold/mango-leaf doorway swag) at the hero top
+- **Hero**: live countdown to the next festival ("Send the festival home.")
+- **Structure**: `src/lib/festivals.ts` holds the festival calendar (dates, days-left, ritual items); YearCalendar renders it chronologically
+- Copy uses ritual vocabulary (shagun, ritual-ready, samagri) — not generic selling
+
 ## Known Issues
-- `npm run dev` starts but doesn't bind to port 3000
-- `npm run build` crashes with Bus error (Node.js 25 + Turbopack)
-- Likely Node.js 25 compatibility — Vercel uses Node 20, should work there
-- Try: `--turbo false` flag or use Node 20 LTS
+- None blocking. `npm run dev` and `npm run build` both verified working on Node 25.9.0 (2026-08-07); the earlier Node 25 + Turbopack Bus error on build did not recur
 
 ## Next Steps (when resuming)
-1. Fix dev server issue (or deploy directly to Vercel)
-2. Install Vercel CLI: `npm i -g vercel`
-3. Deploy: `vercel` from project root
-4. Connect desisaga.com domain
-5. Configure DNS on Namecheap (CNAME → cname.vercel-dns.com)
-6. Set up Stripe account and add real keys
-7. Replace placeholder images with real product photos
+1. Install Vercel CLI: `npm i -g vercel`
+2. Deploy: `vercel` from project root
+3. Connect desisaga.com domain
+4. Configure DNS on Namecheap (CNAME → cname.vercel-dns.com)
+5. Set up Stripe account and add real keys
+6. Replace placeholder images with real product photos
 
 ## User Preferences
 - Review at each major checkpoint before proceeding

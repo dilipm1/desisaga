@@ -44,6 +44,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<Cart>({ items: [], total: 0 });
 
   useEffect(() => {
+    // Hydrate from localStorage only after mount to keep SSR markup consistent.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCart(loadCart());
   }, []);
 

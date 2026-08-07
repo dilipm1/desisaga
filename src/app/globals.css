@@ -1,28 +1,111 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #FFFFFF;
-  --color-foreground: #111111;
-  --color-muted: #6B7280;
-  --color-border: #E5E7EB;
-  --color-accent: #D4A017;
-  --color-accent-light: #FEF3C7;
-  --color-maroon: #7F1D1D;
-  --color-maroon-deep: #450A0A;
-  --color-saffron: #EA580C;
-  --color-saffron-light: #FFF7ED;
-  --color-gold: #D4A017;
-  --color-gold-light: #FEF9C3;
-  --color-ivory: #F9FAFB;
-  --font-sans: var(--font-inter);
+  /* ── Night palette: the celebration at night ── */
+  --color-night: #1A0B0A;
+  --color-ember: #2E1210;
+  --color-ember-light: #3B1B15;
+  --color-parchment: #F7EEDC;
+  --color-parchment-dim: #C8B395;
+  --color-flame: #E9B44C;
+  --color-marigold: #E8731F;
+  --color-kumkum: #C2322E;
+  --color-leaf: #8FAE6B;
+  --color-line: #422A1C;
+
+  /* ── Semantic remaps (so existing tokens keep working) ── */
+  --color-background: #1A0B0A;
+  --color-foreground: #F7EEDC;
+  --color-muted: #C8B395;
+  --color-border: #422A1C;
+  --color-accent: #E9B44C;
+  --color-accent-light: #3B1B15;
+  --color-card: #2E1210;
+  --color-maroon: #2E1210;
+  --color-maroon-deep: #1A0B0A;
+  --color-saffron: #E8731F;
+  --color-saffron-light: #2E1210;
+  --color-gold: #E9B44C;
+  --color-gold-light: #F7EEDC;
+  --color-ivory: #2E1210;
+  --color-warm-cream: #1A0B0A;
+  --color-deep-maroon: #F7EEDC;
+  --color-warm-red: #C2322E;
+  --color-festive-green: #8FAE6B;
+
+  /* ── Type ── */
+  --font-sans: var(--font-instrument), system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-rozha), Georgia, serif;
+  --font-mono: var(--font-space-mono), ui-monospace, SFMono-Regular, monospace;
 }
 
 body {
-  background: var(--color-background);
-  color: var(--color-foreground);
+  background: var(--color-night);
+  color: var(--color-parchment);
   font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Warm glows against the night canvas */
+.bg-paisley {
+  background-image: radial-gradient(circle at 20% 50%, rgba(233, 180, 76, 0.04) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 20%, rgba(194, 50, 46, 0.04) 0%, transparent 50%),
+                    radial-gradient(circle at 50% 80%, rgba(232, 115, 31, 0.04) 0%, transparent 50%);
+}
+
+/* Mandala-inspired border decoration */
+.mandala-border {
+  position: relative;
+}
+.mandala-border::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-flame), var(--color-marigold), var(--color-flame), transparent);
+}
+
+/* Festive section divider */
+.festive-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-flame) 20%, var(--color-marigold) 50%, var(--color-flame) 80%, transparent);
+  opacity: 0.5;
+}
+
+/* Flame shimmer text */
+.gold-shimmer {
+  background: linear-gradient(110deg, var(--color-flame) 0%, #F4A236 40%, var(--color-flame) 50%, #F4A236 60%, var(--color-flame) 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 4s ease-in-out infinite;
+}
+
+/* Flame gradient text */
+.text-flame-gradient {
+  background: linear-gradient(115deg, #F4A236 0%, var(--color-marigold) 55%, var(--color-flame) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Warm card glow (on night) */
+.warm-shadow {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35), 0 2px 10px rgba(233, 180, 76, 0.06);
+}
+.warm-shadow-lg {
+  box-shadow: 0 14px 48px rgba(0, 0, 0, 0.5), 0 4px 18px rgba(233, 180, 76, 0.1);
+}
+
+/* Diya glow effect */
+.diya-glow {
+  filter: drop-shadow(0 0 8px rgba(244, 162, 54, 0.35)) drop-shadow(0 0 20px rgba(232, 115, 31, 0.2));
 }
 
 @keyframes fade-in {
@@ -30,17 +113,71 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-.animate-fade-in { animation: fade-in 0.5s ease-out forwards; }
-.stagger-1 { animation-delay: 0.1s; }
-.stagger-2 { animation-delay: 0.2s; }
-.stagger-3 { animation-delay: 0.3s; }
-.stagger-4 { animation-delay: 0.4s; }
-.stagger-5 { animation-delay: 0.5s; }
-.stagger-6 { animation-delay: 0.6s; }
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
 
-*:focus-visible { outline: 2px solid var(--color-foreground); outline-offset: 2px; }
-::selection { background: var(--color-accent); color: white; }
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-15px) rotate(5deg); }
+  50% { transform: translateY(-8px) rotate(-3deg); }
+  75% { transform: translateY(-20px) rotate(3deg); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+@keyframes gentle-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* Hero entrance: lines rise in sequence */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-rise { animation: rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+.animate-fade-in { animation: fade-in 0.5s ease-out forwards; }
+.animate-float { animation: float 10s ease-in-out infinite; }
+.animate-glow-pulse { animation: glow-pulse 2s ease-in-out infinite; }
+.animate-gentle-bob { animation: gentle-bob 3s ease-in-out infinite; }
+.stagger-1 { animation-delay: 0.12s; }
+.stagger-2 { animation-delay: 0.24s; }
+.stagger-3 { animation-delay: 0.36s; }
+.stagger-4 { animation-delay: 0.48s; }
+.stagger-5 { animation-delay: 0.6s; }
+.stagger-6 { animation-delay: 0.72s; }
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.reveal-visible {
+  opacity: 1;
+  transform: none;
+}
+
+*:focus-visible { outline: 2px solid var(--color-flame); outline-offset: 2px; }
+::selection { background: var(--color-flame); color: var(--color-night); }
+
+/* Rangoli light-pattern for dark surfaces */
+.rangoli-pattern {
+  background-image:
+    radial-gradient(circle at 10% 10%, rgba(233, 180, 76, 0.05) 0%, transparent 30%),
+    radial-gradient(circle at 90% 90%, rgba(194, 50, 46, 0.04) 0%, transparent 30%),
+    radial-gradient(circle at 50% 50%, rgba(232, 115, 31, 0.04) 0%, transparent 40%),
+    radial-gradient(circle at 30% 70%, rgba(233, 180, 76, 0.04) 0%, transparent 25%),
+    radial-gradient(circle at 70% 30%, rgba(232, 115, 31, 0.04) 0%, transparent 25%);
+}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  .reveal { opacity: 1; transform: none; transition: none; }
 }
