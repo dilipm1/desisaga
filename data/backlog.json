@@ -1,0 +1,325 @@
+{
+  "version": "1.0.0",
+  "source": "desisaga-product-backlog",
+  "last_updated": "2026-08-12",
+  "tool": "Basecamp 4",
+  "project_name": "DesiSaga",
+  "sync": {
+    "script": "scripts/basecamp-sync.mjs",
+    "command": "npm run sync:basecamp"
+  },
+  "epics": [
+    {
+      "id": "EPIC-1",
+      "title": "Festival Hampers Marketplace",
+      "graph": "browse → filter → detail → cart → checkout",
+      "description": "Core storefront experience: browsing, filtering, and viewing hampers.",
+      "hill_chart": {
+        "status": "gray",
+        "note": "Early shaping; L1 graph drawn in docs/knowledge-graph.md"
+      },
+      "stories": [
+        {
+          "id": "DS-101",
+          "title": "Multi-festival search",
+          "story": "As a user, I can filter hampers by festival (Diwali, Wedding, etc.)",
+          "priority": "Must",
+          "acceptance_criteria": [
+            "Filter persists across page filters",
+            "Shows correct count"
+          ],
+          "graph_nodes": "catalog → filter → grid",
+          "status": "backlog"
+        },
+        {
+          "id": "DS-102",
+          "title": "Price range filter",
+          "story": "As a user, I can set min/max price",
+          "priority": "Should",
+          "acceptance_criteria": [
+            "Slider updates product grid in real time"
+          ],
+          "graph_nodes": "catalog → price → grid",
+          "status": "backlog"
+        },
+        {
+          "id": "DS-103",
+          "title": "Keyword search",
+          "story": "As a user, I can search by keyword",
+          "priority": "Could",
+          "acceptance_criteria": [
+            "Search matches name/description/tags"
+          ],
+          "graph_nodes": "catalog → search → grid",
+          "status": "backlog"
+        },
+        {
+          "id": "DS-104",
+          "title": "Featured hampers on landing page",
+          "story": "As a user, I see featured hampers on the landing page",
+          "priority": "Must",
+          "acceptance_criteria": [
+            "Featured badges render",
+            "Section populated"
+          ],
+          "graph_nodes": "catalog → featured → landing",
+          "status": "backlog"
+        },
+        {
+          "id": "DS-105",
+          "title": "Sort by price/name",
+          "story": "As a user, I can sort by price/name",
+          "priority": "Could",
+          "acceptance_criteria": [
+            "Sort control reorders grid"
+          ],
+          "graph_nodes": "grid → sort → grid",
+          "status": "backlog"
+        }
+      ]
+    },
+    {
+      "id": "EPIC-2",
+      "title": "Ritual Validation & Samagri Coverage",
+      "graph": "ritual data → product mapping → verification loop → display",
+      "description": "Ensure every hamper tells the customer which rituals it serves.",
+      "hill_chart": {
+        "status": "gray",
+        "note": "Need ritual item taxonomy"
+      },
+      "stories": [
+        {
+          "id": "DS-201",
+          "title": "Ritual items validation",
+          "story": "As a user, I see which rituals each hamper covers",
+          "priority": "Must",
+          "acceptance_criteria": [
+            "Product card shows ritual icons"
+          ],
+          "graph_nodes": "ritual data → mapping → card",
+          "status": "backlog"
+        },
+        {
+          "id": "DS-202",
+          "title": "Samagri detail list",
+          "story": "As a user, I see what's inside (samagri) before buying",
+          "priority": "Must",
+          "acceptance_criteria": [
+            "Detail page lists items + quantities"
+          ],
+          "graph_nodes": "mapping → detail",
+          "status": "backlog"
+        },
+        {
+          "id": "DS-203",
+          "title": "Ritual-ready trust note",
+          "story": "As a user, I trust items are ritual-ready",
+          "priority": "Should",
+          "acceptance_criteria": [
+            "Ritual-check note on detail page"
+          ],
+          "graph_nodes": "verification → display",
+          "status": "backlog"
+        },
+        {
+          "id": "DS-204",
+          "title": "Festival ritual data source",
+          "story": "As the PO, I can add new festival ritual data",
+          "priority": "Should",
+          "acceptance_criteria": [
+            "data/festivals.json is source for calendar"
+          ],
+          "graph_nodes": "ritual data → calendar",
+          "status": "backlog"
+        }
+      ]
+    },
+    {
+      "id": "EPIC-3",
+      "title": "Stripe Payment Integration",
+      "graph": "cart → session → webhook → confirm → notify",
+      "description": "Checkout and payment: test mode now; India + international later.",
+      "hill_chart": {
+        "status": "gray",
+        "note": "Merchant activation is the human gate"
+      },
+      "stories": [
+        {
+          "id": "DS-301",
+          "title": "Stripe test mode checkout",
+          "story": "As a user, I can complete checkout in test mode",
+          "priority": "Must",
+          "acceptance_criteria": [
+            "Order appears in Stripe dashboard",
+            "Success page loads"
+          ],
+          "graph_nodes": "session → webhook → success",
+          "status": "backlog"
+        },
+        {
+          "id": "DS-302",
+          "title": "Stripe India INR/UPI",
+          "story": "As an Indian customer, I can pay INR via UPI/cards",
+          "priority": "Should",
+          "acceptance_criteria": [
+            "Stripe India connected",
+            "2% fee applied"
+          ],
+          "graph_nodes": "session → UPI → confirm",
+          "human_gate": "Merchant activation",
+          "status": "backlog"
+        },
+        {
+          "id": "DS-303",
+          "title": "Stripe international USD/GBP",
+          "story": "As an international customer, I can pay USD/GBP",
+          "priority": "Should",
+          "acceptance_criteria": [
+            "Stripe international enabled",
+            "2.9% + $0.30 fee applied"
+          ],
+          "graph_nodes": "session → cards → confirm",
+          "status": "backlog"
+        },
+        {
+          "id": "DS-304",
+          "title": "Payment success notifications",
+          "story": "As a merchant, I get notified of successful payments",
+          "priority": "Should",
+          "acceptance_criteria": [
+            "Webhook updates order status",
+            "Email notification sent"
+          ],
+          "graph_nodes": "webhook → notify",
+          "status": "backlog"
+        },
+        {
+          "id": "DS-305",
+          "title": "Order confirmation page",
+          "story": "As a user, I see a clear order confirmation",
+          "priority": "Must",
+          "acceptance_criteria": [
+            "Success page shows order summary"
+          ],
+          "graph_nodes": "confirm → success",
+          "status": "backlog"
+        }
+      ]
+    },
+    {
+      "id": "EPIC-4",
+      "title": "Hero Experience & Festival Calendar",
+      "graph": "festival calendar → countdown state → hero render → calendar loop",
+      "description": "The signature ritual-themed hero and live festival countdown.",
+      "hill_chart": {
+        "status": "white",
+        "note": "Design proven; implementation in progress"
+      },
+      "stories": [
+        {
+          "id": "DS-401",
+          "title": "Live festival countdown",
+          "story": "As a user, I see days until next festival",
+          "priority": "Must",
+          "acceptance_criteria": [
+            "Countdown updates daily",
+            "Matches YearCalendar"
+          ],
+          "graph_nodes": "calendar → countdown → hero",
+          "status": "backlog"
+        },
+        {
+          "id": "DS-402",
+          "title": "ToranGarland signature",
+          "story": "As a user, I see the signature doorway garland",
+          "priority": "Must",
+          "acceptance_criteria": [
+            "Renders at hero top",
+            "Animates continuously"
+          ],
+          "graph_nodes": "design → component → hero",
+          "status": "backlog"
+        },
+        {
+          "id": "DS-403",
+          "title": "Year of festivals calendar",
+          "story": "As a user, I see the year of festivals",
+          "priority": "Must",
+          "acceptance_criteria": [
+            "YearCalendar lists all dated festivals chronologically"
+          ],
+          "graph_nodes": "calendar → render",
+          "status": "backlog"
+        },
+        {
+          "id": "DS-404",
+          "title": "Anytime rituals section",
+          "story": "As a user, I see \"occasions, not dates\" rituals",
+          "priority": "Should",
+          "acceptance_criteria": [
+            "Anytime rituals render in separate section"
+          ],
+          "graph_nodes": "rituals → render",
+          "status": "backlog"
+        },
+        {
+          "id": "DS-405",
+          "title": "Festival → product linking",
+          "story": "As a user, I can jump from a festival to its products",
+          "priority": "Must",
+          "acceptance_criteria": [
+            "Card links to filtered product catalog"
+          ],
+          "graph_nodes": "calendar → link → catalog",
+          "status": "backlog"
+        }
+      ]
+    },
+    {
+      "id": "EPIC-5",
+      "title": "Admin & Order Management",
+      "graph": "order capture → status → dispatch → deliver",
+      "description": "Post-purchase order tracking and admin tools (mostly post-MVP).",
+      "hill_chart": {
+        "status": "gray",
+        "note": "Deferred until Stripe live"
+      },
+      "stories": [
+        {
+          "id": "DS-501",
+          "title": "Order status view",
+          "story": "As a customer, I can view order status",
+          "priority": "Could",
+          "acceptance_criteria": [
+            "Order ID links to Stripe payment status"
+          ],
+          "graph_nodes": "order → status → view",
+          "status": "backlog"
+        },
+        {
+          "id": "DS-502",
+          "title": "Admin order list",
+          "story": "As an admin, I can list orders",
+          "priority": "Won't",
+          "acceptance_criteria": [
+            "Admin route lists orders by date"
+          ],
+          "graph_nodes": "capture → list",
+          "status": "backlog"
+        },
+        {
+          "id": "DS-503",
+          "title": "Refund workflow",
+          "story": "As an admin, I can issue refunds",
+          "priority": "Won't",
+          "acceptance_criteria": [
+            "Refund action + Stripe sync"
+          ],
+          "graph_nodes": "status → refund",
+          "human_gate": "PO approval",
+          "status": "backlog"
+        }
+      ]
+    }
+  ]
+}

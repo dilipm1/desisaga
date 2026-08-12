@@ -1,0 +1,320 @@
+openapi: 3.0.3
+info:
+  title: Desi Saga API
+  version: 0.1.0
+  description: >
+    Contract-first API for the Desi Saga festival & ritual gift hamper store.
+    Catalog is served from data/products.json today; cart is client-side
+    (localStorage). This spec defines the future server contract.
+servers:
+  - url: https://desisaga.vercel.app
+    description: Production (Vercel)
+  - url: http://localhost:3000
+    description: Local dev
+
+tags:
+  - name: products
+    description: Product catalog
+  - name: cart
+    description: Shopping cart operations
+  - name: checkout
+    description: Stripe checkout sessions
+  - name: webhooks
+    description: Incoming Stripe webhooks
+
+paths:
+  /api/products:
+    get:
+      tags: [products]
+      summary: List products (optionally filtered)
+      operationId: listProducts
+      parameters:
+        - name: category
+          in: query
+          description: Filter by festival/ritual category
+          schema:
+            type: string
+          example: Diwali
+        - name: featured
+          in: query
+          description: Only featured hampers
+          schema:
+            type: boolean
+        - name: minPrice
+          in: query
+          description: Minimum price (INR)
+          schema:
+            type: number
+        - name: maxPrice
+          in: query
+          description: Maximum price (INR)
+          schema:
+            type: number
+        - name: q
+          in: query
+          description: Free-text search across name/description/tags
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+
+  /api/products/{slug}:
+    get:
+      tags: [products]
+      summary: Get a single product by slug
+      operationId: getProductBySlug
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+          example: diwali-delight-hamper
+      responses:
+        "200":
+          description: The requested product
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "404":
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/cart:
+    get:
+      tags: [cart]
+      summary: Read the current cart
+      operationId: getCart
+      responses:
+        "200":
+          description: Cart contents and total
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+    post:
+      tags: [cart]
+      summary: Add an item to the cart
+      operationId: addToCart
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [productId, quantity]
+              properties:
+                productId:
+                  type: string
+                quantity:
+                  type: integer
+                  minimum: 1
+                  default: 1
+      responses:
+        "200":
+          description: Updated cart
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+
+  /api/cart/items/{productId}:
+    delete:
+      tags: [cart]
+      summary: Remove an item from the cart
+      operationId: removeFromCart
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Updated cart
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+    patch:
+      tags: [cart]
+      summary: Update item quantity
+      operationId: updateCartItem
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [quantity]
+              properties:
+                quantity:
+                  type: integer
+                  minimum: 1
+      responses:
+        "200":
+          description: Updated cart
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+
+  /api/checkout/session:
+    post:
+      tags: [checkout]
+      summary: Create a Stripe Checkout session
+      operationId: createCheckoutSession
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCheckoutRequest"
+      responses:
+        "200":
+          description: Session created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CheckoutSession"
+
+  /api/webhooks/stripe:
+    post:
+      tags: [webhooks]
+      summary: Receive Stripe webhook events
+      operationId: stripeWebhook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  example: checkout.session.completed
+                data:
+                  type: object
+      responses:
+        "200":
+          description: Webhook acknowledged
+        "400":
+          description: Invalid signature / payload
+
+components:
+  schemas:
+    Product:
+      type: object
+      required: [id, slug, name, price, currency, category]
+      properties:
+        id:
+          type: string
+        slug:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+          description: Price in minor handling (integer INR)
+        currency:
+          type: string
+          enum: [INR, USD, GBP]
+        category:
+          type: string
+          example: Diwali
+        images:
+          type: array
+          items:
+            type: string
+            format: uri
+        inStock:
+          type: boolean
+        featured:
+          type: boolean
+        tags:
+          type: array
+          items:
+            type: string
+
+    CartItem:
+      type: object
+      required: [product, quantity]
+      properties:
+        product:
+          $ref: "#/components/schemas/Product"
+        quantity:
+          type: integer
+          minimum: 1
+
+    Cart:
+      type: object
+      required: [items, total]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/CartItem"
+        total:
+          type: number
+          description: Sum of price × quantity across items
+
+    CreateCheckoutRequest:
+      type: object
+      required: [items]
+      properties:
+        items:
+          type: array
+          minItems: 1
+          items:
+            type: object
+            required: [productId, quantity]
+            properties:
+              productId:
+                type: string
+              quantity:
+                type: integer
+                minimum: 1
+        successUrl:
+          type: string
+          format: uri
+        cancelUrl:
+          type: string
+          format: uri
+
+    CheckoutSession:
+      type: object
+      required: [sessionId, url]
+      properties:
+        sessionId:
+          type: string
+        url:
+          type: string
+          format: uri
+
+    Error:
+      type: object
+      required: [message]
+      properties:
+        message:
+          type: string
+        code:
+          type: string

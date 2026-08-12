@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "sync:basecamp": "node scripts/basecamp-sync.mjs"
   },
   "dependencies": {
     "@stripe/stripe-js": "^9.10.0",

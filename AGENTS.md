@@ -58,28 +58,35 @@ desisaga.com → Vercel → Next.js App
 ```
 ~/Projects/desisaga/
 ├── src/
-│   ├── app/
-│   │   ├── page.tsx              ← Landing page
-│   │   ├── layout.tsx            ← Root layout (Navbar, Footer, CartProvider)
-│   │   ├── products/
-│   │   │   ├── page.tsx          ← Product catalog
-│   │   │   └── [slug]/page.tsx   ← Product detail
-│   │   ├── cart/page.tsx         ← Cart
-│   │   └── checkout/
-│   │       ├── page.tsx          ← Checkout (Stripe placeholder)
-│   │       └── success/page.tsx  ← Order confirmation
-│   ├── components/
-│   │   ├── Navbar.tsx            ← Sticky nav with cart badge
-│   │   ├── Footer.tsx            ← Footer with links
-│   │   └── ProductCard.tsx       ← Product card component
-│   ├── lib/
-│   │   ├── cart.ts               ← Cart context + localStorage
-│   │   └── products.ts           ← Product data functions
+│   ├── app/                      ← Next.js App Router (landing, products, cart, checkout, success)
+│   ├── components/               ← UI (Navbar, Footer, ProductCard, festival visuals)
+│   ├── lib/                      ← Business logic (cart, products, festivals, format)
 │   └── types/index.ts            ← TypeScript types
 ├── data/products.json            ← 8 festival hamper products
+├── specs/                        ← Contract-first API specs (openapi.yaml, README)
+├── okf/                          ← Open Knowledge Format (overview, backlog, ADRs, onboarding, retrospectives, roadmap)
+├── docs/                         ← ProjectToDos.md (roadmap) + knowledge-graph.md (shared state map)
+├── skills/                       ← Developer standards + AI workflows (index, tools, patterns, workflows, profiles/)
+├── .github/                      ← PR template + CI/CD workflow
 ├── AGENTS.md                     ← This file
 └── SESSION.md                    ← Session history
 ```
+
+## Operating Framework: PROMPT → CONTEXT → LOOP → GRAPH → DELIVER
+- **PROMPT** — well-formed user stories (given/when/then + acceptance criteria) in `okf/product-backlog.md` / Basecamp to-dos
+- **CONTEXT** — `specs/`, `okf/`, `data/`, `AGENTS.md`, `docs/knowledge-graph.md`
+- **LOOP** — writer/checker separation; CI checker loop; Basecamp check-ins + retrospective → action items
+- **GRAPH** — every Epic mapped to jobs/arrows/shared state + a Basecamp Hill Chart; Level 1 manual → Level 2 repo-based → Level 3 tool-automated
+- **DELIVER** — shippable increments (deployed previews, merged PRs, released catalogs)
+
+### Backlog Management
+- **Tool**: Basecamp 4 project "DesiSaga" (campfires, to-dos, hill charts, schedule, docs)
+- **Canonical machine-readable backlog**: `data/backlog.json` (single source of truth)
+- **Human-readable mirror**: `okf/product-backlog.md`
+- **Sync**: `scripts/basecamp-sync.mjs` pushes backlog.json → Basecamp to-do lists/to-dos
+- **Guide**: `okf/basecamp-guide.md` (setup, feature mapping, Shape Up adaptation)
+
+See `docs/ProjectToDos.md` for the full roadmap, `docs/knowledge-graph.md` for component dependencies, and `okf/basecamp-guide.md` for the backlog workflow.
 
 ## Build Steps
 1. [x] Create Next.js project with `create-next-app`
@@ -89,8 +96,9 @@ desisaga.com → Vercel → Next.js App
 5. [x] Build cart page (add/remove, quantity, subtotal)
 6. [x] Set up Stripe checkout (test mode placeholders)
 7. [x] Add sample products (8 festival hampers)
-8. [ ] Deploy to Vercel
-9. [ ] Connect desisaga.com domain via DNS
+8. [x] Create project structure (specs, okf, docs, skills, .github) — 2026-08-12
+9. [ ] Deploy to Vercel
+10. [ ] Connect desisaga.com domain via DNS
 
 ## Current Status
 - [x] Project concept defined

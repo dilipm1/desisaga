@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Basecamp OAuth Callback — Desi Saga</title>
+  <style>
+    :root {
+      --night: #1A0B0A;
+      --ember: #2E1210;
+      --ember-light: #3B1B15;
+      --parchment: #F7EEDC;
+      --parchment-dim: #C8B395;
+      --flame: #E9B44C;
+      --line: #422A1C;
+      --leaf: #8FAE6B;
+      --kumkum: #C2322E;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      background: var(--night);
+      color: var(--parchment);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .card {
+      background: var(--ember);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      max-width: 680px;
+      width: 100%;
+      padding: 2.5rem;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35), 0 2px 10px rgba(233, 180, 76, 0.06);
+    }
+
+    h1 {
+      font-size: 1.25rem;
+      color: var(--parchment);
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    h1 span { color: var(--flame); }
+
+    .status {
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+      margin-bottom: 1.25rem;
+      font-size: 0.85rem;
+    }
+
+    .status.success {
+      background: rgba(143, 174, 107, 0.12);
+      border: 1px solid rgba(143, 174, 107, 0.4);
+      color: var(--leaf);
+    }
+
+    .status.error {
+      background: rgba(194, 50, 46, 0.12);
+      border: 1px solid rgba(194, 50, 46, 0.4);
+      color: var(--kumkum);
+    }
+
+    label {
+      display: block;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--parchment-dim);
+      margin-bottom: 0.5rem;
+      margin-top: 1.25rem;
+    }
+
+    .code-box {
+      background: var(--night);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 0.85rem 1rem;
+      font-size: 0.85rem;
+      word-break: break-all;
+      color: var(--flame);
+      user-select: all;
+    }
+
+    button {
+      margin-top: 1rem;
+      background: var(--flame);
+      color: var(--night);
+      font-weight: 600;
+      font-family: inherit;
+      font-size: 0.85rem;
+      padding: 0.65rem 1.25rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: opacity 0.15s ease;
+    }
+
+    button:hover { opacity: 0.85; }
+    button.copied { background: var(--leaf); }
+
+    .steps {
+      margin-top: 2rem;
+      border-top: 1px solid var(--line);
+      padding-top: 1.5rem;
+      font-size: 0.8rem;
+      color: var(--parchment-dim);
+      line-height: 1.7;
+    }
+
+    .steps ol { padding-left: 1.25rem; }
+    .steps code {
+      background: var(--night);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 0.1rem 0.4rem;
+      color: var(--flame);
+      font-size: 0.75rem;
+    }
+
+    .params-list {
+      list-style: none;
+      font-size: 0.8rem;
+    }
+
+    .params-list li {
+      padding: 0.4rem 0;
+      border-bottom: 1px dashed var(--line);
+    }
+
+    .params-list li:last-child { border-bottom: none; }
+    .params-list .key { color: var(--parchment-dim); }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Basecamp OAuth <span>Callback</span></h1>
+
+    <div id="status" class="status" style="display:none;"></div>
+
+    <label>Authorization Code</label>
+    <div class="code-box" id="code-box">—</div>
+
+    <label>All URL Parameters</label>
+    <ul class="params-list" id="params-list"></ul>
+
+    <button id="copy-btn" onclick="copyCode()">Copy authorization code</button>
+
+    <div class="steps">
+      <strong>Next steps (run in your terminal):</strong>
+      <ol>
+        <li>Exchange the code for tokens:
+          <br><code>curl -X POST https://launchpad.37signals.com/authorization/token \</code>
+          <br><code>&nbsp;&nbsp;-d "grant_type=authorization_code" \</code>
+          <br><code>&nbsp;&nbsp;-d "code=&lt;CODE_ABOVE&gt;" \</code>
+          <br><code>&nbsp;&nbsp;-d "redirect_uri=http://localhost:3000/oauth-callback.html" \</code>
+          <br><code>&nbsp;&nbsp;-d "client_id=&lt;CLIENT_ID&gt;" \</code>
+          <br><code>&nbsp;&nbsp;-d "client_secret=&lt;CLIENT_SECRET&gt;"</code>
+        </li>
+        <li>Export the credentials:
+          <br><code>export BASECAMP_ACCOUNT_ID="..."</code>
+          <br><code>export BASECAMP_ACCESS_TOKEN="..."</code>
+        </li>
+        <li>Preview the sync: <code>npm run sync:basecamp -- --dry-run</code></li>
+      </ol>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
+    const error = params.get("error");
+
+    const statusEl = document.getElementById("status");
+    const codeBox = document.getElementById("code-box");
+    const paramsList = document.getElementById("params-list");
+
+    if (code) {
+      statusEl.className = "status success";
+      statusEl.textContent = "Authorization code captured. Exchange it for an access token using the steps below.";
+      statusEl.style.display = "block";
+      codeBox.textContent = code;
+    } else if (error) {
+      statusEl.className = "status error";
+      statusEl.textContent = "Authorization failed: " + error +
+        (params.get("error_description") ? " — " + params.get("error_description") : "");
+      statusEl.style.display = "block";
+      codeBox.textContent = "No code returned";
+    } else {
+      statusEl.className = "status error";
+      statusEl.textContent = "No authorization code in the URL. Open the Basecamp authorize URL first.";
+      statusEl.style.display = "block";
+      codeBox.textContent = "No code in URL";
+    }
+
+    if (params.toString()) {
+      for (const [key, value] of params.entries()) {
+        const li = document.createElement("li");
+        li.innerHTML = '<span class="key">' + key + ":</span> " + value;
+        paramsList.appendChild(li);
+      }
+    } else {
+      paramsList.innerHTML = "<li><em>No parameters</em></li>";
+    }
+
+    function copyCode() {
+      const btn = document.getElementById("copy-btn");
+      const text = codeBox.textContent;
+      if (!text || text.startsWith("No code")) return;
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = "Copied";
+        btn.classList.add("copied");
+        setTimeout(() => {
+          btn.textContent = "Copy authorization code";
+          btn.classList.remove("copied");
+        }, 2000);
+      });
+    }
+  </script>
+</body>
+</html>
