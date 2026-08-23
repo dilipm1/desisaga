@@ -1,0 +1,52 @@
+<footer class="border-t border-line/60 bg-night">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8 py-16">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-10">
+      <div class="col-span-2 md:col-span-1">
+        <%= link_to "DESI SAGA", root_path, class: "font-display text-xl tracking-tight text-parchment" %>
+        <p class="mt-3 text-sm text-parchment-dim leading-relaxed max-w-xs">
+          Pre-curated hampers for Indian festivals and rituals — sent home before the celebration.
+        </p>
+      </div>
+      <div>
+        <h3 class="font-mono text-[11px] uppercase tracking-[0.2em] text-flame mb-4">Shop</h3>
+        <ul class="space-y-2.5 text-sm text-parchment-dim">
+          <li><%= link_to "Diwali", products_path(category: "Diwali"), class: "hover:text-flame transition-colors" %></li>
+          <li><%= link_to "Wedding", products_path(category: "Wedding"), class: "hover:text-flame transition-colors" %></li>
+          <li><%= link_to "Puja", products_path(category: "Puja"), class: "hover:text-flame transition-colors" %></li>
+          <li><%= link_to "Housewarming", products_path(category: "Housewarming"), class: "hover:text-flame transition-colors" %></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="font-mono text-[11px] uppercase tracking-[0.2em] text-flame mb-4">Festivals</h3>
+        <ul class="space-y-2.5 text-sm text-parchment-dim">
+          <li><%= link_to "Navratri", products_path(category: "Navratri"), class: "hover:text-flame transition-colors" %></li>
+          <li><%= link_to "Holi", products_path(category: "Holi"), class: "hover:text-flame transition-colors" %></li>
+          <li><%= link_to "Ganesh Chaturthi", products_path(category: "Ganesh Chaturthi"), class: "hover:text-flame transition-colors" %></li>
+          <li><%= link_to "Raksha Bandhan", products_path(category: "Raksha Bandhan"), class: "hover:text-flame transition-colors" %></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="font-mono text-[11px] uppercase tracking-[0.2em] text-flame mb-4">Support</h3>
+        <ul class="space-y-2.5 text-sm text-parchment-dim">
+          <li><span class="hover:text-flame cursor-pointer transition-colors">Contact</span></li>
+          <li><span class="hover:text-flame cursor-pointer transition-colors">Shipping</span></li>
+          <li><span class="hover:text-flame cursor-pointer transition-colors">Returns</span></li>
+          <li><span class="hover:text-flame cursor-pointer transition-colors">FAQ</span></li>
+          <% if authenticated? %>
+            <li><%= button_to "Sign out", session_path, method: :delete, form_class: "inline", class: "hover:text-flame transition-colors" %></li>
+          <% else %>
+            <li><%= link_to "Sign In", new_session_path, class: "hover:text-flame transition-colors" %></li>
+          <% end %>
+          <li><%= link_to "Admin Login", new_session_path, class: "hover:text-flame transition-colors" %></li>
+        </ul>
+      </div>
+    </div>
+    <div class="festive-divider mt-12 mb-6"></div>
+    <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+      <p class="text-xs text-parchment-dim">&copy; <%= Date.current.year %> Desi Saga</p>
+      <p class="text-xs text-parchment-dim flex items-center gap-1.5">
+        Made with <%= icon("heart", css_class: "w-3 h-3 text-kumkum fill-kumkum") %> in India
+      </p>
+    </div>
+  </div>
+</footer>

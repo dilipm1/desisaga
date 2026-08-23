@@ -29,6 +29,24 @@ npm run dev
 # → http://localhost:3000
 ```
 
+> **Tip:** launch the dev server detached so shell timeouts don't kill it:
+> `setsid nohup npm run dev > /tmp/desisaga-dev.log 2>&1 & disown`
+
+### 2a. Environment variables (`.env`, gitignored)
+
+| Variable | Purpose |
+|---|---|
+| `NEXTAUTH_URL` | Auth base URL (`http://localhost:3000` locally) |
+| `NEXTAUTH_SECRET` | Session signing secret |
+| `ADMIN_EMAIL` / `ADMIN_PASSWORD` | Admin login credentials (defaults: `admin@desisaga.com` / `desisaga-admin-2026` — change before production) |
+| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Google OAuth (create at console.cloud.google.com; redirect URI `http://localhost:3000/api/auth/callback/google`) |
+| `BASECAMP_*` | Backlog sync (see `okf/basecamp-guide.md`) |
+
+### 2b. Logins
+
+- **Customer**: `/login` — "Sign in with Google" (requires Google OAuth env vars)
+- **Admin**: `/admin/login` — email/password → redirects to `/admin/products` (inventory grid + add form)
+
 ## 3. Run the checks
 
 ```bash
@@ -41,17 +59,21 @@ npm run build   # Production build
 ```
 desisaga/
 ├── src/
-│   ├── app/          ← Next.js App Router pages (landing, products, cart, checkout)
-│   ├── components/   ← UI components (Navbar, Footer, ProductCard, festival visuals)
-│   ├── lib/          ← Business logic (cart, products, festivals, format)
-│   └── types/        ← TypeScript interfaces
-├── data/             ← Static domain data (products.json)
+│   ├── app/          ← Next.js App Router pages (landing, products, cart, checkout, login, admin/)
+│   │   ├── admin/    ← Admin area (login, products grid, add product)
+│   │   └── api/      ← Route handlers (auth/[...nextauth], admin/products)
+│   ├── components/   ← UI components (Navbar, Footer, ProductCard, festival visuals, ui/)
+│   ├── lib/          ← Business logic (cart, products, festivals, format, authOptions, api/)
+│   └── types/        ← TypeScript interfaces (Product, Cart, User)
+├── data/             ← Domain data (products.json — read/write by admin API)
 ├── specs/            ← Contract-first API specs (openapi.yaml)
 ├── okf/              ← Open Knowledge Format (overview, backlog, ADRs, retrospectives)
 ├── docs/             ← ProjectToDos, knowledge graph
 ├── skills/           ← Developer standards + AI workflow definitions
 └── .github/          ← PR template + CI/CD
 ```
+
+> **Warning:** never create a root-level `app/` directory — it hijacks `src/app/` and every route 404s (learned 2026-08-19).
 
 ## 5. Conventions
 

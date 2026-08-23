@@ -1,0 +1,162 @@
+<% festival = @next_festival&.fetch(:festival) %>
+<div>
+  <!-- Festival hero -->
+  <section class="relative min-h-[100svh] flex items-center overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-night via-[#240D0C] to-[#2B0E09]"></div>
+    <div class="absolute -top-32 left-1/4 w-[700px] h-[700px] rounded-full bg-flame/10 blur-[140px]"></div>
+    <div class="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full bg-kumkum/10 blur-[120px]"></div>
+
+    <%= render "shared/spinning_mandala" %>
+    <%= render "shared/floating_rangoli" %>
+    <%= render "shared/toran_garland" %>
+
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 w-full relative z-10 pt-36 pb-28">
+      <div class="max-w-2xl">
+        <p class="animate-rise font-mono text-[11px] md:text-xs uppercase tracking-[0.25em] text-flame mb-8 flex items-center gap-3">
+          <span class="w-1.5 h-1.5 rounded-full bg-flame animate-pulse inline-block"></span>
+          Next on the calendar
+        </p>
+
+        <h1 class="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[1.02] tracking-tight text-parchment">
+          <span class="animate-rise block">Send the</span>
+          <span class="animate-rise stagger-1 text-flame-gradient block">festival</span>
+          <span class="animate-rise stagger-2 block">home.</span>
+        </h1>
+
+        <p class="animate-rise stagger-3 mt-8 text-base md:text-lg text-parchment-dim leading-relaxed max-w-md">
+          Pre-curated hampers for every Indian festival and ritual — packed with the items your family will actually use, and delivered before the celebration.
+        </p>
+
+        <div class="animate-rise stagger-4 mt-10 flex flex-col sm:flex-row items-stretch sm:items-center gap-6">
+          <div class="inline-flex items-center gap-5 border border-line rounded-lg bg-ember/60 px-5 py-4">
+            <div class="min-w-24">
+              <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-parchment-dim">Days until</p>
+              <p class="font-mono text-4xl md:text-5xl font-bold text-flame tabular-nums leading-none mt-1.5">
+                <%= @next_festival ? @next_festival[:days_left] : "--" %>
+              </p>
+            </div>
+            <div class="h-11 w-px bg-line"></div>
+            <div>
+              <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-parchment-dim">On the calendar</p>
+              <p class="font-mono text-sm text-parchment mt-1.5">
+                <% if festival %>
+                  <%= festival.name %><br><%= Festivals.format_date_label(festival.date) %> · <%= festival.date[0, 4] %>
+                <% else %>
+                  —
+                <% end %>
+              </p>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row gap-3">
+            <%= link_to festival ? products_path(category: festival.category) : products_path,
+                  class: "inline-flex items-center justify-center gap-2 bg-flame text-night font-semibold px-7 py-4 text-sm rounded-md hover:bg-marigold transition-colors warm-shadow" do %>
+              Shop <%= festival ? festival.name : "hampers" %> <%= icon("arrow-right", css_class: "w-4 h-4") %>
+            <% end %>
+            <%= link_to "#calendar",
+                  class: "inline-flex items-center justify-center gap-2 border border-line text-parchment-dim font-medium px-7 py-4 text-sm rounded-md hover:border-flame hover:text-parchment transition-colors" do %>
+              <%= icon("calendar-days", css_class: "w-4 h-4") %> The year of festivals
+            <% end %>
+          </div>
+        </div>
+
+        <% if festival %>
+          <p class="animate-rise stagger-6 mt-10 font-mono text-xs text-parchment-dim/80">
+            <span class="text-flame">What&rsquo;s inside</span>
+            <span class="mx-2">·</span>
+            <%= festival.items.join("  ·  ") %>
+          </p>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-night to-transparent"></div>
+  </section>
+
+  <%= render "shared/year_calendar" %>
+
+  <!-- Featured hampers -->
+  <section class="border-t border-line/60 bg-gradient-to-b from-night to-ember/40 py-24 md:py-32">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div data-controller="reveal" class="reveal" data-reveal-target="item">
+        <div class="flex items-end justify-between gap-8 mb-12">
+          <div class="max-w-xl">
+            <p class="font-mono text-[11px] md:text-xs uppercase tracking-[0.25em] text-flame mb-4">This season</p>
+            <h2 class="font-display text-4xl md:text-5xl leading-tight text-parchment">Hampers for the season</h2>
+            <p class="mt-5 text-parchment-dim leading-relaxed">Handpicked best sellers — ready to pick, quick to send.</p>
+          </div>
+          <%= link_to products_path, class: "hidden sm:inline-flex items-center gap-2 text-sm font-medium text-parchment-dim hover:text-flame transition-colors shrink-0" do %>
+            View all hampers →
+          <% end %>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <% @featured_products.each_with_index do |product, i| %>
+          <div data-controller="reveal" data-reveal-target="item"
+            class="reveal" style="transition-delay: <%= i * 90 %>ms">
+            <%= render "shared/product_card", product: product %>
+          </div>
+        <% end %>
+      </div>
+
+      <%= link_to products_path, class: "sm:hidden mt-10 inline-flex items-center gap-2 text-sm font-medium text-parchment-dim hover:text-flame transition-colors" do %>
+        View all hampers →
+      <% end %>
+    </div>
+  </section>
+
+  <!-- Built for the ritual -->
+  <%
+    rituals = [
+      { icon_name: "flame", title: "Every item ritual-ready", desc: "Each piece is checked for the ritual it belongs to — diyas that light, rakhis that tie, camphor that burns — before it is packed." },
+      { icon_name: "calendar-clock", title: "Delivered before the celebration", desc: "We watch the festival date, not just the address. Hampers arrive in time to be offered, opened, and shared." },
+      { icon_name: "gift", title: "Packed like a shagun", desc: "Wrapped as a gift and ready to hand over, with a card written in your words for the family receiving it." }
+    ]
+  %>
+  <section class="relative py-24 md:py-32 bg-night rangoli-pattern">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div data-controller="reveal" class="reveal max-w-2xl mb-14" data-reveal-target="item">
+        <p class="font-mono text-[11px] md:text-xs uppercase tracking-[0.25em] text-flame mb-4">Built for the ritual</p>
+        <h2 class="font-display text-4xl md:text-5xl leading-tight text-parchment">A hamper should hold its place in the ceremony.</h2>
+        <p class="mt-5 text-parchment-dim leading-relaxed">
+          Not a box of generic goodies — every Desi Saga hamper is assembled around the ritual it&rsquo;s meant for.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <% rituals.each_with_index do |item, i| %>
+          <div data-controller="reveal" data-reveal-target="item"
+            class="reveal h-full rounded-lg border border-line bg-ember p-7 hover:border-flame/40 transition-colors"
+            style="transition-delay: <%= i * 110 %>ms">
+            <div class="w-11 h-11 rounded-md bg-ember-light border border-line flex items-center justify-center text-flame mb-6">
+              <%= icon(item[:icon_name]) %>
+            </div>
+            <h3 class="font-display text-xl text-parchment mb-3"><%= item[:title] %></h3>
+            <p class="text-sm text-parchment-dim leading-relaxed"><%= item[:desc] %></p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust -->
+  <section class="border-t border-line/60 bg-ember/40">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 py-12">
+      <div class="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16 text-sm text-parchment-dim">
+        <div class="flex items-center gap-2">
+          <span class="text-flame">★★★★★</span>
+          <span>4.9 / 5 from 500+ families</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <%= icon("heart", css_class: "w-4 h-4 text-kumkum fill-kumkum") %>
+          <span>500+ hampers delivered</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <%= icon("truck", css_class: "w-4 h-4 text-flame") %>
+          <span>Free shipping over &#8377;999</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

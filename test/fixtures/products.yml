@@ -1,0 +1,27 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+diwali_hamper:
+  name: Diwali Delight Hamper
+  slug: diwali-delight-hamper
+  description: Curated Diwali hamper
+  price: 2499
+  currency: INR
+  category: Diwali
+  images: []
+  in_stock: true
+  featured: true
+  tags: []
+  ritual_contents: []
+
+puja_kit:
+  name: Complete Puja Kit
+  slug: complete-puja-kit
+  description: Traditional puja kit
+  price: 1899
+  currency: INR
+  category: Puja
+  images: []
+  in_stock: true
+  featured: false
+  tags: []
+  ritual_contents: []

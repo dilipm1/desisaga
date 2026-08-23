@@ -293,18 +293,24 @@ Retrospective → Action Items → Process Change → Next Cycle → Measure Imp
 
 ### This Week:
 1. [x] Set up Basecamp "DesiSaga" project: create 5 Epic to-do lists *(done 2026-08-12; Hill Charts guided in `okf/basecamp-guide.md`)*
-2. [ ] Create first feature story: "Live festival countdown on hero" (a 3-node graph)
+2. [x] Create first feature story: "Live festival countdown on hero" (a 3-node graph) *(implemented 2026-08-07)*
 3. [ ] Set up GitHub Actions CI pipeline (basic lint + build) — the first automated loop
 4. [ ] Onboard first developer to the `skills/` directory structure
 5. [ ] Confirm PO review as the **human gate** in the PR workflow
 6. [x] Run `npm run sync:basecamp` with credentials to populate the live backlog *(done 2026-08-12 — 5 lists, 22 to-dos)*
+7. [x] Add authentication (Google sign-in + admin login) — NextAuth v4 *(done 2026-08-19; see SESSION.md)*
+8. [x] Add admin inventory management (products grid, add form, CRUD API) *(done 2026-08-19)*
+9. [ ] Configure Google OAuth credentials in `.env` (console.cloud.google.com) — until then only admin login works
 
 ### This Month:
-1. [ ] Full delivery cycle: Plan → Develop → Review → Deploy → Retrospective (one full loop)
-2. [ ] Integrate Stripe test mode checkout
-3. [ ] Deploy to Vercel with custom domain desisaga.com
-4. [ ] Conduct first cycle retrospective, capture action items → feed cycle 2
-5. [ ] Promote the delivery graph from L1 (manual) to L2 (repo-based) once stable
+1. [ ] **Configure Basecamp Automatic Check-ins** — daily "what I did / what's blocking" questions sent to team
+2. [ ] **Set up Basecamp Schedule** — milestones for key dates (Stripe India, Vercel deploy, Diwali launch)
+3. [ ] **Run first full delivery cycle**: Plan → Develop → Review → Deploy → Retrospective (one full loop)
+4. [ ] **Integrate Stripe test mode checkout**
+5. [ ] **Deploy to Vercel with custom domain desisaga.com** *(attempted 2026-08-18, stopped — no Vercel account yet)*
+6. [ ] **Migrate product storage to a database (Supabase)** — JSON writes don't persist on Vercel serverless; required before production admin panel
+7. [ ] **Conduct first cycle retrospective, capture action items → feed cycle 2**
+8. [ ] **Promote the delivery graph from L1 (manual) to L2 (repo-based) once stable**
 
 ---
 

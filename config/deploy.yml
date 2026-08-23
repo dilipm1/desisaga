@@ -1,0 +1,67 @@
+# Name of your application. Used to uniquely configure containers.
+service: desisaga
+
+# Name of the container image on GHCR (registry auth comes from .kamal/secrets).
+image: ghcr.io/dilipm1/desisaga
+
+# Deploy to these servers.
+servers:
+  web:
+    - 192.168.0.1  # TODO: replace with the VPS IP once provisioned
+
+# Enable SSL auto certification via Let's Encrypt and allow for multiple apps on a single web server.
+#
+# Using an SSL proxy like this requires turning on config.assume_ssl and config.force_ssl in production.rb!
+#
+# Don't use this when deploying to multiple web servers (then you have to terminate SSL at the load balancer).
+proxy:
+  ssl: true
+  host: desisaga.com
+  # Kamal issues one cert per host; add www after DNS is set up if desired:
+  # forwarding: true
+
+# Where you keep your container images.
+registry:
+  server: ghcr.io
+  username: dilipm1
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+# Inject ENV variables into containers (secrets come from .kamal/secrets).
+env:
+  secret:
+    - RAILS_MASTER_KEY
+    - ADMIN_PASSWORD
+  clear:
+    ADMIN_EMAIL: admin@desisaga.com
+    # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.
+    SOLID_QUEUE_IN_PUMA: true
+
+    # Set number of cores available to the application on each server (default: 1).
+    WEB_CONCURRENCY: 2
+
+# Aliases are triggered with "bin/kamal <alias>". You can overwrite arguments on invocation:
+# "bin/kamal logs -r job" will tail logs from the first server in the job section.
+aliases:
+  console: app exec --interactive --reuse "bin/rails console"
+  shell: app exec --interactive --reuse "bash"
+  logs: app logs -f
+  dbc: app exec --interactive --reuse "bin/rails dbconsole --include-password"
+
+# Use a persistent storage volume for sqlite database files and local Active Storage files.
+# Recommended to change this to a mounted volume path that is backed up off server.
+volumes:
+  - "desisaga_storage:/rails/storage"
+
+# Bridge fingerprinted assets, like JS and CSS, between versions to avoid
+# hitting 404 on in-flight requests. Combines all files from new and old
+# version inside the asset_path.
+asset_path: /rails/public/assets
+
+# Configure the image builder.
+builder:
+  arch: amd64
+
+# Use a different ssh user than root
+# ssh:
+#   user: app

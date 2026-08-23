@@ -1,0 +1,31 @@
+<div class="min-h-screen pt-24 pb-16 px-4 bg-night text-parchment">
+  <div class="max-w-md mx-auto bg-ember/20 rounded-xl p-8 border border-line warm-shadow">
+    <p class="font-mono text-[11px] uppercase tracking-[0.25em] text-flame mb-2">Welcome back</p>
+    <h1 class="font-display text-2xl text-parchment mb-6">Sign in</h1>
+
+    <% if flash[:alert] %>
+      <div class="bg-kumkum/20 text-kumkum rounded px-4 py-3 mb-6 text-sm"><%= flash[:alert] %></div>
+    <% end %>
+
+    <%= form_with url: session_path, method: :post, class: "space-y-4" do |form| %>
+      <div>
+        <%= form.label :email_address, "Email", class: "block text-sm font-medium mb-2 text-parchment-dim" %>
+        <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username",
+              placeholder: "Enter your email address",
+              class: "w-full bg-night text-parchment border border-line rounded px-4 py-3 focus:outline-none focus:ring-2 focus:ring-flame/30 placeholder:text-parchment-dim/40" %>
+      </div>
+      <div>
+        <%= form.label :password, "Password", class: "block text-sm font-medium mb-2 text-parchment-dim" %>
+        <%= form.password_field :password, required: true, autocomplete: "current-password",
+              placeholder: "Enter your password",
+              class: "w-full bg-night text-parchment border border-line rounded px-4 py-3 focus:outline-none focus:ring-2 focus:ring-flame/30 placeholder:text-parchment-dim/40" %>
+      </div>
+      <%= form.submit "Sign In",
+            class: "w-full bg-flame text-night py-3 px-4 rounded-xl font-medium text-lg hover:opacity-90 transition-opacity cursor-pointer" %>
+    <% end %>
+
+    <p class="text-center text-parchment-dim text-xs mt-6 leading-relaxed">
+      Admins sign in here with staff credentials to reach the inventory panel.
+    </p>
+  </div>
+</div>

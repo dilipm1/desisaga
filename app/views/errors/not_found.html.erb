@@ -1,0 +1,13 @@
+<div class="min-h-[70vh] flex items-center justify-center bg-night rangoli-pattern">
+  <div class="text-center max-w-md mx-auto px-6 py-20">
+    <svg viewBox="0 0 24 24" fill="none" class="w-8 h-8 text-flame mx-auto mb-4">
+      <path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z" fill="currentColor"/>
+    </svg>
+    <h1 class="font-display text-5xl text-parchment mb-2">404</h1>
+    <h2 class="text-lg font-semibold text-parchment mb-2">This page isn&rsquo;t on the calendar</h2>
+    <p class="text-parchment-dim text-sm mb-8">The page you&rsquo;re looking for doesn&rsquo;t exist.</p>
+    <%= link_to root_path, class: "inline-flex items-center gap-2 bg-flame text-night font-semibold px-8 py-3.5 text-sm hover:bg-marigold transition-all rounded-md warm-shadow" do %>
+      Back to the celebration <%= icon("arrow-right", css_class: "w-4 h-4") %>
+    <% end %>
+  </div>
+</div>

@@ -1,9 +1,9 @@
 ---
 title: Desi Saga — Technical Decisions
 kind: okf/technical-decisions
-version: 1.0.0
+version: 1.1.0
 owner: Technical Lead / PO
-last_updated: 2026-08-12
+last_updated: 2026-08-19
 status: active
 tags: [adr, decisions, architecture]
 ---
@@ -13,6 +13,22 @@ tags: [adr, decisions, architecture]
 > **Context** → **Decision** → **Consequences** → **Status**. Add a new ADR when a non-trivial decision is made. Keep the newest on top.
 
 ---
+
+## ADR-006: Admin Inventory on JSON File Storage (Interim)
+
+- **Date**: 2026-08-19
+- **Status**: Accepted (supersede planned — migrate to Supabase before production)
+- **Context**: Admins need to add products (with samagri/ritualContents) without a database in the MVP. Next.js API routes can read/write files locally.
+- **Decision**: Product CRUD via `/api/admin/products` (GET/POST/DELETE) backed by `data/products.json` using Node `fs`. No auth middleware on the API route yet (local-only MVP).
+- **Consequences**: Works locally and is instantly visible on the storefront; **writes do NOT persist on Vercel serverless** (read-only FS) — admin-added products vanish in production. Requires Supabase/DB migration (ADR will follow) and API-route auth before public deploy.
+
+## ADR-005: Authentication via NextAuth v4 (Google + Admin Credentials)
+
+- **Date**: 2026-08-19
+- **Status**: Accepted
+- **Context**: Site needs customer social login and a separate admin-only login for inventory management. App Router (Server Components by default) constrains how client auth context is wired.
+- **Decision**: `next-auth` v4 with two providers: Google OAuth (customers) and a Credentials provider (admin, email/password from `ADMIN_EMAIL`/`ADMIN_PASSWORD` env). Roles assigned in jwt/session callbacks (`user` | `admin`). `SessionProvider` wrapped in a client component (`src/app/providers.tsx`) because `layout.tsx` is a Server Component.
+- **Consequences**: Single auth system for both personas; admin creds are env-based (no DB users) — must change defaults before production; Google login inert until `GOOGLE_CLIENT_ID/SECRET` are configured; role claim trusted from email match for admin.
 
 ## ADR-004: Operating Framework — PROMPT → CONTEXT → LOOP → GRAPH → DELIVER
 

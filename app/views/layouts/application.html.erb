@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full antialiased">
+  <head>
+    <title>Desi Saga — Indian Festival Gift Hampers</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="Curated gift hampers for Indian Hindu festivals and rituals. Diwali, weddings, puja kits, housewarming, and more.">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rozha+One&family=Instrument+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  </head>
+
+  <body class="min-h-full flex flex-col bg-night bg-paisley">
+    <%= render "shared/navbar" %>
+    <% if notice %><div class="fixed top-20 left-1/2 -translate-x-1/2 z-[60] bg-ember border border-flame/40 text-parchment text-sm px-5 py-3 rounded-lg warm-shadow animate-fade-in"><%= notice %></div><% end %>
+    <% if alert %><div class="fixed top-20 left-1/2 -translate-x-1/2 z-[60] bg-kumkum/90 text-parchment text-sm px-5 py-3 rounded-lg warm-shadow animate-fade-in"><%= alert %></div><% end %>
+
+    <main class="flex-1"><%= yield %></main>
+
+    <%= render "shared/footer" %>
+  </body>
+</html>

@@ -1,0 +1,70 @@
+<div class="flex items-center justify-between mb-6">
+  <h1 class="font-display text-3xl text-parchment">Product Inventory</h1>
+  <%= link_to "Add New Product", new_admin_product_path,
+        class: "bg-flame text-night py-2 px-4 rounded-md font-medium hover:opacity-90 transition-opacity" %>
+</div>
+
+<% if @products.any? %>
+  <div class="overflow-x-auto rounded-lg border border-line">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="bg-ember/40 border-b border-line">
+          <th class="text-left px-4 py-3 font-mono text-[11px] uppercase tracking-[0.15em] text-parchment-dim">Product</th>
+          <th class="text-left px-4 py-3 font-mono text-[11px] uppercase tracking-[0.15em] text-parchment-dim">Price</th>
+          <th class="text-left px-4 py-3 font-mono text-[11px] uppercase tracking-[0.15em] text-parchment-dim">Stock</th>
+          <th class="text-left px-4 py-3 font-mono text-[11px] uppercase tracking-[0.15em] text-parchment-dim">Featured</th>
+          <th class="text-left px-4 py-3 font-mono text-[11px] uppercase tracking-[0.15em] text-parchment-dim">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @products.each do |product| %>
+          <tr class="border-b border-line/60 hover:bg-ember/30 transition-colors" id="<%= dom_id(product) %>">
+            <td class="px-4 py-3">
+              <div class="flex items-center gap-3">
+                <% if product.primary_image %>
+                  <img src="<%= product.primary_image %>" alt="<%= product.name %>" class="w-10 h-10 object-cover rounded border border-line">
+                <% else %>
+                  <span class="w-10 h-10 bg-line rounded flex items-center justify-center text-kumkum"><%= product.name&.first || "?" %></span>
+                <% end %>
+                <div>
+                  <div class="font-medium text-parchment"><%= product.name %></div>
+                  <div class="text-parchment-dim/60 text-xs"><%= product.category %> · <%= product.slug %></div>
+                </div>
+              </div>
+            </td>
+            <td class="px-4 py-3"><span class="text-flame font-medium"><%= format_price(product.price) %></span></td>
+            <td class="px-4 py-3">
+              <% if product.in_stock? %>
+                <span class="text-leaf">In Stock</span>
+              <% else %>
+                <span class="text-kumkum">Out of Stock</span>
+              <% end %>
+            </td>
+            <td class="px-4 py-3">
+              <% if product.featured? %>
+                <span class="bg-flame text-night rounded px-2 py-1 text-xs font-medium">Yes</span>
+              <% else %>
+                <span class="bg-ember/20 text-parchment-dim rounded px-2 py-1 text-xs">No</span>
+              <% end %>
+            </td>
+            <td class="px-4 py-3">
+              <div class="flex gap-2">
+                <%= link_to "Edit", edit_admin_product_path(product),
+                      class: "border border-line rounded px-3 py-1.5 text-xs font-medium text-parchment hover:border-flame/50 hover:text-flame transition-colors" %>
+                <%= button_to "Delete", admin_product_path(product), method: :delete,
+                      form: { data: { turbo_confirm: "Are you sure you want to delete this product?" } },
+                      class: "bg-kumkum/20 border border-kumkum/50 rounded px-3 py-1.5 text-xs font-medium text-kumkum hover:bg-kumkum/40 transition-colors" %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <div class="text-center py-24 bg-ember/20 rounded-xl border border-line">
+    <h2 class="font-display text-xl text-parchment mb-2">No products yet</h2>
+    <p class="text-parchment-dim text-sm mb-6">Add your first hamper to the inventory.</p>
+    <%= link_to "Add New Product", new_admin_product_path, class: "bg-flame text-night py-2 px-4 rounded-md font-medium" %>
+  </div>
+<% end %>

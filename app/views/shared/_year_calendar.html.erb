@@ -1,0 +1,60 @@
+<%
+  dated = Festivals::DATED_FESTIVALS.map { |f| { festival: f, days_left: Festivals.days_left(f.date) } }
+  next_index = dated.index { |d| d[:days_left] >= 0 }
+%>
+<section id="calendar" class="relative py-24 md:py-32 bg-night">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div data-controller="reveal" class="reveal max-w-2xl mb-14" data-reveal-target="item">
+      <p class="font-mono text-[11px] md:text-xs uppercase tracking-[0.25em] text-flame mb-4">The festival calendar</p>
+      <h2 class="font-display text-4xl md:text-5xl leading-tight text-parchment">One hamper for every date worth keeping.</h2>
+      <p class="mt-5 text-parchment-dim leading-relaxed">
+        Festivals run on dates, not seasons. We keep the calendar, so you never have to — every hamper is shipped to arrive before its celebration.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+      <% dated.each_with_index do |entry, i| %>
+        <% festival = entry[:festival]
+           days_left = entry[:days_left]
+           passed = days_left.negative?
+           up_next = !passed && i == next_index %>
+        <%= link_to products_path(category: festival.category),
+              class: "group relative rounded-lg border p-5 transition-all duration-300 #{passed ? 'border-line/50 bg-ember/40 opacity-60' : (up_next ? 'border-flame/60 bg-ember hover:bg-ember-light warm-shadow' : 'border-line bg-ember hover:border-flame/40 hover:bg-ember-light')}" do %>
+          <div class="flex items-center justify-between">
+            <span class="font-mono text-[11px] uppercase tracking-[0.2em] text-parchment-dim">
+              <%= Festivals.format_date_label(festival.date) %> <span class="opacity-60"><%= festival.date[0, 4] %></span>
+            </span>
+            <% if up_next %>
+              <span class="font-mono text-[9px] uppercase tracking-[0.2em] text-night bg-flame px-2 py-0.5 rounded-sm">Up next</span>
+            <% end %>
+          </div>
+
+          <h3 class="font-display text-2xl text-parchment mt-4 group-hover:text-flame transition-colors"><%= festival.name %></h3>
+          <p class="text-sm text-parchment-dim mt-1.5 leading-snug"><%= festival.ritual %></p>
+
+          <p class="font-mono text-xs mt-4 text-flame">
+            <% if passed %>past for this year<% else %>in <%= days_left %> <%= "day".pluralize(days_left) %><% end %>
+          </p>
+        <% end %>
+      <% end %>
+    </div>
+
+    <!-- Occasions with no fixed date -->
+    <div class="mt-16">
+      <div class="flex items-center gap-4 mb-8">
+        <span class="font-mono text-[11px] uppercase tracking-[0.25em] text-parchment-dim">Occasions, not dates</span>
+        <span class="h-px flex-1 bg-line"></span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <% Festivals::ANYTIME_RITUALS.each do |festival| %>
+          <%= link_to products_path(category: festival.category),
+                class: "group rounded-lg border border-line bg-ember/60 p-5 hover:border-flame/40 hover:bg-ember-light transition-all duration-300" do %>
+            <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-marigold">Anytime</span>
+            <h3 class="font-display text-xl text-parchment mt-3 group-hover:text-flame transition-colors"><%= festival.name %></h3>
+            <p class="text-sm text-parchment-dim mt-1.5"><%= festival.ritual %></p>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>

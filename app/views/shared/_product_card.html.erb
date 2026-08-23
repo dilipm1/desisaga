@@ -1,0 +1,17 @@
+<%= link_to product_path(product), class: "group block h-full" do %>
+  <div class="h-full bg-ember border border-line rounded-lg overflow-hidden warm-shadow transition-all duration-300 hover:border-flame/50 hover:warm-shadow-lg hover:-translate-y-1">
+    <div class="aspect-[4/3] bg-gradient-to-br from-ember to-ember-light flex items-center justify-center relative overflow-hidden">
+      <img src="<%= product.primary_image %>" alt="<%= product.name %>"
+        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+      <% if product.featured? %>
+        <span class="absolute top-3 left-3 bg-flame text-night text-[11px] font-semibold px-2.5 py-1 rounded-full">Featured</span>
+      <% end %>
+      <div class="absolute inset-0 bg-gradient-to-t from-night/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+    </div>
+    <div class="p-5">
+      <span class="inline-block text-[10px] font-semibold px-2 py-0.5 rounded-full border mb-3 <%= category_badge_class(product.category) %>"><%= product.category %></span>
+      <h3 class="font-display text-lg text-parchment leading-snug mb-1.5 group-hover:text-flame transition-colors"><%= product.name %></h3>
+      <p class="text-sm font-bold text-flame"><%= format_price(product.price) %></p>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,81 @@
+<div class="max-w-2xl">
+  <%= link_to admin_products_path, class: "text-sm text-parchment-dim hover:text-flame transition-colors mb-4 inline-block" do %>
+    &larr; Back to Inventory
+  <% end %>
+
+  <div class="bg-ember/20 rounded-xl p-8 border border-line">
+    <p class="font-mono text-[11px] uppercase tracking-[0.25em] text-flame mb-2">Inventory</p>
+    <h2 class="font-display text-2xl text-parchment mb-6"><%= @product.new_record? ? "Add New Product" : "Edit Product" %></h2>
+
+    <% if @product.errors.any? %>
+      <div class="bg-kumkum/20 text-kumkum rounded px-4 py-3 mb-6 text-sm">
+        <ul>
+          <% @product.errors.full_messages.each do |message| %><li><%= message %></li><% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <%= form_with model: @product, url: (@product.new_record? ? admin_products_path : admin_product_path(@product)), class: "space-y-6" do |form| %>
+      <% input_cls = "w-full bg-night text-parchment border border-line rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-flame/30 placeholder:text-parchment-dim/40" %>
+
+      <div>
+        <%= form.label :name, "Product Name", class: "block text-sm font-medium mb-2 text-parchment-dim" %>
+        <%= form.text_field :name, required: true, placeholder: "e.g., Diwali Delight Hamper", class: input_cls %>
+      </div>
+
+      <div>
+        <%= form.label :description, "Description", class: "block text-sm font-medium mb-2 text-parchment-dim" %>
+        <%= form.text_area :description, rows: 3, placeholder: "What's in the hamper and who is it for?", class: input_cls %>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <%= form.label :price, "Price (INR)", class: "block text-sm font-medium mb-2 text-parchment-dim" %>
+          <%= form.number_field :price, min: 1, required: true, placeholder: "1999", class: input_cls %>
+        </div>
+        <div>
+          <%= form.label :category, "Category", class: "block text-sm font-medium mb-2 text-parchment-dim" %>
+          <%= form.select :category, Product::CATEGORIES, {}, class: input_cls %>
+        </div>
+      </div>
+
+      <div>
+        <%= form.label :images, "Images (comma-separated URLs)", class: "block text-sm font-medium mb-2 text-parchment-dim" %>
+        <%= form.text_field :images, value: @product.images&.join(", "), placeholder: "https://example.com/image1.jpg, https://example.com/image2.jpg", class: input_cls %>
+        <p class="text-parchment-dim/60 text-xs mt-1">Separate multiple images with commas</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <%= form.label :in_stock, "In Stock", class: "block text-sm font-medium mb-2 text-parchment-dim" %>
+          <label class="inline-flex items-center gap-2 cursor-pointer">
+            <%= form.check_box :in_stock, class: "w-4 h-4 accent-[#E9B44C]" %>
+            <span class="text-sm text-parchment">Available</span>
+          </label>
+        </div>
+        <div>
+          <%= form.label :featured, "Featured on homepage", class: "block text-sm font-medium mb-2 text-parchment-dim" %>
+          <label class="inline-flex items-center gap-2 cursor-pointer">
+            <%= form.check_box :featured, class: "w-4 h-4 accent-[#E9B44C]" %>
+            <span class="text-sm text-parchment">Feature it</span>
+          </label>
+        </div>
+      </div>
+
+      <div>
+        <%= form.label :tags, "Tags (comma-separated)", class: "block text-sm font-medium mb-2 text-parchment-dim" %>
+        <%= form.text_field :tags, value: @product.tags&.join(", "), placeholder: "ritual, gift, premium", class: input_cls %>
+      </div>
+
+      <div>
+        <%= form.label :ritual_contents, "Ritual Contents / Samagri (comma-separated)", class: "block text-sm font-medium mb-2 text-parchment-dim" %>
+        <%= form.text_area :ritual_contents, value: @product.ritual_contents&.join(", "), rows: 3,
+              placeholder: "diya set, rangoli colors, sweets box, aarti thali", class: input_cls %>
+        <p class="text-parchment-dim/60 text-xs mt-1">List the ritual items included in the hamper</p>
+      </div>
+
+      <%= form.submit(@product.new_record? ? "Add Product" : "Update Product",
+            class: "w-full bg-flame text-night py-3 px-6 rounded-xl font-medium text-lg hover:opacity-90 transition-opacity cursor-pointer") %>
+    <% end %>
+  </div>
+</div>

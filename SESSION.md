@@ -1,120 +1,116 @@
-# Session — 2026-08-07: Night-of-the-Celebration Design Pass
+# Session — 2026-08-24: OCI credentials wired, ARM hunter LIVE (waiting for capacity)
 
-## What happened
-- Ran the Anthropic `frontend-design` skill (`npx skills use`), applied it to the landing page + store shell
-- Flipped the site from cream/saffron to a dark "night of the celebration" canvas (approved direction)
-- New type system: Rozha One (display), Instrument Sans (body), Space Mono (dates/countdown) via `next/font/google`
-- New palette tokens in `globals.css`: night `#1A0B0A`, ember `#2E1210`, flame `#E9B44C`, marigold `#E8731F`, kumkum `#C2322E`, parchment `#F7EEDC`, leaf `#8FAE6B`, line `#422A1C`
-- Hero rebuilt around "Send the festival home." with a live countdown to the next festival + ritual-item chips
-- Signature element: `ToranGarland` — marigold & mango-leaf SVG doorway swag that sways at the hero top
-- New `src/lib/festivals.ts` (dates, days-left, ritual items) and `YearCalendar` section rendering the year chronologically (real dates as numbering)
-- New `Reveal` scroll-triggered reveal component (IntersectionObserver, reduced-motion safe)
-- Dark-restyled Navbar (persistent "Raksha Bandhan · 15d" countdown chip), Footer, ProductCard, and all 6 pages
-- CTA/button system moved to flame (`bg-flame text-night`) with mono date-stamp data treatment
-- Fixed 4 `react-hooks/set-state-in-effect` lint errors (lazy state init, derived scroll state, deterministic particles, one justified eslint-disable for localStorage hydration in cart.tsx)
-- `npm run build` now succeeds on Node 25.9.0 (previous Bus error gone) — verified pages 200 + DOM/font/token checks via headless Chromium
+## ⚡ RESUME HERE — current state
 
-## Files changed
-| File | Change |
-|---|---|
-| `src/app/globals.css` | Night palette tokens, font tokens, flame gradient, night glow shadows, reveal animation |
-| `src/app/layout.tsx` | Loads Rozha One / Instrument Sans / Space Mono; dark body; ToranGarland moved out |
-| `src/lib/festivals.ts` | NEW — festival calendar (dates, days-left, ritual items) + `useNextFestival` |
-| `src/components/FestiveHero.tsx` | ToranGarland signature upgrade, deterministic FloatingRangoli, FestivalCountdown |
-| `src/components/FestivalHero.tsx` | Rebuilt night hero (countdown date-stamp, ritual chips) |
-| `src/components/YearCalendar.tsx` | NEW — chronological festival calendar + anytime rituals |
-| `src/components/Reveal.tsx` | NEW — scroll reveal wrapper |
-| `src/app/page.tsx` | Rebuilt sections (hero, calendar, season hampers, built-for-the-ritual, trust) |
-| `src/components/Navbar.tsx` / `Footer.tsx` / `ProductCard.tsx` | Dark restyle + countdown chip |
-| inner pages (products, detail, cart, checkout, success) | Dark surfaces, flame CTAs |
-| `AGENTS.md` / `SESSION.md` | Design system + status updates |
+**The ARM hunt is RUNNING in the background** (`scripts/oci/grab-arm.sh`, launched via setsid+nohup, log at `/tmp/opencode/arm-hunt.log`). It cycles all 3 Chicago ADs every ~10 min trying to grab a 2 OCPU / 12 GB Always Free instance (Oracle cut A1 free limits from 4/24 → 2/12; script defaults updated).
 
-## Notes / next
-- Images still placeholders (Pexels) — real product photos later
-- Copy now uses ritual vocabulary (shagun, ritual-ready, samagri)
+**On success the script**: writes public IP to `scripts/oci/arm-instance-ip.txt` AND fires `notify-send -u critical` desktop ping, then exits.
 
-## Follow-up — 2026-08-07 (live review)
-- Ran `npm run dev` — server bound to http://localhost:3000 and served HTTP 200 (the old "doesn't bind to port 3000" issue did not recur)
-- User reviewed in browser: "It looks a bit better now" — approved
-- `useNextFestival`/`YearCalendar` reworked to use a `useToday()` clock (30-min tick) so the countdown stays live on static deploys instead of freezing at build time
-- Committed the night-redesign + session docs
+**Check status anytime**: `tail -20 /tmp/opencode/arm-hunt.log && cat scripts/oci/arm-instance-ip.txt 2>/dev/null`
+
+### Wired & verified 2026-08-24
+- **Committed `5e8dc72`**: full Rails conversion + OCI tooling as one atomic checkpoint (215 files; master.key/.env/sqlite verified excluded via Rails .gitignore).
+- **Network landmine found & fixed in cross-check**: the reused signup-era `free-vcn` had NO internet route (empty route table) — hunter would have won an unreachable instance. Created IGW + `0.0.0.0/0` route on subnet's RT + opened security-list ports **22/80/443** (Phase 4 console task done early). Only OS-level iptables remains post-launch.
+- `~/.oci/config` (0600) — user/tenancy OCIDs + fingerprint `0d:dc:4a:9c:…`, region **us-chicago-1**, key at `~/.oci/oci_api_key.pem`. Auth verified via API.
+- OCI CLI reinstalled PERSISTENTLY at `~/.local/share/oci-venv` → symlink `~/.local/bin/oci` (v3.90.3). Old /tmp venv died with reboot — don't repeat that.
+- Script hardened: OCID parsed from launch response (not laggy list), public-IP retry loop, bootstrap route-table bug fixed (was passing VCN OCID as rt-id), subnet route sanity warning at startup, OUT/ERR temp cleanup.
+- CLI quirks learned: empty list results render as ZERO output exit 0; `--sort-by` needs uppercase TIMECREATED; `pkill -f` with pattern present in own cmdline hangs the tool shell — kill by PID.
+
+### Next steps once IP lands
+1. `ssh ubuntu@IP` (key already authorized by script) · wait for cloud-init
+2. Open ports TWICE: OCI Security List (22/80/443) AND Ubuntu's iptables/ufw (Oracle images ship locked down)
+3. Fix GHCR token first: `gh auth refresh -s write:packages` (current token can't push)
+4. Update `config/deploy.yml` proxy hosts/servers with the real IP → `bin/kamal setup`
+5. `bin/kamal app exec --reuse "bin/rails db:seed"` → Namecheap DNS (A @ → IP, CNAME www) → https://desisaga.com live
+
+### Contingency (if hunt starves for days)
+Upgrade tenancy to Pay-As-You-Go (card on file, ₹0 within A1 limits, jumps capacity queue). User saw console banner: free A1 limits now 2 OCPU/12 GB — already accounted for.
 
 ---
 
-# Session — 2026-07-15: Full Build Session
+## Prior session (2026-08-23) — full Next.js → Rails 8.1 conversion
+All app work DONE & verified (routes/cart/admin/tests/assets/Docker). Admin login: `admin@desisaga.com` / `desisaga-admin-2026`. Dev server stopped; start with `bin/rails server -p 3000`. Details below.
 
-## What happened
-- Started in dock-setup-backup folder, migrated context to ~/Projects/desisaga
-- Created Next.js 16 project with TypeScript, Tailwind, App Router
-- Built complete store with 6 pages and 8 sample products
-- Git initialized with 2 commits
-- Dev server has port binding issue (Node.js 25 + Turbopack) — needs investigation
+## What happened this session
 
-## What was built
-| File | Description |
+### 1. Complete rewrite: Next.js → Ruby on Rails 8.1 (DHH-style)
+- Deleted ALL Next.js code (src/, package.json, configs). Kept docs/, okf/, specs/, skills/, data/backlog.json.
+- Fresh Rails 8.1.3 app generated at repo root (`rails new --css=tailwind --skip-git`, then rsynced).
+- Ruby 4.0.6 via mise; OCI CLI installed at `~/.local/bin/oci` (venv at /tmp/opencode/oci-venv — REINSTALL if /tmp cleared).
+
+### 2. Stack
+- Hotwire (Turbo+Stimulus) via Importmap — NO Node build step
+- Tailwind v4 via tailwindcss-rails (theme in `app/assets/tailwind/application.css`)
+- SQLite + Solid Cache/Queue/Cable · Puma · Kamal 2 scaffolded
+
+### 3. Features ported 1:1 from Next.js
+| Route | What |
 |---|---|
-| `src/app/page.tsx` | Landing page — hero, category grid, featured hampers, trust bar |
-| `src/app/products/page.tsx` | Product catalog — grid, category filters, search |
-| `src/app/products/[slug]/page.tsx` | Product detail — image, description, add to cart |
-| `src/app/cart/page.tsx` | Cart — quantity controls, subtotal, free shipping threshold |
-| `src/app/checkout/page.tsx` | Checkout — Stripe placeholder (test mode pending) |
-| `src/app/checkout/success/page.tsx` | Order confirmation |
-| `src/app/layout.tsx` | Root layout — Navbar, Footer, CartProvider |
-| `src/components/Navbar.tsx` | Sticky nav with cart badge, mobile menu |
-| `src/components/Footer.tsx` | Footer with shop/festival/support links |
-| `src/components/ProductCard.tsx` | Product card with emoji, price, category |
-| `src/lib/cart.ts` | Cart context with localStorage persistence |
-| `src/lib/products.ts` | Product data functions (getAll, getBySlug, etc.) |
-| `src/types/index.ts` | TypeScript types (Product, CartItem, Cart) |
-| `data/products.json` | 8 festival hamper products |
-| `AGENTS.md` | Full project context |
-| `SESSION.md` | This file |
+| `/` | Toran-garland hero w/ live festival countdown (`lib/festivals.rb`), year calendar, featured grid, ritual pillars, trust bar |
+| `/products` | Category chips + search (`Product.search` scope) |
+| `/products/:slug` | Detail + ritual contents + add-to-cart (Turbo form) |
+| `/cart` | Server-side session cart (`session[:cart]`), qty +/-/remove/clear as plain forms |
+| `/checkout` | Stripe test-mode placeholder → demo order → "Shubh Labh!" success page |
+| `/login` | Rails 8 `authentication` generator (bcrypt, signed cookie, sessions table) |
+| `/admin/products` | Full CRUD grid, turbo-confirm deletes, per-form CSRF safe |
 
-## Git commits
-1. `b3d3d77` — Initial Next.js project setup
-2. `bedd7f6` — Add store pages, cart, product catalog, and components
+### 4. Key files created
+- `lib/festivals.rb` (autoloaded; DATED_FESTIVALS/ANYTIME_RITUALS/days_left/next_festival)
+- `app/models/{product,user,cart_item,current}.rb` — Product has json columns images/tags/ritual_contents, `to_param` = slug
+- `app/controllers/application_controller.rb` — NO auth include; cart helpers; **current_user resumes session from cookie** (bug fix below)
+- `app/controllers/admin/base_controller.rb` (include Authentication + require_admin, layout "admin")
+- Views: ERB partials in `app/views/shared/` (_navbar _footer _toran_garland _spinning_mandala _floating_rangoli _animated_diya _year_calendar _product_card)
+- `app/helpers/icons_helper.rb` — inline lucide SVGs (no icon gem)
+- Stimulus: navbar_controller (mobile menu), reveal_controller (scroll reveal)
+- `db/seeds.rb` — 8 hampers + admin user from ENV
+- Design system intact: night palette (#1A0B0A/#2E1210/#F7EEDC/#E9B44C…), Rozha One/Instrument Sans/Space Mono via Google Fonts CDN
 
-## Sample products (8 total)
-1. Diwali Delight Hamper — ₹2,499
-2. Complete Puja Kit — ₹1,899
-3. Wedding Blessing Box — ₹3,499
-4. Griha Pravesh Set — ₹2,799
-5. Navratri Celebration Pack — ₹1,999
-6. Raksha Bandhan Special — ₹1,499
-7. Holi Colors Gift Box — ₹1,299
-8. Ganesh Chaturthi Kit — ₹2,199
+### 5. Bugs found & fixed (smoke test caught these)
+| Bug | Fix |
+|---|---|
+| Admin CRUD used `find(id)` but routes carry SLUG (`to_param`) | `find_by!(slug:)` in Admin::ProductsController#set_product |
+| `images.first` crashed when images nil | `images&.first` in Product#primary_image |
+| Navbar showed "Sign in" even after login — ApplicationController's `current_user` read Current.session but never resumed it from cookie (concern only included in Sessions/Admin controllers) | `current_user` now does `Current.session \|\|= Session.find_by(id: cookies.signed[:session_id])` — verified over HTTP on /, /products, /cart |
+| Fixture products.yml had duplicate blank slugs → all tests errored | Wrote 2 valid fixtures; suite green |
 
-## Tech stack
-- Next.js 16.2.10 (App Router, TypeScript)
-- Tailwind CSS + shadcn/ui
-- Stripe (installed, test mode placeholders)
-- lucide-react (icons)
-- Cart: React Context + localStorage
+### 6. Verification status (2026-08-23)
+- ✅ All routes smoke-tested live (200s; /admin/* 302 without cookie, 200 with; /nope → styled 404)
+- ✅ Cart flow end-to-end over curl incl. per-form CSRF token extraction (/tmp/opencode/tok.py)
+- ✅ Admin login bad creds rejected, good creds reach inventory; create+delete product verified over HTTP
+- ✅ Signed-in state ("Sign out" + Admin link) asserted on public pages after fix
+- ✅ `bin/rails test`: 12 runs, 48 assertions, 0 failures
+- ✅ `RAILS_ENV=production assets:precompile` OK
+- ✅ Docker image builds AND boots locally (prod mode): `/` 200, `/up` green (needs Host: desisaga.com header — hosts allowlist)
 
-## Known issue
-- `npm run dev` starts but doesn't bind to port 3000
-- `npm run build` crashes with Bus error (Node.js 25 + Turbopack)
-- Likely Node.js 25 compatibility — Vercel uses Node 20, should work there
-- Investigation needed: try `--turbo false` or use Node 20 LTS
+### 7. Deploy prep (DONE, waiting on server)
+- `config/deploy.yml`: service desisaga, image ghcr.io/dilipm1/desisaga, proxy ssl host desisaga.com, volume desisaga_storage:/rails/storage, env injects ADMIN_EMAIL/ADMIN_PASSWORD(+RAILS_MASTER_KEY secret)
+- `config/environments/production.rb`: force_ssl + assume_ssl ON, config.hosts = [desisaga.com, www.desisaga.com]
+- `.kamal/secrets`: RAILS_MASTER_KEY=$(cat config/master.key); ADMIN_PASSWORD from .env; KAMAL_REGISTRY_PASSWORD expected as env var
+- Registry decision: GHCR (gh logged in as dilipm1, but token LACKS write:packages scope — needs `gh auth refresh -s write:packages`)
+- User rejected paid VPS for now → chose Oracle Always Free ARM route
+- **`scripts/oci/grab-arm.sh`** written + syntax-checked: bootstraps VCN/subnet if absent, cycles all ADs, retries "Out of host capacity" forever w/ jittered ~5min backoff, writes IP to scripts/oci/arm-instance-ip.txt. Env overrides: OCPUS/MEMORY_GB/RETRY_SECONDS. Run non-blocking: `nohup scripts/oci/grab-arm.sh > /tmp/opencode/arm-hunt.log 2>&1 &`
+- Fallback option discussed, not built: Render free tier (ephemeral disk caveat)
 
-## Next steps (when resuming)
-1. Fix dev server issue (or deploy directly to Vercel)
-2. Install Vercel CLI: `npm i -g vercel`
-3. Deploy: `vercel` from project root
-4. Connect desisaga.com domain
-5. Configure DNS on Namecheap (CNAME → cname.vercel-dns.com)
-6. Set up Stripe account and add real keys
-7. Replace placeholder images with real product photos
+---
 
-## DNS configuration (for later)
-```
-Type    Host    Value
-CNAME   @       cname.vercel-dns.com
-CNAME   www     cname.vercel-dns.com
-```
+## 🚧 Waiting on USER (to unblock deploy)
 
-## Context from dock-setup-backup
-- User's system: Omarchy (Arch Linux), Hyprland, ThinkPad T14
-- Browser: qutebrowser for lightweight use, Chromium for heavy sites
-- Glances MCP server running for system monitoring
-- Performance-conscious user — prefers lightweight solutions
+**Oracle Cloud API credentials** (they hit "out of host capacity" in console; automation needs API access):
+1. Console → profile icon → **User settings → API keys → Add API Key → Generate API Key Pair**
+2. Download private key → save as `~/.oci/oci_api_key.pem` (chmod 600)
+3. Paste me: home region (e.g. ap-mumbai-1) · tenancy OCID · user OCID · fingerprint
+4. I then: write ~/.oci/config → verify auth → launch grab-arm.sh in background → report when IP lands
+
+**If capacity never frees:** suggest PAYG upgrade (stays free within A1 limits, jumps queue) or Render fallback.
+
+## Next steps after instance lands
+1. `bin/kamal setup` (installs Docker, boots proxy, first deploy, Let's Encrypt for desisaga.com)
+2. `bin/kamal app exec --reuse "bin/rails db:seed"`
+3. Namecheap DNS: A record @ → IP (+ CNAME www)
+4. Later: real Stripe, customer accounts, fix .github/workflows/ci-cd.yml (still Node-targeted!)
+
+## Gotchas for next session
+- `pkill -f rails` can hang the tool shell (kills own process group) — use `kill -9 $(pgrep -f puma)` carefully or just leave server running
+- Per-form CSRF tokens: scraping "first" authenticity_token on a page grabs the WRONG form's token; extract per-form-block (tok.py pattern in /tmp/opencode — recreate if lost)
+- /checkout redirects to /products when cart empty (by design)
+- Production container 403s on localhost Host header — hosts allowlist is intentional; test with `-H "Host: desisaga.com"`

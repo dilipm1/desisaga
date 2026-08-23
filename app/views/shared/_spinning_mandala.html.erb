@@ -1,0 +1,31 @@
+<div class="absolute right-[-220px] top-[-120px] w-[560px] h-[560px] hidden md:block">
+  <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full animate-[spin_120s_linear_infinite]">
+    <circle cx="200" cy="200" r="195" stroke="#E9B44C" stroke-width="0.5" opacity="0.12"/>
+    <circle cx="200" cy="200" r="180" stroke="#E9B44C" stroke-width="0.3" opacity="0.08"/>
+    <% 12.times do |i| %>
+      <% angle = i * 30 * Math::PI / 180
+         x1 = 200 + 140 * Math.cos(angle)
+         y1 = 200 + 140 * Math.sin(angle)
+         x2 = 200 + 180 * Math.cos(angle)
+         y2 = 200 + 180 * Math.sin(angle) %>
+      <line x1="<%= x1 %>" y1="<%= y1 %>" x2="<%= x2 %>" y2="<%= y2 %>" stroke="#E9B44C" stroke-width="0.3" opacity="0.1"/>
+      <circle cx="<%= x2 %>" cy="<%= y2 %>" r="3" fill="#E9B44C" opacity="0.06"/>
+    <% end %>
+    <% 8.times do |i| %>
+      <% angle = i * 45 * Math::PI / 180
+         cx = 200 + 120 * Math.cos(angle)
+         cy = 200 + 120 * Math.sin(angle) %>
+      <path d="M200,200 Q<%= cx + 15 %>,<%= cy - 15 %> <%= cx %> <%= cy %> Q<%= cx - 15 %>,<%= cy + 15 %> 200,200"
+        fill="none" stroke="#E9B44C" stroke-width="0.4" opacity="0.08"/>
+    <% end %>
+    <% 16.times do |i| %>
+      <% angle = i * 22.5 * Math::PI / 180
+         cx = 200 + 80 * Math.cos(angle)
+         cy = 200 + 80 * Math.sin(angle) %>
+      <circle cx="<%= cx %>" cy="<%= cy %>" r="2" fill="#E9B44C" opacity="0.05"/>
+    <% end %>
+    <circle cx="200" cy="200" r="60" stroke="#E9B44C" stroke-width="0.3" opacity="0.06"/>
+    <circle cx="200" cy="200" r="40" stroke="#E9B44C" stroke-width="0.4" opacity="0.08"/>
+    <circle cx="200" cy="200" r="15" fill="#E9B44C" opacity="0.04"/>
+  </svg>
+</div>

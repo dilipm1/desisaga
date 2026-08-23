@@ -1,47 +1,34 @@
 # Desi Saga
 
-Ecommerce store for Indian Hindu festival and ritual gift hampers. Pre-curated
-packages for Diwali, weddings, puja kits, housewarming, Navratri, Raksha Bandhan,
-and more — designed around a dark "night of the celebration" aesthetic.
+Indian Hindu festival & ritual gift hampers — desisaga.com.
 
-## Tech Stack
+Ruby on Rails 8.1 · Hotwire (Turbo + Stimulus) · Importmap (no Node build) · Tailwind CSS v4 · SQLite · Solid Cache/Queue/Cable
 
-- **Framework**: Next.js 16 (App Router, TypeScript)
-- **Styling**: Tailwind CSS v4
-- **Type**: Rozha One (display) · Instrument Sans (body) · Space Mono (dates/countdown)
-- **Payments**: Stripe (test mode placeholders)
-- **Cart**: React Context + localStorage
-- **Icons**: lucide-react
+## Quick start
 
-## Pages
-
-- `/` — Landing (toran hero, live festival countdown, year-of-festivals calendar)
-- `/products` — Catalog with category filters and search
-- `/products/[slug]` — Product detail
-- `/cart` — Cart with quantity controls
-- `/checkout` — Checkout (Stripe placeholder)
-- `/checkout/success` — Order confirmation
-
-## Getting Started
-
-```bash
-npm install
-npm run dev
+```sh
+bin/setup          # install gems, prepare DB
+bin/rails db:seed  # 8 festival hampers + admin user
+bin/dev            # run the app at http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+## What's inside
 
-## Scripts
+- `/` — festival hero with live countdown, year calendar, featured hampers
+- `/products` — catalog with category filters + search; `/products/:slug` detail pages
+- `/cart` — server-side session cart (quantity +/-, remove, clear)
+- `/checkout` — Stripe test-mode placeholder → demo order success page
+- `/login` — bcrypt session auth (Rails `authentication` generator)
+- `/admin/products` — inventory CRUD (admin role required)
 
-```bash
-npm run dev      # dev server (Turbopack)
-npm run build    # production build
-npm run start    # serve production build
-npm run lint     # eslint
+Admin credentials come from `.env` (`ADMIN_EMAIL` / `ADMIN_PASSWORD`), defaults `admin@desisaga.com` / `desisaga-admin-2026`.
+
+## Tests
+
+```sh
+bin/rails test
 ```
 
-## Notes
+## Deployment
 
-- Product data lives in `data/products.json`; festival calendar data in `src/lib/festivals.ts`
-- Images are placeholders (Pexels) until real product photos are available
-- Stripe is installed but payment processing is pending real keys
+Kamal is preconfigured (`config/deploy.yml`) for a VPS with SQLite. See AGENTS.md for the full plan.

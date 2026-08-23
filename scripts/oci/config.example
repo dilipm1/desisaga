@@ -1,0 +1,6 @@
+[DEFAULT]
+user=YOUR_USER_OCID
+fingerprint=YOUR_API_KEY_FINGERPRINT
+tenancy=YOUR_TENANCY_OCID
+region=YOUR_HOME_REGION
+key_file=~/.oci/oci_api_key.pem

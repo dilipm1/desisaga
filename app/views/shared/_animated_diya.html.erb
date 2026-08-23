@@ -1,0 +1,30 @@
+<div class="relative inline-block" style="width: <%= size || 40 %>px; height: <%= (size || 40) * 1.2 %>px;">
+  <svg viewBox="0 0 60 72" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+    <ellipse cx="30" cy="62" rx="22" ry="6" fill="#8B4513" opacity="0.3"/>
+    <path d="M12 50 C12 50 14 62 30 62 C46 62 48 50 48 50 L45 45 L15 45 Z" fill="url(#diyaBase)"/>
+    <path d="M15 45 L45 45 L43 40 L17 40 Z" fill="#CD853F"/>
+    <ellipse cx="30" cy="40" rx="13" ry="3" fill="#DEB887"/>
+    <ellipse cx="30" cy="41" rx="10" ry="2" fill="#B8860B" opacity="0.6"/>
+    <line x1="30" y1="38" x2="30" y2="28" stroke="#4A3728" stroke-width="1.5" stroke-linecap="round"/>
+    <ellipse cx="30" cy="22" rx="8" ry="10" fill="#FF6B00" opacity="0.15">
+      <animate attributeName="rx" values="8;10;8" dur="1.5s" repeatCount="indefinite"/>
+      <animate attributeName="ry" values="10;12;10" dur="1.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.15;0.25;0.15" dur="1.5s" repeatCount="indefinite"/>
+    </ellipse>
+    <path d="M30 16 C26 20 24 26 30 28 C36 26 34 20 30 16Z" fill="#FF8C00">
+      <animate attributeName="d" values="M30 16 C26 20 24 26 30 28 C36 26 34 20 30 16Z;M30 14 C25 19 23 25 30 28 C37 25 35 19 30 14Z;M30 16 C26 20 24 26 30 28 C36 26 34 20 30 16Z" dur="1.2s" repeatCount="indefinite"/>
+    </path>
+    <path d="M30 19 C28 22 27 25 30 27 C33 25 32 22 30 19Z" fill="#FFD700">
+      <animate attributeName="d" values="M30 19 C28 22 27 25 30 27 C33 25 32 22 30 19Z;M30 17 C27 21 26 24 30 27 C34 24 33 21 30 17Z;M30 19 C28 22 27 25 30 27 C33 25 32 22 30 19Z" dur="1s" repeatCount="indefinite"/>
+    </path>
+    <ellipse cx="30" cy="23" rx="1.5" ry="3" fill="#FFFACD">
+      <animate attributeName="ry" values="3;4;3" dur="0.8s" repeatCount="indefinite"/>
+    </ellipse>
+    <defs>
+      <linearGradient id="diyaBase" x1="30" y1="50" x2="30" y2="62" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#CD853F"/>
+        <stop offset="1" stop-color="#8B4513"/>
+      </linearGradient>
+    </defs>
+  </svg>
+</div>
