@@ -1,0 +1,10 @@
+#cloud-config
+# Anti-brick for Oracle Cloud Ubuntu images: their stock iptables REJECTs
+# everything except established + port 22. Open web ports at first boot
+# and persist, so the instance is reachable the moment it boots.
+runcmd:
+  - iptables -I INPUT -p tcp --dport 22 -j ACCEPT
+  - iptables -I INPUT -p tcp --dport 80 -j ACCEPT
+  - iptables -I INPUT -p tcp --dport 443 -j ACCEPT
+  - sh -c 'iptables-save > /etc/iptables/rules.v4 2>/dev/null || true'
+  - sh -c 'netfilter-persistent save 2>/dev/null || true'

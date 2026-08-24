@@ -18,12 +18,21 @@ set -uo pipefail
 OCPUS="${OCPUS:-2}"
 MEMORY_GB="${MEMORY_GB:-12}"
 SHAPE="${SHAPE:-VM.Standard.A1.Flex}"
-RETRY_SECONDS="${RETRY_SECONDS:-300}"          # 5 min between full rounds
+RETRY_SECONDS="${RETRY_SECONDS:-420}"         # 7 min between full rounds (429-safe)
 PROFILE="${PROFILE:-DEFAULT}"
 OS_NAME="Canonical Ubuntu"
 OS_VER="24.04"
 
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PID_FILE="${SCRIPT_DIR}/hunt.pid"
+IP_FILE="${SCRIPT_DIR}/arm-instance-ip.txt"
+CLOUD_INIT="${SCRIPT_DIR}/cloud-init.yaml"
+
 log() { echo "[$(date '+%F %T')] $*"; }
+
+# PID file for status/restart tooling (never pkill-grep again)
+echo $$ > "$PID_FILE"
+trap 'rm -f "$PID_FILE"' EXIT
 
 OCI="oci --profile $PROFILE"
 
@@ -107,8 +116,7 @@ while true; do
 
     log "Round ${ROUND} · trying ${AD} (${OCPUS} OCPU / ${MEMORY_GB} GB)…"
     OUT=$(mktemp); ERR=$(mktemp)
-    if $OCI compute instance launch \
-        --availability-domain "$AD" \
+    LAUNCH_ARGS=(--availability-domain "$AD" \
         --compartment-id "$COMPARTMENT_OCID" \
         --shape "$SHAPE" \
         --shape-config "{\"ocpus\":${OCPUS},\"memoryInGBs\":${MEMORY_GB}}" \
@@ -116,7 +124,12 @@ while true; do
         --subnet-id "$SUBNET_OCID" \
         --assign-public-ip true \
         --display-name desisaga-arm \
-        --ssh-authorized-keys-file "$SSH_KEY_PATH" > "$OUT" 2>"$ERR"; then
+        --ssh-authorized-keys-file "$SSH_KEY_PATH")
+    # cloud-init opens OS-level firewall at first boot (anti-brick)
+    if [ -f "$CLOUD_INIT" ]; then
+      LAUNCH_ARGS+=(--user-data-file "$CLOUD_INIT")
+    fi
+    if $OCI compute instance launch "${LAUNCH_ARGS[@]}" > "$OUT" 2>"$ERR"; then
       log "🎉 LAUNCHED in ${AD}!"
       # Prefer the OCID straight from the launch response (listing can lag behind).
       INSTANCE_OCID=$(python3 -c \
@@ -143,15 +156,30 @@ while true; do
         log "  waiting for public IP…"; sleep 10
       done
       log "PUBLIC IP: ${PUBLIC_IP}"
-      echo "$PUBLIC_IP" > "$(dirname "$0")/arm-instance-ip.txt"
+      echo "$PUBLIC_IP" > "$IP_FILE"
+      # Reachability probe — never celebrate a bricked instance
+      SSH_OK=0
+      for _ in 1 2 3 4 5 6 7 8 9 10; do
+        if timeout 5 bash -c "exec 3<>/dev/tcp/${PUBLIC_IP}/22" 2>/dev/null; then SSH_OK=1; break; fi
+        log "  probing SSH on ${PUBLIC_IP}:22 (attempt ${_})…"; sleep 15
+      done
+      if [ "$SSH_OK" = "1" ]; then
+        log "✅ SSH reachable — instance is genuinely alive."
+        SSH_MSG="SSH OK — ready for kamal setup"
+      else
+        log "⚠️  SSH not reachable yet (cloud-init may still be running) — verify manually."
+        SSH_MSG="SSH not confirmed — check iptables/cloud-init"
+      fi
       command -v notify-send >/dev/null 2>&1 && \
-        notify-send -u critical "🎉 desisaga ARM instance UP" "IP: ${PUBLIC_IP} — run kamal setup"
+        notify-send -u critical "🎉 desisaga ARM instance UP" "IP: ${PUBLIC_IP} — ${SSH_MSG}"
       rm -f "$ERR" "$OUT"
       exit 0
     fi
 
     if grep -qi "out of host capacity\|notavailable\|internal server error" "$ERR"; then
       log "  ${AD}: no ARM capacity yet."
+    elif grep -qi "TooManyRequests\|429" "$ERR"; then
+      log "  ${AD}: throttled by Oracle (429) — backing off."
     elif grep -qi "LimitExceeded\|QuotaExceeded\|NotAuthorizedOrNotFound" "$ERR"; then
       log "  ${AD}: HARD BLOCK — $(grep -oi 'Service limit[^.]*\|Out of host capacity[^.]*\|NotAuthorized[^.]*' "$ERR" | head -1)"
       grep -i "limit\|quota" "$ERR" | head -2 | sed 's/^/      /'
@@ -159,7 +187,19 @@ while true; do
       log "  ${AD}: unexpected error — $(grep -o '"code": "[^"]*"\|"message": "[^"]*"\|"status": [0-9]*' "$ERR" | tr '\n' ' ')"
     fi
     rm -f "$ERR" "$OUT"
+    # Anti-throttle: small gap between AD attempts within a round
+    if [ "$AD" != "${AD_LIST[-1]}" ]; then
+      AD_GAP=$((30 + RANDOM % 30))
+      sleep "$AD_GAP"
+    fi
   done
+
+  # Anti-block: every 8th round takes a long human-like break (10–20 min)
+  if [ $((ROUND % 8)) -eq 0 ]; then
+    LONG_PAUSE=$((600 + RANDOM % 600))
+    log "Humanizing pause: ${LONG_PAUSE}s (round ${ROUND})…"
+    sleep "$LONG_PAUSE"
+  fi
 
   SLEEP=$((RETRY_SECONDS + RANDOM % 90))   # jitter so we never look like abuse
   log "Sleeping ${SLEEP}s before round $((ROUND + 1))…"
