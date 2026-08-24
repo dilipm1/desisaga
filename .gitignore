@@ -27,6 +27,8 @@
 
 # machine-local state
 scripts/oci/arm-instance-ip.txt
+scripts/oci/hunt.log
+scripts/oci/hunt.pid
 
 # testing
 /coverage
