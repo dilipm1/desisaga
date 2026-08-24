@@ -2,11 +2,19 @@
 
 ## ⚡ RESUME HERE — current state
 
-**The ARM hunt is RUNNING in the background** (`scripts/oci/grab-arm.sh`, launched via setsid+nohup, log at `/tmp/opencode/arm-hunt.log`). It cycles all 3 Chicago ADs every ~10 min trying to grab a 2 OCPU / 12 GB Always Free instance (Oracle cut A1 free limits from 4/24 → 2/12; script defaults updated).
+**The ARM hunt runs as a systemd user service** (`~/.config/systemd/user/desisaga-hunt.service`): auto-restarts on crash, starts at login, logs to `scripts/oci/hunt.log`. Hunting 2 OCPU / 12 GB Always Free A1 across all 3 Chicago ADs.
 
-**On success the script**: writes public IP to `scripts/oci/arm-instance-ip.txt` AND fires `notify-send -u critical` desktop ping, then exits.
+**Watch it in the Omarchy bar**: `⏳ R<n>` widget (right section) = hunting · `✅ UP` = instance won · `⛔ OFF` = stopped. **Left-click**: floating terminal with live log + restart help. **Right-click**: restart hunt. Refreshes every 30 s.
 
-**Check status anytime**: `tail -20 /tmp/opencode/arm-hunt.log && cat scripts/oci/arm-instance-ip.txt 2>/dev/null`
+**Manual control**:
+```bash
+scripts/oci/hunt-status.sh      # one-line JSON state
+scripts/oci/hunt-restart.sh     # safe restart (systemd-aware)
+scripts/oci/hunt-watch.sh       # status + live tail
+systemctl --user stop|start|restart desisaga-hunt
+```
+
+**On success**: IP lands in `scripts/oci/arm-instance-ip.txt` + `notify-send` fires + widget flips to `✅ UP`. cloud-init now baked into the launch (opens OS iptables 22/80/443 at first boot — anti-brick), and the script probes SSH reachability before declaring victory.
 
 ### Wired & verified 2026-08-24
 - **Committed `5e8dc72`**: full Rails conversion + OCI tooling as one atomic checkpoint (215 files; master.key/.env/sqlite verified excluded via Rails .gitignore).
@@ -23,8 +31,34 @@
 4. Update `config/deploy.yml` proxy hosts/servers with the real IP → `bin/kamal setup`
 5. `bin/kamal app exec --reuse "bin/rails db:seed"` → Namecheap DNS (A @ → IP, CNAME www) → https://desisaga.com live
 
-### Contingency (if hunt starves for days)
-Upgrade tenancy to Pay-As-You-Go (card on file, ₹0 within A1 limits, jumps capacity queue). User saw console banner: free A1 limits now 2 OCPU/12 GB — already accounted for.
+### Contingency ladder (DECIDED 2026-08-24: Option 1 for now)
+User chose to keep the free-tier hunt (Option 1). Standing checkpoint plan:
+- **Day 7** (~2026-08-31): if still dry → add 1 OCPU/6 GB fallback hunter + GitHub Actions hunter for 24/7 coverage (our systemd hunter only runs while the desktop is on — that's the gap; GH Actions cron needs own repo, not a fork)
+- **Day 14** (~2026-08-07 Sep): if still dry → PAYG upgrade (card on file, ₹0 within 2/12 A1 limits, jumps capacity queue; set ₹0 budget alert immediately; NO downgrade after)
+
+Research notes (2026-08-24, web): June 15 2026 Oracle silently halved free A1 4/24 → 2/12 (enforcement from Aug 18, some instances disabled — we're already at 2/12 so safe). PAYG also got the same cut (so "upgrade keeps 4/24 free" is dead), but PAYG still gets priority capacity — not guaranteed though (São Paulo report: 1000+ failed attempts even on PAYG). US regions driest; capacity frees in random small windows, often US off-peak. $300 trial credits are NOT a path: trial-created resources get reclaimed at trial end.
+
+### Free VPS research report (non-Oracle, 2026-08-24 web search)
+**Context: desisaga needs a real VM (Rails + SQLite + Kamal/Docker + persistent disk). PaaS "free tiers" mostly fail on ephemeral filesystems / cold starts / no Docker.**
+
+| Provider | Free offer | Verdict for desisaga |
+|---|---|---|
+| **Oracle ARM A1** (current) | 2 OCPU/12 GB, 200 GB storage, 10 TB egress, forever | 🏆 Still by far the best deal in cloud — worth the lottery wait |
+| **Oracle AMD E2.1.Micro ×2** | 2× (1/8 OCPU/1 GB), forever, same tenancy | Fallback: instantly available (no lottery usually) but 1 GB RAM is very tight for Rails+Docker; keep as emergency option |
+| **GCP e2-micro** | 1 VM (0.25 vCPU/1 GB), 30 GB disk, forever, US regions only | Only other permanent free VM from a major cloud; 1 GB egress/month kills an ecommerce site |
+| **Render free** | 512 MB web service, 750 hr/mo, sleeps after 15 min (was 30), no custom domains on free | Ephemeral FS + cold starts + no custom domain = dealbreakers |
+| **Koyeb free** | As of Aug 2026: database-only (Postgres 5 hr/mo); compute free tier REMOVED (was 512 MB) | Dead for us |
+| **Fly.io** | Free tier removed Oct 2024; new accounts get 2-hour trial only | Dead for us |
+| **Railway** | $5 one-time trial credit | Trial only |
+| **AWS/Azure** | 12-month trials (t2.micro/B1s) + credits | Trials, not forever; reclaim after |
+| **Cloudflare Workers/Pages** | 100k req/day free | Serverless edge — can't run Rails/SQLite |
+| **Vercel/Netlify** | Generous static/serverless | No Rails |
+| **Serv00** | 3 GB space, 512 MB RAM, SSH, FreeBSD, forever | Web hosting niche; no Docker, not for Rails+Kamal |
+| **EUserv VS2-Free** | 1 vCPU/1 GB, IPv6-ONLY | Needs tunneling; German; sketchy availability |
+| **Glitch / Alwaysdata / HelioHost** | Small always-free app hosting | Node/PHP-focused, tiny limits; not for production Rails |
+| **Hetzner/DO/Vultr** | Not free (€4–6/mo trials aside) | The honest paid fallback if Oracle never pays out |
+
+**Bottom line**: Oracle ARM remains the only free option that actually fits desisaga (RAM + persistent disk + Docker + custom domain + real egress). Everything else is either dead, a trial, sleeps, or can't run Rails+SQLite. If the lottery fails by Day 14: PAYG first (still ₹0), a €4/mo Hetzner CX22 as the paid escape hatch.
 
 ---
 
