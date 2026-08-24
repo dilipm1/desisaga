@@ -34,6 +34,15 @@ systemctl --user stop|start|restart desisaga-hunt
 ### Shape alternation added (2026-08-24 afternoon)
 User asked whether varying image/shape helps vs only rotating ADs. Answer: **image = no** (placement checks shape CPU/RAM only; images live in block storage), **shape size = YES** (fragmented host capacity fits 1 OCPU/6 GB far more often than 2/12), AD = already covered. So `grab-arm.sh` now **alternates each round between 2 OCPU/12 GB and 1 OCPU/6 GB** (even rounds full, odd rounds half — same API volume, no extra throttle risk). A 1/6 win is upsizeable later: stop → edit shape → 2/12 → start (resize itself retryable; instance stays ours). Env `OCPUS`+`MEMORY_GB` together pin one size (systemd unit sets neither → alternation active). Verified live: Round 1 ran 2/12 across all 3 ADs; reduced-size win logs an upsize hint. Note: restart resets the round counter to 1 (cumulative denials/throttles unaffected).
 
+### Non-big-3 free options sweep (2026-08-24)
+- **Serv00** (Poland, non-profit): genuinely free forever — 3 GB SSD, unlimited transfer, 512 MB RAM, SSH + 15 system processes, 10 MySQL DBs, EU-hosted, 170k users. BUT FreeBSD (no Docker/Kamal), 512 MB RAM → not viable for Rails prod.
+- **EUserv VS2-free** (Germany): free forever container VPS (~1 vCPU/1 GB) but **IPv6-only** (needs Cloudflare proxy/DNS64+NAT64), monthly manual extension required, LowEndTalk reports one-time €2.40 extension fee + "nearly unusable" performance. Emergency only.
+- **IBM Cloud Lite**: 256 MB-class, effectively dead as VM option. **Alibaba**: promo trials only, no permanent free VPS.
+- **Trials (not free)**: DO $200/60d · Vultr $100–250/30d · Linode/Akamai $100/60d · AccuWin Windows 30d.
+- ⚠️ **Avoid**: GratisVPS/VPSWala-style "free VPS" listicle sites — affiliate bait, unverifiable, often scams.
+- **Wildcard discussed**: home-server + Cloudflare Tunnel (₹0, uses desktop) — power/reliability unsuited to a storefront; noted only.
+- Multiple independent 2026 roundups (infrafree.dev, klymentiev, 1vps.com) converge: **only Oracle A1 and GCP e2-micro are truly free-forever VMs; everything else is trials or PaaS**. Our hunt remains optimal.
+
 ### Big-3 cloud free-tier deep check (2026-08-24, user asked for thorough verify)
 - **AWS** — overhauled July 15, 2025: old 12-month free EC2 is GONE for new accounts. Now credit-based: $100 signup + up to $100 earned, **Free plan dies at 6 months / credit exhaustion → account AUTO-CLOSES** (90-day grace, data deleted). 30+ always-free services (Lambda 1M req, DynamoDB 25 GB, CloudFront 1 TB) but **NO always-free VM**. Dead end for hosting desisaga.
 - **Azure** — unchanged: $200/30 days + **12-month B1s VM (750 hr/mo ≈ 1 VM 24/7)** + 65+ always-free (Functions 1M, Cosmos DB 1000 RU/s+25 GB). B1s = 1 vCPU/1 GB — real VM but tiny; hard cliff at month 12 (~$8/mo after).
