@@ -31,6 +31,9 @@ systemctl --user stop|start|restart desisaga-hunt
 4. Update `config/deploy.yml` proxy hosts/servers with the real IP → `bin/kamal setup`
 5. `bin/kamal app exec --reuse "bin/rails db:seed"` → Namecheap DNS (A @ → IP, CNAME www) → https://desisaga.com live
 
+### Shape alternation added (2026-08-24 afternoon)
+User asked whether varying image/shape helps vs only rotating ADs. Answer: **image = no** (placement checks shape CPU/RAM only; images live in block storage), **shape size = YES** (fragmented host capacity fits 1 OCPU/6 GB far more often than 2/12), AD = already covered. So `grab-arm.sh` now **alternates each round between 2 OCPU/12 GB and 1 OCPU/6 GB** (even rounds full, odd rounds half — same API volume, no extra throttle risk). A 1/6 win is upsizeable later: stop → edit shape → 2/12 → start (resize itself retryable; instance stays ours). Env `OCPUS`+`MEMORY_GB` together pin one size (systemd unit sets neither → alternation active). Verified live: Round 1 ran 2/12 across all 3 ADs; reduced-size win logs an upsize hint. Note: restart resets the round counter to 1 (cumulative denials/throttles unaffected).
+
 ### Contingency ladder (DECIDED 2026-08-24: Option 1 for now)
 User chose to keep the free-tier hunt (Option 1). Standing checkpoint plan:
 - **Day 7** (~2026-08-31): if still dry → add 1 OCPU/6 GB fallback hunter + GitHub Actions hunter for 24/7 coverage (our systemd hunter only runs while the desktop is on — that's the gap; GH Actions cron needs own repo, not a fork)

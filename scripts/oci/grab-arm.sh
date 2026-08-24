@@ -4,19 +4,26 @@
 # Strategy:
 #   1. Bootstraps VCN + subnet + internet access if the tenancy has none.
 #   2. Cycles through every Availability Domain in the home region.
-#   3. Retries "Out of host capacity" forever with jittered backoff (never hammers).
-#   4. On success: waits for RUNNING, prints public IP, exits 0.
+#   3. ALTERNATES rounds between the full 2 OCPU/12 GB and a half 1 OCPU/6 GB
+#      allocation — host capacity fragments into small gaps, so smaller requests
+#      land far more often; a 1/6 win can be upsized to 2/12 later
+#      (stop → edit shape → start, retried while keeping the instance).
+#      (Image choice does NOT affect placement — capacity checks only look at
+#      shape CPU/RAM, images live in block storage.)
+#   4. Retries "Out of host capacity" forever with jittered backoff (never hammers).
+#   5. On success: waits for RUNNING, probes SSH, prints public IP, exits 0.
 #
 # Usage (non-blocking):
 #   nohup scripts/oci/grab-arm.sh > /tmp/opencode/arm-hunt.log 2>&1 &
 #
-# Env overrides:
+# Env overrides (OCPUS+MEMORY_GB together pin ONE size, disabling alternation):
 #   OCPUS=2 MEMORY_GB=12 RETRY_SECONDS=300 SHAPE=VM.Standard.A1.Flex PROFILE=DEFAULT
 set -uo pipefail
 
-# 2026-08-24: Oracle cut Free-tier A1 limits to 2 OCPU / 12 GB — these ARE the max now.
-OCPUS="${OCPUS:-2}"
-MEMORY_GB="${MEMORY_GB:-12}"
+# 2026-08-24: Oracle cut Free-tier A1 limits to 2 OCPU / 12 GB — 2/12 is the tenancy max.
+PIN_OCPUS="${OCPUS:-}"
+PIN_MEMORY_GB="${MEMORY_GB:-}"
+ALT_SIZES=("2 12" "1 6")
 SHAPE="${SHAPE:-VM.Standard.A1.Flex}"
 RETRY_SECONDS="${RETRY_SECONDS:-420}"         # 7 min between full rounds (429-safe)
 PROFILE="${PROFILE:-DEFAULT}"
@@ -103,6 +110,12 @@ SSH_KEY_PATH="${HOME}/.ssh/id_ed25519.pub"
 ROUND=0
 while true; do
   ROUND=$((ROUND + 1))
+  # Alternate size per round unless pinned via env (OCPUS + MEMORY_GB both set)
+  if [ -n "$PIN_OCPUS" ] && [ -n "$PIN_MEMORY_GB" ]; then
+    CUR_OCPUS="$PIN_OCPUS"; CUR_MEM="$PIN_MEMORY_GB"
+  else
+    read -r CUR_OCPUS CUR_MEM <<< "${ALT_SIZES[$(( (ROUND - 1) % ${#ALT_SIZES[@]} ))]}"
+  fi
   for AD in "${AD_LIST[@]}"; do
     # Skip an already-successful hunt
     EXISTING=$($OCI compute instance list --compartment-id "$COMPARTMENT_OCID" --all \
@@ -114,12 +127,12 @@ while true; do
       exit 0
     fi
 
-    log "Round ${ROUND} · trying ${AD} (${OCPUS} OCPU / ${MEMORY_GB} GB)…"
+    log "Round ${ROUND} · trying ${AD} (${CUR_OCPUS} OCPU / ${CUR_MEM} GB)…"
     OUT=$(mktemp); ERR=$(mktemp)
     LAUNCH_ARGS=(--availability-domain "$AD" \
         --compartment-id "$COMPARTMENT_OCID" \
         --shape "$SHAPE" \
-        --shape-config "{\"ocpus\":${OCPUS},\"memoryInGBs\":${MEMORY_GB}}" \
+        --shape-config "{\"ocpus\":${CUR_OCPUS},\"memoryInGBs\":${CUR_MEM}}" \
         --image-id "$IMAGE_OCID" \
         --subnet-id "$SUBNET_OCID" \
         --assign-public-ip true \
@@ -130,7 +143,8 @@ while true; do
       LAUNCH_ARGS+=(--user-data-file "$CLOUD_INIT")
     fi
     if $OCI compute instance launch "${LAUNCH_ARGS[@]}" > "$OUT" 2>"$ERR"; then
-      log "🎉 LAUNCHED in ${AD}!"
+      log "🎉 LAUNCHED in ${AD} (${CUR_OCPUS} OCPU / ${CUR_MEM} GB)!"
+      [ "$CUR_OCPUS" -lt 2 ] && log "Won at reduced size — upsize later: stop instance → edit shape → 2 OCPU/12 GB → start (resize may itself hit capacity; retry freely, the instance stays yours)."
       # Prefer the OCID straight from the launch response (listing can lag behind).
       INSTANCE_OCID=$(python3 -c \
         "import json; d=json.load(open('${OUT}')); print(d.get('id') or d['data']['id'])" 2>/dev/null || true)
