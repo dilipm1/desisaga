@@ -5,7 +5,7 @@ module Festivals
     Festival.new(
       id: "raksha-bandhan",
       name: "Raksha Bandhan",
-      date: "2026-08-22",
+      date: "2026-08-28",
       ritual: "The rakhi you tie for a sibling",
       items: [ "rakhi", "roli-chawal", "sweets", "a card in your words" ],
       category: "Raksha Bandhan"
@@ -13,7 +13,7 @@ module Festivals
     Festival.new(
       id: "ganesh-chaturthi",
       name: "Ganesh Chaturthi",
-      date: "2026-08-26",
+      date: "2026-09-14",
       ritual: "Welcoming Bappa home",
       items: [ "eco idol", "modak", "durva grass", "aarti book" ],
       category: "Ganesh Chaturthi"
@@ -21,7 +21,7 @@ module Festivals
     Festival.new(
       id: "navratri",
       name: "Navratri",
-      date: "2026-10-15",
+      date: "2026-10-11",
       ritual: "Nine nights of the goddess",
       items: [ "dandiya", "chunri", "puja samagri", "Durga idol" ],
       category: "Navratri"
@@ -37,7 +37,7 @@ module Festivals
     Festival.new(
       id: "holi",
       name: "Holi",
-      date: "2027-03-04",
+      date: "2027-03-22",
       ritual: "The festival of colours",
       items: [ "organic gulaal", "gujiya", "thandai mix" ],
       category: "Holi"
