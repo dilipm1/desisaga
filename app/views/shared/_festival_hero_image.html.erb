@@ -1,0 +1,60 @@
+<%# Subtle animated background image for upcoming festival — right side of hero %>
+<% festival_category = local_assigns[:festival]&.category
+   festival_name = local_assigns[:festival]&.name
+
+   # Map festival category/region to curated background image (Pexels, warmed)
+   image_map = {
+     "Diwali"           => "https://images.pexels.com/photos/10182772/pexels-photo-10182772.jpeg?auto=compress&cs=tinysrgb&w=800",
+     "Ganesh Chaturthi" => "https://images.pexels.com/photos/1485015/pexels-photo-1485015.jpeg?auto=compress&cs=tinysrgb&w=800",
+     "Holi"             => "https://images.pexels.com/photos/2041707/pexels-photo-2041707.jpeg?auto=compress&cs=tinysrgb&w=800",
+     "Navratri"         => "https://images.pexels.com/photos/17264037/pexels-photo-17264037.jpeg?auto=compress&cs=tinysrgb&w=800",
+     "Raksha Bandhan"   => "https://images.pexels.com/photos/15474159/pexels-photo-15474159.jpeg?auto=compress&cs=tinysrgb&w=800",
+     "Sankranti"        => "https://images.pexels.com/photos/594607/pexels-photo-594607.jpeg?auto=compress&cs=tinysrgb&w=800",
+     "Ugadi"            => "https://images.pexels.com/photos/3650438/pexels-photo-3650438.jpeg?auto=compress&cs=tinysrgb&w=800",
+     "Vaisakhi"         => "https://images.pexels.com/photos/326333/pexels-photo-326333.jpeg?auto=compress&cs=tinysrgb&w=800",
+     "Onam"             => "https://images.pexels.com/photos/6157052/pexels-photo-6157052.jpeg?auto=compress&cs=tinysrgb&w=800",
+     "Dussehra"         => "https://images.pexels.com/photos/2294341/pexels-photo-2294341.jpeg?auto=compress&cs=tinysrgb&w=800",
+     "Shivratri"        => "https://images.pexels.com/photos/1258865/pexels-photo-1258865.jpeg?auto=compress&cs=tinysrgb&w=800",
+     "Rama Navami"      => "https://images.pexels.com/photos/289587/pexels-photo-289587.jpeg?auto=compress&cs=tinysrgb&w=800",
+     "Janmashtami"      => "https://images.pexels.com/photos/236149/pexels-photo-236149.jpeg?auto=compress&cs=tinysrgb&w=800",
+     "Chhath Puja"      => "https://images.pexels.com/photos/1704486/pexels-photo-1704486.jpeg?auto=compress&cs=tinysrgb&w=800",
+     "Puja"             => "https://images.pexels.com/photos/35407778/pexels-photo-35407778.jpeg?auto=compress&cs=tinysrgb&w=800",
+     "Wedding"          => "https://images.pexels.com/photos/18897125/pexels-photo-18897125.jpeg?auto=compress&cs=tinysrgb&w=800",
+     "Housewarming"     => "https://images.pexels.com/photos/18849556/pexels-photo-18849556.jpeg?auto=compress&cs=tinysrgb&w=800"
+   }
+   hero_image = image_map[festival_category] || image_map["Diwali"]
+%>
+
+<div class="hidden lg:block absolute right-6 xl:right-10 top-1/2 -translate-y-1/2 w-[420px] xl:w-[520px] h-[480px] xl:h-[560px] pointer-events-none select-none" aria-hidden="true">
+  <!-- soft glow behind -->
+  <div class="absolute -inset-6 bg-gradient-to-br from-flame/10 via-marigold/5 to-kumkum/10 blur-[60px] rounded-[2.5rem]"></div>
+
+  <!-- image card -->
+  <div class="relative w-full h-full rounded-[2rem] overflow-hidden border border-line/30 bg-ember/30 backdrop-blur-[2px] warm-shadow-lg animate-float" style="animation-duration: 14s;">
+    <img src="<%= hero_image %>" alt="<%= festival_name || "Festival" %>" class="w-full h-full object-cover opacity-[0.22] scale-[1.03]" loading="eager" />
+
+    <!-- subtle gradients to keep image muted and blend into night -->
+    <div class="absolute inset-0 bg-gradient-to-t from-night via-night/40 to-transparent opacity-80"></div>
+    <div class="absolute inset-0 bg-gradient-to-l from-night/55 via-transparent to-ember/20"></div>
+    <div class="absolute inset-0 bg-gradient-to-br from-flame/[0.06] via-transparent to-kumkum/[0.08]"></div>
+
+    <!-- top highlight line -->
+    <div class="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-flame/20 to-transparent"></div>
+
+    <!-- floating diya accent over image -->
+    <div class="absolute bottom-6 right-6 opacity-60">
+      <%= render "shared/animated_diya", size: 36 %>
+    </div>
+
+    <!-- festival label on image (subtle) -->
+    <% if festival_name %>
+      <div class="absolute bottom-6 left-6 right-20">
+        <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-parchment/60">Up next</p>
+        <p class="font-display text-lg text-parchment/80 mt-1 leading-tight"><%= festival_name %></p>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- secondary blurred orb accent -->
+  <div class="absolute -bottom-10 -left-10 w-40 h-40 rounded-full bg-marigold/10 blur-[30px]"></div>
+</div>

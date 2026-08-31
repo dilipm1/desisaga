@@ -9,6 +9,7 @@
     <%= render "shared/spinning_mandala" %>
     <%= render "shared/floating_rangoli" %>
     <%= render "shared/toran_garland" %>
+    <%= render "shared/festival_hero_image", festival: festival %>
 
     <div class="max-w-7xl mx-auto px-6 lg:px-8 w-full relative z-10 pt-36 pb-28">
       <div class="max-w-2xl">
@@ -52,10 +53,6 @@
             <%= link_to festival ? products_path(category: festival.category) : products_path,
                   class: "inline-flex items-center justify-center gap-2 bg-marigold text-night font-semibold px-7 py-4 text-sm rounded-md hover:bg-kumkum transition-colors warm-shadow" do %>
               Shop <%= festival ? festival.name : "hampers" %> <%= icon("arrow-right", css_class: "w-4 h-4") %>
-            <% end %>
-            <%= link_to "#calendar",
-                  class: "inline-flex items-center justify-center gap-2 border border-line text-parchment-dim font-medium px-7 py-4 text-sm rounded-md hover:border-marigold hover:text-marigold transition-colors" do %>
-              <%= icon("calendar-days", css_class: "w-4 h-4") %> The year of festivals
             <% end %>
           </div>
         </div>

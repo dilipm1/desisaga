@@ -1,6 +1,6 @@
 <%
   next_festival = Festivals.next_festival
-  category_links = [["Shop", products_path], ["Diwali", products_path(category: "Diwali")], ["Wedding", products_path(category: "Wedding")], ["Puja", products_path(category: "Puja")]]
+  category_links = [["Shop", products_path], ["Diwali", products_path(category: "Diwali")], ["Wedding", products_path(category: "Wedding")], ["Puja", products_path(category: "Puja")], ["Calendar", "/#calendar"]]
 %>
 <nav data-controller="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-night/90 backdrop-blur-md border-b border-line">
   <div class="max-w-7xl mx-auto px-6 lg:px-8">
@@ -64,6 +64,7 @@
       <%= link_to "Diwali", products_path(category: "Diwali"), class: "block py-2.5 px-4 text-sm font-medium text-parchment-dim hover:text-flame hover:bg-ember rounded-md transition-colors" %>
       <%= link_to "Wedding", products_path(category: "Wedding"), class: "block py-2.5 px-4 text-sm font-medium text-parchment-dim hover:text-flame hover:bg-ember rounded-md transition-colors" %>
       <%= link_to "Puja", products_path(category: "Puja"), class: "block py-2.5 px-4 text-sm font-medium text-parchment-dim hover:text-flame hover:bg-ember rounded-md transition-colors" %>
+      <%= link_to "Calendar", "/#calendar", class: "block py-2.5 px-4 text-sm font-medium text-parchment-dim hover:text-flame hover:bg-ember rounded-md transition-colors" %>
       <% if authenticated? %>
         <div class="pt-2 px-4 space-y-2">
           <p class="text-sm text-parchment-dim">Signed in as <span class="text-flame"><%= current_user.display_name %></span></p>
