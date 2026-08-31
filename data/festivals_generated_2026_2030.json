@@ -1,0 +1,280 @@
+{
+  "meta": {
+    "generated_at": "2026-08-31",
+    "ayanamsa": "Lahiri (Chitrapaksha)",
+    "timezone": "Asia/Kolkata",
+    "source": "Pre-computed via Drik Panchang cross-check + Meeus solar/lunar logic (Option B)",
+    "note": "Observation dates are Gregorian dates when festival is observed (after sunset → next sunrise rule for Sankranti, sunrise tithi rule for lunar). Regional variants share same astronomical transit/date for 2026-27; date_override allows future split (e.g., Makara 2028 edge). Extend years by regenerating via PanchangCalculator.",
+    "years": [2026, 2027, 2028, 2029, 2030]
+  },
+  "festivals": [
+    {
+      "id": "makara-sankranti",
+      "base_name": "Makara Sankranti",
+      "category": "Sankranti",
+      "type": "solar",
+      "transit_rule": "Sun Nirayana longitude 270° (capricorn ingress), observation = next sunrise if transit after sunset",
+      "dates": {
+        "2026": "2026-01-14",
+        "2027": "2027-01-15",
+        "2028": "2028-01-15",
+        "2029": "2029-01-14",
+        "2030": "2030-01-14"
+      },
+      "transits": {
+        "2026": "2026-01-14T03:12:00+05:30",
+        "2027": "2027-01-14T21:14:00+05:30",
+        "2028": "2028-01-15T02:45:00+05:30",
+        "2029": "2029-01-14T08:30:00+05:30",
+        "2030": "2030-01-14T14:20:00+05:30"
+      },
+      "variants": [
+        { "region": "tamil-nadu", "state_code": "TN", "alias": "Thai Pongal", "days": 4, "hamper_slug": "thai-pongal-harvest", "ritual": "Bhogi, Thai Pongal (pongal pot, kolam), Mattu, Kaanum", "language": "ta", "items": ["pongal pot", "sugarcane", "kolam", "jaggery"] },
+        { "region": "gujarat", "state_code": "GJ", "alias": "Uttarayan", "hamper_slug": "uttarayan-kite", "ritual": "kite flying, til-gud", "language": "gu", "items": ["kite", "til-gud", "undhiyu"] },
+        { "region": "punjab", "state_code": "PB", "alias": "Maghi / Lohri", "hamper_slug": "maghi-lohri", "ritual": "bonfire, til, gur", "language": "pa", "items": ["til", "gur", "popcorn"] },
+        { "region": "karnataka", "state_code": "KA", "alias": "Sankranti / Ellu Bella", "hamper_slug": "sankranti-ellu-bella", "ritual": "ellu bella, sugarcane", "language": "kn", "items": ["ellu bella", "sugarcane", "jaggery"] },
+        { "region": "maharashtra", "state_code": "MH", "alias": "Makar Sankranti", "hamper_slug": "makar-sankranti-tilgul", "ritual": "tilgul, haldi-kumkum", "language": "mr", "items": ["tilgul", "haldi", "kumkum"] },
+        { "region": "default", "state_code": "ALL", "alias": "Makara Sankranti", "hamper_slug": "makara-sankranti-surya", "ritual": "Surya puja, Ganga snan, khichdi", "language": "hi", "items": ["khichdi", "til", "gur"] }
+      ]
+    },
+    {
+      "id": "maha-shivratri",
+      "base_name": "Maha Shivratri",
+      "category": "Shivratri",
+      "type": "lunar",
+      "tithi_rule": "Phalguna Krishna Chaturdashi spans midnight",
+      "dates": {
+        "2026": "2026-02-15",
+        "2027": "2027-02-06",
+        "2028": "2028-02-24",
+        "2029": "2029-02-13",
+        "2030": "2030-02-04"
+      },
+      "variants": [
+        { "region": "default", "alias": "Maha Shivratri", "hamper_slug": "shivratri-bilva", "ritual": "Shiva linga abhishek, bilva", "items": ["bilva leaves", "milk", "dhatura"] }
+      ]
+    },
+    {
+      "id": "holi",
+      "base_name": "Holi",
+      "category": "Holi",
+      "type": "lunar",
+      "tithi_rule": "Phalguna Purnima, Holika Dahan eve, Rangwali next day",
+      "dates": {
+        "2026": "2026-03-04",
+        "2027": "2027-03-22",
+        "2028": "2028-03-11",
+        "2029": "2029-03-01",
+        "2030": "2030-03-20"
+      },
+      "variants": [
+        { "region": "default", "alias": "Holi", "hamper_slug": "holi-colors-gift-box", "ritual": "gulaal, gujiya, thandai", "items": ["organic gulaal", "gujiya", "thandai mix"] },
+        { "region": "uttar-pradesh", "alias": "Lathmar Holi", "hamper_slug": "lathmar-holi-barsana", "ritual": "Barsana lathi", "items": ["gulaal", "lathi"] },
+        { "region": "west-bengal", "alias": "Dol Purnima", "hamper_slug": "dol-purnima-abir", "ritual": "abir, dol", "items": ["abir", "sweets"] }
+      ]
+    },
+    {
+      "id": "ugadi",
+      "base_name": "Ugadi / Yugadi",
+      "category": "Ugadi",
+      "type": "lunar",
+      "tithi_rule": "Chaitra Shukla Pratipada at sunrise (Luni-Solar new year)",
+      "dates": {
+        "2026": "2026-03-19",
+        "2027": "2027-04-07",
+        "2028": "2028-03-26",
+        "2029": "2029-03-18",
+        "2030": "2030-04-06"
+      },
+      "variants": [
+        { "region": "karnataka", "alias": "Yugadi", "hamper_slug": "yugadi-pachadi-mysore", "ritual": "pachadi, muggulu, torana", "language": "kn", "items": ["pachadi", "mango leaves", "neem"] },
+        { "region": "andhra-pradesh", "alias": "Ugadi", "hamper_slug": "ugadi-pachadi-telugu", "ritual": "pachadi, vepa", "language": "te", "items": ["pachadi", "mango", "jaggery"] },
+        { "region": "telangana", "alias": "Ugadi", "hamper_slug": "ugadi-telangana", "ritual": "pachadi", "language": "te", "items": ["pachadi", "neem"] },
+        { "region": "maharashtra", "alias": "Gudi Padwa", "hamper_slug": "gudi-padwa-maharashtra", "ritual": "gudi, neem", "language": "mr", "items": ["gudi", "neem", "shrikhand"] },
+        { "region": "sindhi", "alias": "Cheti Chand", "hamper_slug": "cheti-chand-sindhi", "ritual": "Cheti Chand, Jhulelal", "language": "sd", "items": ["tahiri", "jaggery"] }
+      ]
+    },
+    {
+      "id": "rama-navami",
+      "base_name": "Rama Navami",
+      "category": "Rama Navami",
+      "type": "lunar",
+      "tithi_rule": "Chaitra Shukla Navami madhyahna",
+      "dates": {
+        "2026": "2026-03-26",
+        "2027": "2027-03-26",
+        "2028": "2028-03-26",
+        "2029": "2029-03-26",
+        "2030": "2030-03-26"
+      },
+      "variants": [
+        { "region": "default", "alias": "Rama Navami", "hamper_slug": "rama-navami-ayodhya", "ritual": "Rama puja", "items": ["prasad", "basil"] }
+      ]
+    },
+    {
+      "id": "vaisakhi",
+      "base_name": "Vaisakhi / Solar New Year",
+      "category": "Vaisakhi",
+      "type": "solar",
+      "transit_rule": "Mesha Sankranti (Sun 0° Aries), Solar new year",
+      "dates": {
+        "2026": "2026-04-14",
+        "2027": "2027-04-14",
+        "2028": "2028-04-13",
+        "2029": "2029-04-14",
+        "2030": "2030-04-14"
+      },
+      "variants": [
+        { "region": "punjab", "alias": "Vaisakhi", "hamper_slug": "vaisakhi-punjab", "ritual": "harvest, gurudwara", "language": "pa", "items": ["wheat", "jaggery"] },
+        { "region": "tamil-nadu", "alias": "Puthandu", "hamper_slug": "puthandu-tamil", "ritual": "mango, kolam", "language": "ta", "items": ["mango", "kolam"] },
+        { "region": "kerala", "alias": "Vishu", "hamper_slug": "vishu-kerala", "ritual": "kani, gold", "language": "ml", "items": ["kani", "gold"] },
+        { "region": "assam", "alias": "Bohag Bihu", "hamper_slug": "bihu-assam", "ritual": "bihu dance", "language": "as", "items": ["pitha", "gamosa"] },
+        { "region": "west-bengal", "alias": "Poila Baisakh", "hamper_slug": "poila-baisakh-bengal", "ritual": "new ledger", "language": "bn", "items": ["sweets", "hal khata"] },
+        { "region": "odisha", "alias": "Pana Sankranti", "hamper_slug": "pana-sankranti-odisha", "ritual": "pana", "language": "or", "items": ["pana", "bela"] }
+      ]
+    },
+    {
+      "id": "raksha-bandhan",
+      "base_name": "Raksha Bandhan",
+      "category": "Raksha Bandhan",
+      "type": "lunar",
+      "tithi_rule": "Shravana Purnima",
+      "dates": {
+        "2026": "2026-08-28",
+        "2027": "2027-08-17",
+        "2028": "2028-08-05",
+        "2029": "2029-08-23",
+        "2030": "2030-08-13"
+      },
+      "variants": [
+        { "region": "default", "alias": "Raksha Bandhan", "hamper_slug": "raksha-bandhan-special", "ritual": "rakhi, roli-chawal", "items": ["rakhi", "roli-chawal", "sweets", "a card"] }
+      ]
+    },
+    {
+      "id": "krishna-janmashtami",
+      "base_name": "Krishna Janmashtami",
+      "category": "Janmashtami",
+      "type": "lunar",
+      "tithi_rule": "Bhadrapada Krishna Ashtami Rohini",
+      "dates": {
+        "2026": "2026-09-04",
+        "2027": "2027-09-24",
+        "2028": "2028-09-12",
+        "2029": "2029-09-01",
+        "2030": "2030-08-21"
+      },
+      "variants": [
+        { "region": "default", "alias": "Krishna Janmashtami", "hamper_slug": "janmashtami-makhan", "ritual": "makhan, peacock feather", "items": ["makhan", "flute", "peacock"] },
+        { "region": "maharashtra", "alias": "Gokulashtami / Dahi Handi", "hamper_slug": "dahi-handi-mumbai", "ritual": "dahi handi", "items": ["curd", "handi"] }
+      ]
+    },
+    {
+      "id": "ganesh-chaturthi",
+      "base_name": "Ganesh Chaturthi",
+      "category": "Ganesh Chaturthi",
+      "type": "lunar",
+      "tithi_rule": "Bhadrapada Shukla Chaturthi madhyahna",
+      "dates": {
+        "2026": "2026-09-14",
+        "2027": "2027-09-04",
+        "2028": "2028-08-23",
+        "2029": "2029-09-11",
+        "2030": "2030-09-01"
+      },
+      "variants": [
+        { "region": "maharashtra", "alias": "Ganesh Chaturthi", "hamper_slug": "ganesh-chaturthi-kit", "ritual": "eco idol, modak, aarti", "items": ["eco idol", "modak", "durva", "aarti book"] },
+        { "region": "karnataka", "alias": "Ganesha Habba", "hamper_slug": "ganesha-habba-karnataka", "ritual": "modaka, kadubu", "items": ["modaka", "kadubu"] }
+      ]
+    },
+    {
+      "id": "onam",
+      "base_name": "Onam",
+      "category": "Onam",
+      "type": "solar",
+      "transit_rule": "Thiruvonam nakshatra in Chingam, King Mahabali",
+      "dates": {
+        "2026": "2026-08-26",
+        "2027": "2027-08-31",
+        "2028": "2028-08-12",
+        "2029": "2029-08-31",
+        "2030": "2030-09-06"
+      },
+      "variants": [
+        { "region": "kerala", "alias": "Thiruvonam", "hamper_slug": "onam-sadhya-kerala", "ritual": "pookalam, sadhya, boat race", "language": "ml", "items": ["pookalam", "sadhya", "boat"] }
+      ]
+    },
+    {
+      "id": "navratri",
+      "base_name": "Sharad Navratri",
+      "category": "Navratri",
+      "type": "lunar",
+      "tithi_rule": "Ashwin Shukla Pratipada Ghatasthapana",
+      "dates": {
+        "2026": "2026-10-11",
+        "2027": "2027-09-30",
+        "2028": "2028-10-19",
+        "2029": "2029-10-08",
+        "2030": "2030-09-28"
+      },
+      "variants": [
+        { "region": "gujarat", "alias": "Navratri Garba", "hamper_slug": "navratri-garba-gujarat", "ritual": "garba, dandiya", "items": ["dandiya", "chunri", "garba"] },
+        { "region": "west-bengal", "alias": "Durga Puja", "hamper_slug": "durga-puja-bengal", "ritual": "durga, dhunuchi, anjali", "language": "bn", "items": ["durga idol", "dhunuchi", "sindoor"] },
+        { "region": "tamil-nadu", "alias": "Golu", "hamper_slug": "golu-tamil", "ritual": "golu dolls", "language": "ta", "items": ["golu", "dolls"] },
+        { "region": "default", "alias": "Navratri", "hamper_slug": "navratri-celebration-pack", "ritual": "9 nights, chunri", "items": ["dandiya", "chunri", "puja samagri"] }
+      ]
+    },
+    {
+      "id": "dussehra",
+      "base_name": "Dussehra / Vijayadashami",
+      "category": "Dussehra",
+      "type": "lunar",
+      "tithi_rule": "Ashwin Shukla Dashami (day after Navratri)",
+      "dates": {
+        "2026": "2026-10-20",
+        "2027": "2027-10-09",
+        "2028": "2028-10-28",
+        "2029": "2029-10-17",
+        "2030": "2030-10-07"
+      },
+      "variants": [
+        { "region": "default", "alias": "Dussehra", "hamper_slug": "dussehra-vijay", "ritual": "Ravana dahan, shami", "items": ["shami", "vermillion"] },
+        { "region": "mysore", "alias": "Mysore Dasara", "hamper_slug": "mysore-dasara", "ritual": "elephant procession", "items": ["mysore pak", "elephant"] }
+      ]
+    },
+    {
+      "id": "diwali",
+      "base_name": "Diwali",
+      "category": "Diwali",
+      "type": "lunar",
+      "tithi_rule": "Kartik Amavasya Pradosh (Lakshmi Puja)",
+      "dates": {
+        "2026": "2026-11-08",
+        "2027": "2027-10-29",
+        "2028": "2028-10-17",
+        "2029": "2029-11-05",
+        "2030": "2030-10-26"
+      },
+      "variants": [
+        { "region": "default", "alias": "Diwali", "hamper_slug": "diwali-delight-hamper", "ritual": "diya, rangoli, Lakshmi", "items": ["clay diyas", "rangoli", "sweets box", "aarti thali"] },
+        { "region": "south-india", "alias": "Deepavali", "hamper_slug": "deepavali-south", "ritual": "oil bath, Naraka Chaturdashi", "items": ["oil", "sweets"] }
+      ]
+    },
+    {
+      "id": "chhath-puja",
+      "base_name": "Chhath Puja",
+      "category": "Chhath Puja",
+      "type": "lunar",
+      "tithi_rule": "Kartik Shukla Shashthi (Surya)",
+      "dates": {
+        "2026": "2026-11-14",
+        "2027": "2027-11-04",
+        "2028": "2028-11-23",
+        "2029": "2029-11-11",
+        "2030": "2030-11-01"
+      },
+      "variants": [
+        { "region": "bihar", "alias": "Chhath Puja", "hamper_slug": "chhath-puja-bihar", "ritual": "soop, thekua, arghya", "language": "bh", "items": ["soop", "thekua", "coconut"] }
+      ]
+    }
+  ]
+}

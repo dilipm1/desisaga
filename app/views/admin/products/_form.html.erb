@@ -40,6 +40,12 @@
       </div>
 
       <div>
+        <%= form.label :region, "Region / State Variant (optional)", class: "block text-sm font-medium mb-2 text-parchment-dim" %>
+        <%= form.select :region, options_for_select([["All India / Default", ""]] + Product::REGIONS.reject { |r| r == "default" }.map { |r| [r.humanize, r] }, @product.region), {}, class: input_cls %>
+        <p class="text-parchment-dim/60 text-xs mt-1">For Sankranti (tamil-nadu vs gujarat), Ugadi (karnataka vs maharashtra), etc.</p>
+      </div>
+
+      <div>
         <%= form.label :images, "Images (comma-separated URLs)", class: "block text-sm font-medium mb-2 text-parchment-dim" %>
         <%= form.text_field :images, value: @product.images&.join(", "), placeholder: "https://example.com/image1.jpg, https://example.com/image2.jpg", class: input_cls %>
         <p class="text-parchment-dim/60 text-xs mt-1">Separate multiple images with commas</p>

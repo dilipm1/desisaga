@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_31_010935) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_31_044155) do
   create_table "products", force: :cascade do |t|
     t.string "category"
     t.datetime "created_at", null: false
@@ -21,12 +21,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_31_010935) do
     t.boolean "in_stock"
     t.string "name"
     t.integer "price"
+    t.string "region"
     t.json "ritual_contents"
     t.string "slug"
     t.json "tags"
     t.datetime "updated_at", null: false
     t.index ["category"], name: "index_products_on_category"
     t.index ["featured"], name: "index_products_on_featured"
+    t.index ["region"], name: "index_products_on_region"
     t.index ["slug"], name: "index_products_on_slug", unique: true
   end
 

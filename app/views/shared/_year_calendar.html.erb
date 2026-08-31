@@ -1,6 +1,13 @@
 <%
-  dated = Festivals::DATED_FESTIVALS.map { |f| { festival: f, days_left: Festivals.days_left(f.date) } }
+  # Own Panchang (Option B) — all bases for current year, variants collapsed into base card
+  year = Date.current.year
+  dated = Festivals.build_dated_for(year).map { |f| { festival: f, days_left: Festivals.days_left(f.date) } }
+  # if all past, roll to next year
+  if dated.none? { |d| d[:days_left] >= 0 }
+    dated = Festivals.build_dated_for(year + 1).map { |f| { festival: f, days_left: Festivals.days_left(f.date) } }
+  end
   next_index = dated.index { |d| d[:days_left] >= 0 }
+  all_variants_count = PanchangCalculator.festivals.sum { |f| (f["variants"] || []).size }
 %>
 <section id="calendar" class="relative py-24 md:py-32 bg-night">
   <div class="max-w-7xl mx-auto px-6 lg:px-8">
@@ -31,6 +38,11 @@
 
           <h3 class="font-display text-2xl text-parchment mt-4 group-hover:text-flame transition-colors"><%= festival.name %></h3>
           <p class="text-sm text-parchment-dim mt-1.5 leading-snug"><%= festival.ritual %></p>
+          <% if festival.variant && festival.variant["region"] != "default" %>
+            <p class="font-mono text-[10px] uppercase tracking-[0.15em] text-marigold/80 mt-2"><%= festival.variant["alias"] %> · <%= festival.variant["region"] %></p>
+          <% elsif (vars = PanchangCalculator.find_base(festival.base_id || festival.id)&.[]("variants")) && vars.size > 1 %>
+            <p class="font-mono text-[10px] leading-relaxed text-parchment-dim/60 mt-2"><%= vars.map { |v| v["alias"] }.uniq.first(3).join(" · ") %></p>
+          <% end %>
 
           <p class="font-mono text-xs mt-4 text-flame">
             <% if passed %>past for this year<% else %>in <%= days_left %> <%= "day".pluralize(days_left) %><% end %>

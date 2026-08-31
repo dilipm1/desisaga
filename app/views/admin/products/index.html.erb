@@ -10,6 +10,7 @@
       <thead>
         <tr class="bg-ember/40 border-b border-line">
           <th class="text-left px-4 py-3 font-mono text-[11px] uppercase tracking-[0.15em] text-parchment-dim">Product</th>
+          <th class="text-left px-4 py-3 font-mono text-[11px] uppercase tracking-[0.15em] text-parchment-dim">Region</th>
           <th class="text-left px-4 py-3 font-mono text-[11px] uppercase tracking-[0.15em] text-parchment-dim">Price</th>
           <th class="text-left px-4 py-3 font-mono text-[11px] uppercase tracking-[0.15em] text-parchment-dim">Stock</th>
           <th class="text-left px-4 py-3 font-mono text-[11px] uppercase tracking-[0.15em] text-parchment-dim">Featured</th>
@@ -32,6 +33,7 @@
                 </div>
               </div>
             </td>
+            <td class="px-4 py-3"><span class="text-xs font-mono text-parchment-dim"><%= product.region.present? ? product.region.humanize : "—" %></span></td>
             <td class="px-4 py-3"><span class="text-flame font-medium"><%= format_price(product.price) %></span></td>
             <td class="px-4 py-3">
               <% if product.in_stock? %>

@@ -7,14 +7,26 @@ class Product < ApplicationRecord
     "Navratri",
     "Raksha Bandhan",
     "Holi",
-    "Ganesh Chaturthi"
+    "Ganesh Chaturthi",
+    "Sankranti",
+    "Shivratri",
+    "Ugadi",
+    "Rama Navami",
+    "Vaisakhi",
+    "Janmashtami",
+    "Onam",
+    "Dussehra",
+    "Chhath Puja"
   ].freeze
+
+  REGIONS = %w[tamil-nadu gujarat punjab karnataka maharashtra kerala andhra-pradesh telangana west-bengal bihar assam odisha default].freeze
 
   validates :name, presence: true
   validates :slug, presence: true, uniqueness: true,
     format: { with: /\A[a-z0-9-]+\z/, message: "must be lowercase letters, numbers, and dashes" }
   validates :price, numericality: { greater_than_or_equal_to: 0 }
   validates :category, inclusion: { in: CATEGORIES }
+  validates :region, inclusion: { in: REGIONS }, allow_blank: true
 
   before_validation :normalize_slug, if: -> { name.present? && slug.blank? }
   before_validation :coerce_array_columns
@@ -22,6 +34,7 @@ class Product < ApplicationRecord
 
   scope :featured, -> { where(featured: true) }
   scope :in_category, ->(category) { where(category: category) }
+  scope :in_region, ->(region) { where(region: region) if region.present? }
   scope :search, ->(query) {
     q = "%#{query.to_s.downcase}%"
     where("lower(name) LIKE :q OR lower(description) LIKE :q OR lower(tags) LIKE :q", q: q)
