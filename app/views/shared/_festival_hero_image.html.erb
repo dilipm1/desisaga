@@ -25,36 +25,36 @@
    hero_image = image_map[festival_category] || image_map["Diwali"]
 %>
 
-<div class="hidden lg:block absolute right-6 xl:right-10 top-1/2 -translate-y-1/2 w-[420px] xl:w-[520px] h-[480px] xl:h-[560px] pointer-events-none select-none" aria-hidden="true">
+<div class="hidden md:block absolute right-4 lg:right-8 xl:right-10 top-1/2 -translate-y-1/2 w-[360px] lg:w-[440px] xl:w-[520px] h-[420px] lg:h-[500px] xl:h-[560px] pointer-events-none select-none z-[5]" aria-hidden="true">
   <!-- soft glow behind -->
-  <div class="absolute -inset-6 bg-gradient-to-br from-flame/10 via-marigold/5 to-kumkum/10 blur-[60px] rounded-[2.5rem]"></div>
+  <div class="absolute -inset-4 bg-gradient-to-br from-flame/15 via-marigold/10 to-kumkum/12 blur-[40px] rounded-[2rem]"></div>
 
   <!-- image card -->
-  <div class="relative w-full h-full rounded-[2rem] overflow-hidden border border-line/30 bg-ember/30 backdrop-blur-[2px] warm-shadow-lg animate-float" style="animation-duration: 14s;">
-    <img src="<%= hero_image %>" alt="<%= festival_name || "Festival" %>" class="w-full h-full object-cover opacity-[0.22] scale-[1.03]" loading="eager" />
+  <div class="relative w-full h-full rounded-[2rem] overflow-hidden border border-line/40 bg-ember/20 backdrop-blur-[1px] warm-shadow-lg animate-float" style="animation-duration: 12s;">
+    <img src="<%= hero_image %>" alt="<%= festival_name || "Festival" %>" class="w-full h-full object-cover opacity-40 scale-[1.02]" loading="eager" />
 
-    <!-- subtle gradients to keep image muted and blend into night -->
-    <div class="absolute inset-0 bg-gradient-to-t from-night via-night/40 to-transparent opacity-80"></div>
-    <div class="absolute inset-0 bg-gradient-to-l from-night/55 via-transparent to-ember/20"></div>
-    <div class="absolute inset-0 bg-gradient-to-br from-flame/[0.06] via-transparent to-kumkum/[0.08]"></div>
+    <!-- subtle gradients — lighter so image stays visible -->
+    <div class="absolute inset-0 bg-gradient-to-t from-night/35 via-transparent to-transparent"></div>
+    <div class="absolute inset-0 bg-gradient-to-l from-night/25 via-transparent to-transparent"></div>
+    <div class="absolute inset-0 bg-gradient-to-br from-flame/[0.04] via-transparent to-kumkum/[0.05]"></div>
 
     <!-- top highlight line -->
-    <div class="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-flame/20 to-transparent"></div>
+    <div class="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-flame/25 to-transparent"></div>
 
     <!-- floating diya accent over image -->
-    <div class="absolute bottom-6 right-6 opacity-60">
-      <%= render "shared/animated_diya", size: 36 %>
+    <div class="absolute bottom-6 right-6 opacity-70">
+      <%= render "shared/animated_diya", size: 32 %>
     </div>
 
-    <!-- festival label on image (subtle) -->
+    <!-- festival label on image -->
     <% if festival_name %>
       <div class="absolute bottom-6 left-6 right-20">
-        <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-parchment/60">Up next</p>
-        <p class="font-display text-lg text-parchment/80 mt-1 leading-tight"><%= festival_name %></p>
+        <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-parchment/70">Up next</p>
+        <p class="font-display text-lg text-parchment mt-1 leading-tight drop-shadow-[0_1px_8px_rgba(0,0,0,0.6)]"><%= festival_name %></p>
       </div>
     <% end %>
   </div>
 
   <!-- secondary blurred orb accent -->
-  <div class="absolute -bottom-10 -left-10 w-40 h-40 rounded-full bg-marigold/10 blur-[30px]"></div>
+  <div class="absolute -bottom-8 -left-8 w-36 h-36 rounded-full bg-marigold/12 blur-[24px]"></div>
 </div>
