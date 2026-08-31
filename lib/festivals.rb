@@ -7,7 +7,7 @@ module Festivals
       name: "Raksha Bandhan",
       date: "2026-08-22",
       ritual: "The rakhi you tie for a sibling",
-      items: ["rakhi", "roli-chawal", "sweets", "a card in your words"],
+      items: [ "rakhi", "roli-chawal", "sweets", "a card in your words" ],
       category: "Raksha Bandhan"
     ),
     Festival.new(
@@ -15,7 +15,7 @@ module Festivals
       name: "Ganesh Chaturthi",
       date: "2026-08-26",
       ritual: "Welcoming Bappa home",
-      items: ["eco idol", "modak", "durva grass", "aarti book"],
+      items: [ "eco idol", "modak", "durva grass", "aarti book" ],
       category: "Ganesh Chaturthi"
     ),
     Festival.new(
@@ -23,7 +23,7 @@ module Festivals
       name: "Navratri",
       date: "2026-10-15",
       ritual: "Nine nights of the goddess",
-      items: ["dandiya", "chunri", "puja samagri", "Durga idol"],
+      items: [ "dandiya", "chunri", "puja samagri", "Durga idol" ],
       category: "Navratri"
     ),
     Festival.new(
@@ -31,7 +31,7 @@ module Festivals
       name: "Diwali",
       date: "2026-11-08",
       ritual: "The festival of lights",
-      items: ["clay diyas", "rangoli", "sweets box", "aarti thali"],
+      items: [ "clay diyas", "rangoli", "sweets box", "aarti thali" ],
       category: "Diwali"
     ),
     Festival.new(
@@ -39,7 +39,7 @@ module Festivals
       name: "Holi",
       date: "2027-03-04",
       ritual: "The festival of colours",
-      items: ["organic gulaal", "gujiya", "thandai mix"],
+      items: [ "organic gulaal", "gujiya", "thandai mix" ],
       category: "Holi"
     )
   ].freeze
@@ -50,7 +50,7 @@ module Festivals
       name: "Wedding",
       date: "",
       ritual: "A shagun for the couple",
-      items: ["mangalsutra", "sindoor", "shagun envelope"],
+      items: [ "mangalsutra", "sindoor", "shagun envelope" ],
       category: "Wedding"
     ),
     Festival.new(
@@ -58,7 +58,7 @@ module Festivals
       name: "Housewarming",
       date: "",
       ritual: "Aashirwad for the new home",
-      items: ["Ganesh idol", "kalash", "coconut", "toran"],
+      items: [ "Ganesh idol", "kalash", "coconut", "toran" ],
       category: "Housewarming"
     ),
     Festival.new(
@@ -66,7 +66,7 @@ module Festivals
       name: "Puja",
       date: "",
       ritual: "A thali for everyday worship",
-      items: ["brass thali", "camphor", "kumkum", "puja guide"],
+      items: [ "brass thali", "camphor", "kumkum", "puja guide" ],
       category: "Puja"
     )
   ].freeze
@@ -74,6 +74,7 @@ module Festivals
   module_function
 
   def days_left(date, from: Date.current)
+    return 999_999 if date.blank?
     (Date.parse(date) - from).to_i
   end
 

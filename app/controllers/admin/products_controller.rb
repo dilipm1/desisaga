@@ -43,15 +43,9 @@ class Admin::ProductsController < Admin::BaseController
     def product_params
       params.require(:product).permit(
         :name, :slug, :description, :price, :category, :in_stock, :featured,
-        images: [], tags: [], ritual_contents: []
+        :images, :tags, :ritual_contents
       ).tap do |permitted|
         permitted[:currency] ||= "INR"
-        %i[images tags ritual_contents].each do |field|
-          if permitted[field].is_a?(String)
-            permitted[field] = permitted[field].split(",").map(&:strip).reject(&:blank?)
-          end
-        end
-        permitted[:slug] = permitted[:name].parameterize if permitted[:slug].blank?
       end
     end
 end

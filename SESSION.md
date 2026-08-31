@@ -65,7 +65,7 @@ User chose to keep the free-tier hunt (Option 1). Standing checkpoint plan:
 - **Day 14** (~2026-08-07 Sep): if still dry → PAYG upgrade (card on file, ₹0 within 2/12 A1 limits, jumps capacity queue; set ₹0 budget alert immediately; NO downgrade after)
 
 Research notes (2026-08-24, web): June 15 2026 Oracle silently halved free A1 4/24 → 2/12 (enforcement from Aug 18, some instances disabled — we're already at 2/12 so safe). PAYG also got the same cut (so "upgrade keeps 4/24 free" is dead), but PAYG still gets priority capacity — not guaranteed though (São Paulo report: 1000+ failed attempts even on PAYG). US regions driest; capacity frees in random small windows, often US off-peak. $300 trial credits are NOT a path: trial-created resources get reclaimed at trial end.
-
+<br>
 ### Free VPS research report (non-Oracle, 2026-08-24 web search)
 **Context: desisaga needs a real VM (Rails + SQLite + Kamal/Docker + persistent disk). PaaS "free tiers" mostly fail on ephemeral filesystems / cold starts / no Docker.**
 
@@ -90,11 +90,10 @@ Research notes (2026-08-24, web): June 15 2026 Oracle silently halved free A1 4/
 
 ---
 
-## Prior session (2026-08-23) — full Next.js → Rails 8.1 conversion
+### Prior session (2026-08-23) — full Next.js → Rails 8.1 conversion
 All app work DONE & verified (routes/cart/admin/tests/assets/Docker). Admin login: `admin@desisaga.com` / `desisaga-admin-2026`. Dev server stopped; start with `bin/rails server -p 3000`. Details below.
 
-## What happened this session
-
+### What happened this session
 ### 1. Complete rewrite: Next.js → Ruby on Rails 8.1 (DHH-style)
 - Deleted ALL Next.js code (src/, package.json, configs). Kept docs/, okf/, specs/, skills/, data/backlog.json.
 - Fresh Rails 8.1.3 app generated at repo root (`rails new --css=tailwind --skip-git`, then rsynced).
@@ -155,23 +154,24 @@ All app work DONE & verified (routes/cart/admin/tests/assets/Docker). Admin logi
 
 ---
 
-## 🚧 Waiting on USER (to unblock deploy)
+### 8. 🚧 Waiting on USER (to unblock deploy)
 
 **Oracle Cloud API credentials** (they hit "out of host capacity" in console; automation needs API access):
 1. Console → profile icon → **User settings → API keys → Add API Key → Generate API Key Pair**
 2. Download private key → save as `~/.oci/oci_api_key.pem` (chmod 600)
 3. Paste me: home region (e.g. ap-mumbai-1) · tenancy OCID · user OCID · fingerprint
 4. I then: write ~/.oci/config → verify auth → launch grab-arm.sh in background → report when IP lands
+5. 
 
 **If capacity never frees:** suggest PAYG upgrade (stays free within A1 limits, jumps queue) or Render fallback.
 
-## Next steps after instance lands
+### 9. Next steps after instance lands
 1. `bin/kamal setup` (installs Docker, boots proxy, first deploy, Let's Encrypt for desisaga.com)
 2. `bin/kamal app exec --reuse "bin/rails db:seed"`
 3. Namecheap DNS: A record @ → IP (+ CNAME www)
 4. Later: real Stripe, customer accounts, fix .github/workflows/ci-cd.yml (still Node-targeted!)
 
-## Gotchas for next session
+### 10. Gotchas for next session
 - `pkill -f rails` can hang the tool shell (kills own process group) — use `kill -9 $(pgrep -f puma)` carefully or just leave server running
 - Per-form CSRF tokens: scraping "first" authenticity_token on a page grabs the WRONG form's token; extract per-form-block (tok.py pattern in /tmp/opencode — recreate if lost)
 - /checkout redirects to /products when cart empty (by design)

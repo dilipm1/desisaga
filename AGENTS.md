@@ -53,6 +53,107 @@ desisaga.com → Rails app (Puma)
                 └── /up          Health check
 ```
 
+## Site Map & Navigation
+
+### Storefront Routes (Public)
+| URL | Method | Controller#Action | Purpose |
+|---|---|---|---|
+| `/` | GET | `pages#home` | Hero (toran + countdown) + year calendar + featured grid + ritual pillars + trust bar |
+| `/products` | GET | `products#index` | Catalog with category chips, search, sort by name/price |
+| `/products?category=Diwali` | GET | `products#index` | Filter by category (8 categories) |
+| `/products?q=sweets` | GET | `products#index` | Keyword search (name/description/tags) |
+| `/products?sort=name` | GET | `products#index` | Sort: name (A-Z) |
+| `/products?sort=price` | GET | `products#index` | Sort: price (low-high) |
+| `/products?sort=price.desc` | GET | `products#index` | Sort: price (high-low) |
+| `/products/diwali-delight-hamper` | GET | `products#show` | Product detail (ritual contents, add-to-cart) |
+| `/cart` | GET | `carts#show` | Cart view (qty +/-, remove, clear) |
+| `/cart` | DELETE | `carts#destroy` | Clear entire cart |
+| `/cart_items` | POST | `cart_items#create` | Add product to cart |
+| `/cart_items/:id` | PATCH/PUT | `cart_items#update` | Update quantity |
+| `/cart_items/:id` | DELETE | `cart_items#destroy` | Remove single item |
+| `/checkout` | GET | `checkouts#show` | Checkout page (redirects to /products if cart empty) |
+| `/checkout` | POST | `checkouts#create` | Place demo order, clears cart, redirects to success |
+| `/checkout/success` | GET | `checkouts#success` | "Shubh Labh!" confirmation page |
+| `/login` | GET | `sessions#new` | Login form (rate-limited at 10/3min) |
+| `/session/new` | GET | `sessions#new` | Alias for /login |
+| `/session` | POST | `sessions#create` | Authenticate (creates signed session_id cookie) |
+| `/logout` | DELETE | `sessions#destroy` | Terminate session |
+| `/up` | GET | (rails health) | Health check (200 OK) |
+| `/passwords/new` | GET | `passwords#new` | Request password reset |
+| `/passwords` | POST | `passwords#create` | Send password reset email |
+| `/passwords/:token/edit` | GET | `passwords#edit` | Reset password form |
+| `/passwords/:token` | PATCH | `passwords#update` | Update password |
+
+### Admin Routes (Require admin role)
+| URL | Method | Controller#Action | Purpose |
+|---|---|---|---|
+| `/admin` | GET | `admin/products#index` | Redirects to /admin/products |
+| `/admin/products` | GET | `admin/products#index` | Inventory grid (table view) |
+| `/admin/products` | POST | `admin/products#create` | Create new product |
+| `/admin/products/new` | GET | `admin/products#new` | New product form |
+| `/admin/products/:id/edit` | GET | `admin/products#edit` | Edit product form |
+| `/admin/products/:id` | GET | `admin/products#show` | View product detail |
+| `/admin/products/:id` | PATCH/PUT | `admin/products#update` | Update product |
+| `/admin/products/:id` | DELETE | `admin/products#destroy` | Delete product (turbo-confirm) |
+
+### Global Navigation (`_navbar.html.erb`)
+**Desktop (≥md)**
+- Brand: "DESI SAGA" (font-display, links to `/`)
+- Shop (links to `/products`)
+- Category dropdown: Diwali · Wedding · Puja · Navratri · Raksha Bandhan · Holi · Ganesh Chaturthi · Housewarming
+- Cart icon (`icon("shopping-bag")`) → `/cart` with badge showing `cart_count`
+- "Sign in" link → `/login` (replaced with user email + dropdown when authenticated)
+
+**Mobile (<md)**
+- Hamburger menu (`navbar_controller`) toggles mobile menu
+- Cart icon always visible
+- Sign in / Sign out always visible
+
+### User-Authenticated Navigation
+When signed in, the navbar shows:
+- User email address (or display_name) with dropdown
+- "Admin" link → `/admin/products` (if `User#admin?`)
+- "Sign out" link → DELETE `/logout`
+
+### Footer (`_footer.html.erb`)
+- Brand + tagline
+- Category links (Diwali, Puja, Wedding, Housewarming, Navratri, Raksha Bandhan, Holi, Ganesh Chaturthi)
+- Shop links (All hampers, Cart)
+- Trust elements (★ 4.9/5, 500+ families)
+
+### User Flows
+**Browse & Buy (Anonymous)**
+```
+/ → /products → /products/:slug → POST /cart_items → /cart → /checkout → /checkout/success
+```
+
+**Sign In & Admin**
+```
+/login → POST /session → redirect to / or return_to
+Admin: /admin → /admin/products → CRUD actions
+```
+
+**Password Reset**
+```
+/passwords/new → POST /passwords → email with token → /passwords/:token/edit → PATCH /passwords/:token
+```
+
+### Cart Flow Detail
+1. `POST /cart_items` (product_id) → adds to `session[:cart]` and redirects back
+2. `PATCH /cart_items/:id` (quantity) → updates qty; if 0, removes
+3. `DELETE /cart_items/:id` → removes item
+4. `DELETE /cart` → clears all items
+5. `/checkout` → `/checkout/success` (demo order placement)
+
+### Category List (`Product::CATEGORIES`)
+```
+Diwali · Puja · Wedding · Housewarming · Navratri · Raksha Bandhan · Holi · Ganesh Chaturthi
+```
+
+### Festival Calendar (`lib/festivals.rb`)
+**Dated**: Raksha Bandhan · Ganesh Chaturthi · Navratri · Diwali · Holi
+**Anytime**: Wedding · Housewarming · Puja
+
 ## Project Structure
 ```
 ~/Projects/desisaga/
@@ -106,41 +207,41 @@ desisaga.com → Rails app (Puma)
 - [x] Rails 8.1 app verified: all storefront routes 200, cart flow end-to-end (add → view → checkout → success), admin login (bad creds rejected, good creds reach `/admin/products`), admin create/delete product verified over HTTP — 2026-08-23
 - [x] `bin/rails test` — 12 runs, 48 assertions, 0 failures
 - [x] Production assets precompile verified (Tailwind v4 build)
+- [x] Security Audit (OWASP Top 10) & Optimization Roadmap (Waves 1-3) completed — 2026-08-27
 - [ ] Stripe connected (real payments)
 - [ ] Customer-facing signup/OAuth (customers currently browse + cart without accounts)
 - [ ] Deployed to a host that runs Rails
 - [ ] DNS configured
 
-## Authentication & Admin Inventory (Rails port 2026-08-23)
-- **Mechanism**: Rails 8 `rails generate authentication` — bcrypt-hashed passwords, signed `session_id` cookie, `sessions` table (user_agent/ip), password reset mailer scaffolded
-- **Login**: `/login` (single login for customers & staff; admin role unlocks `/admin`)
-- **Roles**: `User#admin?` returns true if `role == "admin"` OR `email_address == ENV["ADMIN_EMAIL"]`
-- **Admin credentials**: seeded from `.env` — `ADMIN_EMAIL` (default `admin@desisaga.com`) / `ADMIN_PASSWORD` (default `desisaga-admin-2026`) — change before production
-- **Admin area**: `/admin/products` — table grid with edit/delete (turbo confirm), new/edit form incl. ritualContents/samagri comma-list fields
-- **Authorization**: `Admin::BaseController#require_admin`; non-admins redirected to `/login`
+## Optimization & Security Roadmap
 
-## Design System (unchanged through the port)
-- **Direction**: "Night of the celebration" — dark ritual canvas, firelight accents
-- **Type**: Rozha One (display) · Instrument Sans (body) · Space Mono (dates/countdown)
-- **Palette**: night `#1A0B0A`, ember `#2E1210`, parchment `#F7EEDC`, flame `#E9B44C`, marigold `#E8731F`, kumkum `#C2322E`, leaf `#8FAE6B`, line `#422A1C`
-- **Signature**: ToranGarland (marigold/mango-leaf doorway swag) at the hero top — now an ERB/SVG partial
-- **Hero**: live days-until countdown to the next festival ("Send the festival home.")
-- **Structure**: `lib/festivals.rb` holds the festival calendar (dates, days-left, ritual items); YearCalendar partial renders it chronologically
-- Copy uses ritual vocabulary (shagun, ritual-ready, samagri) — not generic selling
+### 🛡️ Security (OWASP Top 10 Status)
+- **A01-A07**: All verified secure (Access Control, Crypto, Injection, Auth, Misconfiguration).
+- **A04 (Insecure Design)**: Session-based cart is efficient but requires monitoring for cookie size.
 
-## Known Issues
-- None blocking. Dev server (`setsid bin/rails server -p 3000`) and production assets both verified 2026-08-23.
-- **Google OAuth removed in the port**: the old NextAuth Google sign-in is gone; customers have no account system yet (browse/cart work anonymously). Add OmniAuth later if needed.
-- **`.env` carries over**: old GOOGLE_CLIENT_* keys are unused now; only ADMIN_EMAIL/ADMIN_PASSWORD matter.
-- **CI workflow** (`.github/workflows/ci-cd.yml`) still targets Node/Next.js — needs a Rails CI job before next PR merge.
+### 🚀 Optimization Waves
+#### **Wave 1: Security & Stability (Highest Priority)**
+- **Data Integrity**: Refactor slugs and array parsing (tags/ritual_contents) into `Product` model callbacks/setters.
+- **Database**: Add indices to `products.category` and `products.featured`.
+
+#### **Wave 2: Performance & Quality (Medium Impact)**
+- **Pagination**: Integrate `pagy` to handle catalog scaling.
+- **Refactoring**: Move complex parameter transformation logic from controllers to models/service objects.
+
+#### **Wave 3: Scaling (Future Proofing)**
+- **Cart Migration**: Move from `session[:cart]` to database-backed `Cart` model if complexity grows.
+- **Search**: Transition to more robust search if catalog exceeds ~1,000 products.
 
 ## Next Steps (when resuming)
-1. **Oracle Always Free ARM hunt**: user owes API credentials (region/tenancy OCID/user OCID/fingerprint + key at ~/.oci/oci_api_key.pem) → then run `scripts/oci/grab-arm.sh` non-blocking; full context in SESSION.md
-2. On instance IP: `bin/kamal setup` → `bin/kamal app exec --reuse "bin/rails db:seed"` → Namecheap DNS A record → live at https://desisaga.com
-3. Fix `.github/workflows/ci-cd.yml` for Rails (bundle + db:test:prepare + bin/rails test)
-4. Set up Stripe and wire real checkout (replace demo place-order)
-5. Replace placeholder images with real product photos (consider Active Storage)
-6. Optional: customer accounts, price as integer paise if multi-currency arrives
+1. **Wave 1 Implementation**:
+   - [ ] Add database indices for `category` and `featured`.
+   - [ ] Refactor `Product` model for slug/array auto-handling.
+2. **Oracle Always Free ARM hunt**: user owes API credentials (region/tenancy OCID/user OCID/fingerprint + key at ~/.oci/oci_api_key.pem) → then run `scripts/oci/grab-arm.sh` non-blocking; full context in SESSION.md
+3. On instance IP: `bin/kamal setup` → `bin/kamal app exec --reuse "bin/rails db:seed"` → Namecheap DNS A record → live at https://desisaga.com
+4. Fix `.github/workflows/ci-cd.yml` for Rails (bundle + db:test:prepare + bin/rails test)
+5. Set up Stripe and wire real checkout (replace demo place-order)
+6. Replace placeholder images with real product photos (consider Active Storage)
+7. Optional: customer accounts, price as integer paise if multi-currency arrives
 
 ## Deployment Plan (drafted 2026-08-18, revised for Rails 2026-08-23)
 - Vercel plan is obsolete — Vercel cannot run Rails. Use Kamal (bundled with Rails 8) against any Ubuntu VPS, or Fly.io.

@@ -14,6 +14,12 @@
       <% if @selected_category %><%= form.hidden_field :category, value: @selected_category %><% end %>
       <%= form.text_field :q, value: params[:q], placeholder: "Search hampers...",
             class: "w-full max-w-sm border-b-2 border-line pb-2 text-sm focus:outline-none focus:border-flame transition-colors bg-transparent text-parchment placeholder:text-parchment-dim/50" %>
+
+      <select name="sort" class="text-sm font-medium transition-all px-4 py-2 rounded-full border bg-transparent text-parchment-dim hover:text-flame border-line hover:border-flame/50 w-48" onchange="this.form.submit()">
+        <option value="name" <%= @selected_sort == "name" ? "selected" : "" %>">Name (A-Z)</option>
+        <option value="price" <%= @selected_sort == "price" ? "selected" : "" %>">Price (Low-High)</option>
+        <option value="price.desc" <%= @selected_sort == "price.desc" ? "selected" : "" %>">Price (High-Low)</option>
+      </select>
     <% end %>
 
     <div class="flex gap-2 flex-wrap mb-10">
