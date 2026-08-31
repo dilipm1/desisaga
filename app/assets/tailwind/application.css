@@ -126,6 +126,20 @@ body {
   opacity: 0.35; pointer-events: none;
 }
 
+/* Diya flicker — subtle scale + glow for transparent ghost diya */
+@keyframes diya-flicker {
+  0%, 100% { transform: scaleY(1) scaleX(1); opacity: 1; }
+  25% { transform: scaleY(0.96) scaleX(1.02); opacity: 0.92; }
+  50% { transform: scaleY(1.03) scaleX(0.98); opacity: 1; }
+  75% { transform: scaleY(0.98) scaleX(1.01); opacity: 0.94; }
+}
+@keyframes diya-glow {
+  0%, 100% { opacity: 0.12; transform: scale(1); }
+  50% { opacity: 0.22; transform: scale(1.06); }
+}
+.animate-diya-flicker { animation: diya-flicker 1.4s ease-in-out infinite alternate; transform-origin: bottom center; }
+.animate-diya-glow { animation: diya-glow 1.5s ease-in-out infinite alternate; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
   .reveal { opacity: 1; transform: none; transition: none; }

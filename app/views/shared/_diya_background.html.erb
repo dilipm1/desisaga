@@ -1,0 +1,41 @@
+<%# Transparent ghost diya — hero background, right real estate, Option A behind card %>
+<% size = local_assigns[:size] || 440
+   uid = "diyaBg-#{SecureRandom.hex(3)}" %>
+<div class="hidden lg:block absolute right-0 xl:right-2 top-1/2 -translate-y-1/2 w-[520px] h-[620px] pointer-events-none select-none opacity-[0.09]" aria-hidden="true">
+  <!-- warm glow behind ghost -->
+  <div class="absolute inset-0 bg-gradient-to-br from-flame/10 via-marigold/5 to-transparent blur-[55px] rounded-full"></div>
+
+  <!-- ghost diya — centered, float drift + CSS flicker -->
+  <div class="absolute inset-0 flex items-center justify-center animate-float" style="animation-duration: 20s; animation-delay: 1.2s;">
+    <div class="relative" style="width: <%= size %>px; height: <%= (size * 1.2).round %>px;">
+      <svg viewBox="0 0 60 72" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full text-ember">
+        <defs>
+          <linearGradient id="<%= uid %>-base" x1="30" y1="50" x2="30" y2="62" gradientUnits="userSpaceOnUse">
+            <stop stop-color="currentColor" stop-opacity="0.45"/>
+            <stop offset="1" stop-color="currentColor" stop-opacity="0.18"/>
+          </linearGradient>
+        </defs>
+        <!-- shadow, muted -->
+        <ellipse cx="30" cy="62" rx="22" ry="6" fill="currentColor" opacity="0.08"/>
+        <!-- vessel — transparent ghost, recolored to ember -->
+        <path d="M12 50 C12 50 14 62 30 62 C46 62 48 50 48 50 L45 45 L15 45 Z" fill="url(#<%= uid %>-base)" stroke="currentColor" stroke-opacity="0.12" stroke-width="0.6"/>
+        <path d="M15 45 L45 45 L43 40 L17 40 Z" fill="currentColor" opacity="0.12"/>
+        <ellipse cx="30" cy="40" rx="13" ry="3" fill="currentColor" opacity="0.10"/>
+        <ellipse cx="30" cy="41" rx="10" ry="2" fill="currentColor" opacity="0.08"/>
+        <line x1="30" y1="38" x2="30" y2="28" stroke="currentColor" stroke-opacity="0.18" stroke-width="1.2" stroke-linecap="round"/>
+        <!-- glow — CSS pulse, not SMIL -->
+        <ellipse cx="30" cy="22" rx="9" ry="11" fill="#FF6B00" opacity="0.10" class="animate-diya-glow" style="transform-origin: 30px 22px;"/>
+        <!-- outer flame — CSS flicker -->
+        <g class="animate-diya-flicker" style="transform-origin: 30px 27px; animation-delay: 0.15s;">
+          <path d="M30 16 C26 20 24 26 30 28 C36 26 34 20 30 16Z" fill="#FF8C00" opacity="0.85"/>
+        </g>
+        <!-- inner flame — CSS flicker faster -->
+        <g class="animate-diya-flicker" style="transform-origin: 30px 24px; animation-duration: 1.1s; animation-delay: 0.35s;">
+          <path d="M30 19 C28 22 27 25 30 27 C33 25 32 22 30 19Z" fill="#FFD700" opacity="0.95"/>
+        </g>
+        <!-- wick highlight -->
+        <ellipse cx="30" cy="23" rx="1.3" ry="2.6" fill="#FFFACD" opacity="0.55"/>
+      </svg>
+    </div>
+  </div>
+</div>
