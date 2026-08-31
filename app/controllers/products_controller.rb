@@ -6,11 +6,14 @@ class ProductsController < ApplicationController
     when "price"      then "price ASC"
     when "price.desc" then "price DESC"
     end
-    @products = Product.order(Arel.sql(order_sql))
-    @products = @products.in_category(params[:category]) if params[:category].in?(Product::CATEGORIES)
-    @products = @products.search(params[:q]) if params[:q].present?
+    scope = Product.order(Arel.sql(order_sql))
+    scope = scope.in_category(params[:category]) if params[:category].in?(Product::CATEGORIES)
+    scope = scope.search(params[:q]) if params[:q].present?
+    @pagy, @products = pagy(scope, limit: 12)
     @selected_category = params[:category]
     @selected_sort = sort
+  rescue Pagy::OverflowError
+    @pagy, @products = pagy(scope, limit: 12, page: 1)
   end
 
   def show

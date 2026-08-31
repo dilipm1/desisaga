@@ -5,7 +5,7 @@
         <%= @selected_category || "All Hampers" %>
       </h1>
       <p class="text-parchment-dim text-sm">
-        <%= pluralize(@products.size, "product") %> found
+        <%= pluralize(@pagy.count, "product") %> found<% if @pagy.pages > 1 %> · page <%= @pagy.page %> of <%= @pagy.pages %><% end %>
       </p>
       <div class="festive-divider mt-4 w-24"></div>
     </div>
@@ -35,6 +35,13 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
         <%= render partial: "shared/product_card", collection: @products, as: :product %>
       </div>
+      <% if @pagy.pages > 1 %>
+        <div class="mt-12 flex justify-center">
+          <nav class="flex items-center gap-1" aria-label="Pagination">
+            <%== pagy_nav(@pagy) %>
+          </nav>
+        </div>
+      <% end %>
     <% else %>
       <div class="text-center py-24">
         <svg viewBox="0 0 24 24" fill="none" class="w-8 h-8 text-flame mx-auto mb-4">

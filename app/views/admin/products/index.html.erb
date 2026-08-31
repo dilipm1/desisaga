@@ -61,6 +61,13 @@
       </tbody>
     </table>
   </div>
+  <% if @pagy.pages > 1 %>
+    <div class="mt-6 flex justify-center">
+      <nav class="flex items-center gap-1" aria-label="Admin pagination">
+        <%== pagy_nav(@pagy) %>
+      </nav>
+    </div>
+  <% end %>
 <% else %>
   <div class="text-center py-24 bg-ember/20 rounded-xl border border-line">
     <h2 class="font-display text-xl text-parchment mb-2">No products yet</h2>

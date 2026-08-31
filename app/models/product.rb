@@ -18,6 +18,7 @@ class Product < ApplicationRecord
 
   before_validation :normalize_slug, if: -> { name.present? && slug.blank? }
   before_validation :coerce_array_columns
+  before_validation :set_currency_default
 
   scope :featured, -> { where(featured: true) }
   scope :in_category, ->(category) { where(category: category) }
@@ -56,5 +57,9 @@ class Product < ApplicationRecord
 
   def split_array_string(value)
     value.to_s.split(",").map(&:strip).reject(&:blank?)
+  end
+
+  def set_currency_default
+    self.currency = "INR" if currency.blank?
   end
 end

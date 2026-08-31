@@ -1,4 +1,5 @@
 module ApplicationHelper
+  include Pagy::Frontend
   def format_price(amount, currency: "INR")
     symbol = currency == "INR" ? "&#8377;".html_safe : currency
     "#{symbol}#{number_with_delimiter(amount)}"

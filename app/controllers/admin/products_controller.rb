@@ -2,7 +2,9 @@ class Admin::ProductsController < Admin::BaseController
   before_action :set_product, only: %i[show edit update destroy]
 
   def index
-    @products = Product.order(:name)
+    @pagy, @products = pagy(Product.order(:name), limit: 20)
+  rescue Pagy::OverflowError
+    @pagy, @products = pagy(Product.order(:name), limit: 20, page: 1)
   end
 
   def show
@@ -44,8 +46,6 @@ class Admin::ProductsController < Admin::BaseController
       params.require(:product).permit(
         :name, :slug, :description, :price, :category, :in_stock, :featured,
         :images, :tags, :ritual_contents
-      ).tap do |permitted|
-        permitted[:currency] ||= "INR"
-      end
+      )
     end
 end

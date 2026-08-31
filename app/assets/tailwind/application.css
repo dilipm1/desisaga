@@ -109,6 +109,23 @@ body {
     radial-gradient(circle at 70% 30%, rgba(232, 115, 31, 0.04) 0%, transparent 25%);
 }
 
+/* Pagy pagination — night theme */
+.pagy-nav { display: inline-flex; align-items: center; gap: 0.25rem; }
+.pagy-nav .page a, .pagy-nav .page span {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 2.25rem; height: 2.25rem; padding: 0 0.6rem;
+  border-radius: 9999px; font-size: 0.875rem; font-weight: 500;
+  border: 1px solid var(--color-line); color: var(--color-parchment-dim);
+  transition: all 150ms;
+}
+.pagy-nav .page a:hover { border-color: rgba(233,180,76,0.5); color: var(--color-flame); }
+.pagy-nav .page.active span, .pagy-nav .page.current span {
+  background: var(--color-flame); border-color: transparent; color: var(--color-night);
+}
+.pagy-nav .page.prev.disabled span, .pagy-nav .page.next.disabled span {
+  opacity: 0.35; pointer-events: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
   .reveal { opacity: 1; transform: none; transition: none; }
