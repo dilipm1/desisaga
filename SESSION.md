@@ -1,3 +1,74 @@
+# Session — 2026-08-31: Option B Panchang (2026-2030) + regional variants + pagy + Vercel removal + hero polish
+
+## ⚡ RESUME HERE — current state
+
+**Dev server live** at `http://localhost:3000` (Puma 8.1.3, Rails 8.1). Hero shows festival countdown with subtle animated image on right + calendar moved to navbar + 14-base year calendar (variant-aware). `bin/rails test` 12/48 green, `brakeman` 0, `rubocop` 0.
+
+**ARM hunt still live** — systemd `desisaga-hunt` (Round 6+, 600+ denials, see `scripts/oci/hunt.log`). Same `us-chicago-1` wiring as 2026-08-24 below. No IP yet — Day 7 checkpoint today, PAYG option still at Day 14 if desired.
+
+**Last commits pushed to `origin/main`:**
+- `9f7dfcd` ui: calendar to navbar + festival hero image
+- `17d015b` option B: own Panchang engine — pre-compute 2026-2030 + 14 bases + regional variants (Sankranti/Pongal/Uttarayan/Maghi, Ugadi/Yugadi/Gudi Padwa, Vaisakhi/Puthandu/Vishu, etc.) + 23 hampers
+- `d80f7f8` fix: Ganesh 2026-08-26→2026-09-14, Raksha 2026-08-22→2026-08-28, Navratri 2026-10-15→2026-10-11, Holi 2027-03-04→2027-03-22 (all Drik-verified)
+- `ab81ed3` wave2: pagy (12 storefront / 20 admin, overflow→p1) + full dedup of Product callbacks
+- `e4c715e` dev: storefront fixes (Tailwind arbitrary `text-[$ss]`, sort `price.desc`), DB indices, model callbacks, Vercel `ci-cd.yml` removal
+
+### What was done this session (2026-08-31, ~4h, 5 commits)
+
+**1. Storefront polish + Wave 1 (e4c715e)**
+- Fixed broken Tailwind in `app/views/pages/home.html.erb:53,57` (`bg-[$marigold]`/`text-[$ss]` → `bg-marigold`/`text-sm`, verified `hover:border-marigold`)
+- Fixed `Products#index` sort: whitelist `price.desc` → `case` + `Arel.sql(order_sql)` (verified ASC 1,299→3,499 vs DESC reverse, all 200)
+- DB: `db/migrate/20260831010935_add_index_to_products_category_and_feature.rb` (category + featured; slug unique already existed) + `AddRegionToProducts` later
+- Product: `before_validation :normalize_slug` (parameterize) + `coerce_array_columns` (comma-split) + `set_currency_default` (INR) — 1-line `find_by_slug!` fix, `images&.first` guard
+- Deleted `.github/workflows/ci-cd.yml` (Node/Vercel 37 lines) — Rails `ci.yml` retained; `grep -r vercel .github` 0 after
+
+**2. Wave 2 — Pagy + full dedup (ab81ed3)**
+- `Gemfile:20` `pagy ~>9.4`, `ApplicationController:2` `include Pagy::Backend`, `ApplicationHelper:2` `Frontend`
+- `Products#index:9` `pagy(scope, limit:12)` + `Admin::Products#index:4` `limit:20`, both `rescue Pagy::OverflowError → page 1`
+- Moved final `currency ||= "INR"` tap from `Admin::ProductsController:47` to `Product#set_currency_default` → `product_params` is now pure `permit`
+- Views: `products/index.html.erb:8` `pagy.count` + `pagy_nav` when `pages>1`; admin grid adds pagy nav; `application.css:117` night `.pagy-nav` styles
+- Live verified with 20 products → 12+8 split, overflow fallback 200
+
+**3. Festival date correctness (d80f7f8)**
+- Investigated `lib/festivals.rb:8` — Ganesh `2026-08-26` was 19 days early vs Drik/Taiwan timeanddate `2026-09-14` (Mon), Raksha `08-22` vs `08-28` (Fri), Navratri `10-15` vs `10-11` (Sun), Holi `2027-03-04` vs `2027-03-22` (Mon)
+- Updated all 4 + verified `Festivals.next_festival(from:2026-08-31) → Ganesh in 14d` (was Navratri), `year calendar 28 Aug·14 Sep·11 Oct·8 Nov·22 Mar` sorted, `bin/rails test` 12/48 still green
+
+**4. Own Panchang Option B for ALL festivals (17d015b)**
+- Choice: **Pre-compute table** (Lahiri ayanamsa) not live API — `data/festivals_generated_2026_2030.json` for 14 bases × 5 years (2026-2030) with 6 Sankranti variants, 5 Ugadi variants, 6 Vaisakhi variants etc. — Drik cross-checked (Adhik Maas 2026 late shift)
+- Engine: `lib/panchang_calculator.rb` — `table` loader, `all_for_year`, `next_festival(from:, region:)` (year-wrap, `date_override` for future Jan 14 vs 15 Sankranti split), Meeus stubs `solar_longitude`/`tithi_at_sunrise` ready
+- Wrapper: `lib/festivals.rb` — `LEGACY_DATED` kept, `build_dated_for`/`dated`/`dated_festivals(region:)` delegates to calculator, `next_festival(region:)` delegates with fallback
+- Model: `Product::CATEGORIES 8→17` (+ Sankranti, Shivratri, Ugadi, Rama Navami, Vaisakhi, Janmashtami, Onam, Dussehra, Chhath Puja) + `REGIONS` + `region` string column + index (`db/migrate/20260831044155`), `Product#in_region` scope, `ApplicationHelper` 9 new emoji/badge, `Admin::_form` region select, `Admin::index` region column, `Pages/Products` controllers region-aware
+- Seeds: `db/seeds.rb` 8→23 hampers (Thai Pongal Tamil, Uttarayan Gujarat, Maghi Punjab, Ellu Bella Karnataka, Yugadi/Gudi Padwa, Vaisakhi/Puthandu/Vishu, Shivratri, Rama Navami, Janmashtami, Onam, Dussehra, Chhath)
+- Calendar: `app/views/shared/_year_calendar.html.erb:2` now `build_dated_for(Date.current.year)` → 14 cards (was 5), variant alias badges, next-year rollover if all past
+
+**5. UI polish (9f7dfcd)**
+- Hero: removed floating `link_to "#calendar"` (awkward centered) — hero now single `Shop` CTA (`app/views/pages/home.html.erb:51`)
+- Navbar: added **Calendar** item `app/views/shared/_navbar.html.erb:4` (`["Calendar","/#calendar"]` desktop + mobile) linking to `id="calendar"` (works from any page via `/#calendar`)
+- Hero image: new partial `_festival_hero_image.html.erb` — `hidden lg:block absolute right-6 top-1/2 w-[420px] xl:w-[520px] h-[480px]`, per-category Pexels map (Diwali, Ganesh, Janmashtami etc.), `opacity-[0.22]` + night gradients, `animate-float 14s`, `Up next` label, diya accent, `pointer-events-none` — verified `src …236149… Janmashtami` on home 200
+
+**Verification this session**
+- `bin/rails test` → 12 runs, 48 assertions, 0 failures (×5 runs)
+- `brakeman -q` → 0 warnings, `rubocop` → 0 style offenses after ` -a`
+- Smoke `curl http://localhost:3000` → `home 200`, `products 200`, `cart 200`, `admin 302→200`, `sort price 1,299→3,499 ASC vs 3,499→1,299 DESC`, `pagy 12+8 split` with 20 fixtures, `next Jan 10 2027 default Makara vs tamil-nadu Thai Pongal` variant alias
+
+### Next steps for 2026-08-31+
+
+1. **Live Meeus stubs** — fill `PanchangCalculator#solar_longitude` / `tithi_at_sunrise` and cross-check vs table in `test/services/panchang_calculator_test.rb`
+2. **Oracle hunt** — still Round 6+, now Day 7 — consider GH Actions hunter for 24/7 if desktop off; Day 14 PAYG upgrade still option
+3. **Stripe** — wire real checkout (demo place-order → Stripe)
+4. **Images** — replace Pexels placeholders with real photos via Active Storage
+5. Optional: customer accounts, automated `bin/rails r FestivalSeeder.refresh` via `solid_queue`
+
+### Files changed this session (for next reader)
+```
+data/festivals_generated_2026_2030.json + lib/panchang_calculator.rb (new)
+lib/festivals.rb (variant-aware) + app/models/product.rb (17 cats + region + callbacks)
+app/controllers/{pages,products,admin/products} + app/helpers/application_helper.rb
+app/views/{pages/home, shared/_navbar, shared/_year_calendar, shared/_festival_hero_image (new), admin/products/*}
+db/{migrate/*region, schema.rb, seeds.rb} + app/assets/tailwind/application.css (pagy) + Gemfile(pagy)
+.github/workflows/ci-cd.yml (deleted)
+```
+
 # Session — 2026-08-24: OCI credentials wired, ARM hunter LIVE (waiting for capacity)
 
 ## ⚡ RESUME HERE — current state
