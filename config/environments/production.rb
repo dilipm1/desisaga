@@ -85,6 +85,6 @@ Rails.application.configure do
     "www.desisaga.com"  # Allow requests from www.desisaga.com
   ]
   #
-  # Skip DNS rebinding protection for the default health check endpoint.
-  # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+  # Skip DNS rebinding protection for the default health check endpoint (Kamal proxy uses container hostname).
+  config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 end
