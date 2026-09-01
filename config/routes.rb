@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  constraints(host: /\Awww\./) do
+    get "*path", to: redirect { |params, req| "https://desisaga.com#{req.fullpath}" }, status: 301
+  end
+
   resource :session
   get "login", to: "sessions#new", as: :login
   delete "logout", to: "sessions#destroy", as: :logout
