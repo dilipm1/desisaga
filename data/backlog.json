@@ -1,5 +1,5 @@
 {
-  "version": "1.1.0",
+  "version": "1.1.1",
   "source": "desisaga-product-backlog",
   "last_updated": "2026-09-01",
   "tool": "Basecamp 4",
@@ -246,7 +246,7 @@
       "description": "The signature ritual-themed hero and live festival countdown.",
       "hill_chart": {
         "status": "shipped",
-        "note": "2026-09-01: Toran + countdown + 14-base calendar + anytime rituals + hero image (subtle float) + navbar Calendar shipped. Next: Meeus live stubs (Wave 2b)."
+        "note": "2026-09-01: Toran + countdown + 14-base calendar + anytime rituals + hero image (subtle float) + navbar Calendar + www→apex 301 redirect shipped. Next: Meeus live stubs (Wave 2b)."
       },
       "stories": [
         {
@@ -318,6 +318,22 @@
           "shipped_at": "2026-08-23",
           "verified": "Calendar cards → products?category= + hero CTA → products?category=next; preserves region/q/sort 2026-09-01",
           "implementation": "app/views/shared/_year_calendar.html.erb + app/views/pages/home.html.erb + app/views/shared/_navbar.html.erb"
+        },
+        {
+          "id": "DS-406",
+          "title": "www → apex 301 redirect",
+          "story": "As a user, www.desisaga.com redirects to desisaga.com",
+          "priority": "Must",
+          "acceptance_criteria": [
+            "www.desisaga.com/ 301 → desisaga.com/",
+            "www.desisaga.com/products 301 → desisaga.com/products (path preserved)",
+            "Single SAN cert covers both hosts"
+          ],
+          "graph_nodes": "dns → proxy → routes → redirect",
+          "status": "done",
+          "shipped_at": "2026-09-01",
+          "verified": "Kamal proxy hosts: [desisaga.com, www.desisaga.com] SAN cert; routes.rb constraint(host: /\\Awww\\./) redirect 301; curl -I https://www.desisaga.com/ → 301 location: https://desisaga.com/; curl -I https://www.desisaga.com/products → 301 location: https://desisaga.com/products",
+          "implementation": "config/deploy.yml proxy.hosts + config/routes.rb www constraint + kamal deploy c697411"
         }
       ]
     },

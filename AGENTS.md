@@ -222,6 +222,7 @@ Regions (`Product::REGIONS`): `tamil-nadu · gujarat · punjab · karnataka · m
 16. [ ] Connect desisaga.com domain via DNS
 
 ## Current Status
+- [x] **Production live at `https://desisaga.com`** — Hetzner CX23 Nuremberg `nbg1` (`2.28.69.167`), Kamal + Docker + Puma 8.1.3, Rails 8.1 — 2026-09-01
 - [x] Rails 8.1 app verified: all storefront routes 200, cart flow end-to-end, admin login, admin create/delete with region, `/` hero + calendar (14 bases) + featured — 2026-08-31
 - [x] `bin/rails test` — 12 runs, 48 assertions, 0 failures
 - [x] Production assets precompile verified (Tailwind v4 build + pagy night styles)
@@ -229,13 +230,13 @@ Regions (`Product::REGIONS`): `tamil-nadu · gujarat · punjab · karnataka · m
 - [x] Vercel CI removed (`.github/workflows/ci-cd.yml` deleted), Rails `ci.yml` retained
 - [x] Festival engine: Own Panchang Option B live, 23 hampers seeded, regional hampers verified (Thai Pongal vs Uttarayan etc.)
 - [x] Dev server running at `http://localhost:3000` (PID 150662) — Calendar in navbar, hero image subtle float on right
-- [x] Infra decision 2026-09-01 (CORRECTED 19:45 UTC): **Tier 1 Hetzner CX23 Nuremberg `nbg1` ~€5.49/mo (~₹500+VAT) + €0.60 IPv4 + Cloudflare free** — plan `docs/plans/hetzner-cx23-majestic-2026-09-01.md:1`, `okf/technical-architecture.md:1` (Majestic Monolith, delegated types). CX22→CX23 June 15 2026 price adj; Singapore CX unavailable (CPX only). `config/deploy.yml:10` host still placeholder until purchase.
+- [x] Infra decision 2026-09-01 (DEPLOYED): **Tier 1 Hetzner CX23 Nuremberg `nbg1` ~€5.49/mo (~₹500+VAT) + €0.60 IPv4 + Cloudflare free** — plan `docs/plans/hetzner-cx23-majestic-2026-09-01.md:1`, `okf/technical-architecture.md:1` (Majestic Monolith, delegated types). CX22→CX23 June 15 2026 price adj; Singapore CX unavailable (CPX only). `config/deploy.yml:10` **wired to `2.28.69.167`**.
+- [x] **www → apex 301 redirect** — `config/routes.rb` constraint + `config/deploy.yml` SAN cert; `www.desisaga.com/` 301 → `desisaga.com/`, `www.desisaga.com/*` 301 → `desisaga.com/*` (path preserved)
 - [x] hunt parallel: `us-chicago-1` (not ap-mumbai-1) — revisit Step 5 later
 - [ ] Stripe connected (real payments) — **Won't until host chosen** (`data/backlog.json:4` EPIC-3 gray, `app/controllers/checkouts_controller.rb:8` stub)
 - [ ] Customer-facing signup/OAuth (customers currently browse + cart without accounts)
 - [ ] ActiveStorage — **postponed until host chosen** (`app/models/product.rb:48` `FALLBACK_IMAGE` stays)
-- [ ] Deployed to Hetzner `sgp1` (Kamal `bin/kamal setup` pending IP)
-- [ ] DNS configured (Cloudflare A `@ → sGP-IP`)
+- [ ] DNS configured (Cloudflare A `@ → 2.28.69.167` + CNAME `www`)
 
 ## Optimization & Security Roadmap
 

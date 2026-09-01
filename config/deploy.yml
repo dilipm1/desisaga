@@ -17,9 +17,9 @@ servers:
 # Don't use this when deploying to multiple web servers (then you have to terminate SSL at the load balancer).
 proxy:
   ssl: true
-  host: desisaga.com
-  # Kamal issues one cert per host; add www after DNS is set up if desired:
-  # forwarding: true
+  hosts:
+    - desisaga.com
+    - www.desisaga.com
 
 # Where you keep your container images.
 registry:

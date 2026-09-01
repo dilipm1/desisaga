@@ -1,7 +1,7 @@
 ---
 title: Desi Saga — Product Backlog
 kind: okf/product-backlog
-version: 1.1.0
+version: 1.1.1
 owner: Product Owner
 last_updated: 2026-09-01
 status: active
@@ -10,7 +10,7 @@ tags: [backlog, moscow, epics, basecamp]
 
 # Desi Saga — Product Backlog
 
-> Maintained from a **Product Owner perspective** (MoSCoW). Each Epic is designed as a **graph** (jobs → arrows → shared state). Canonical source: `data/backlog.json`; human-readable mirror: this file. Live view: Basecamp "DesiSaga" project to-do lists + Hill Charts. **Last audit 2026-09-01 v1.1.0 — Stripe/deploy stubbed, EPIC-6 added (Basecamp-mimic tech).**
+> Maintained from a **Product Owner perspective** (MoSCoW). Each Epic is designed as a **graph** (jobs → arrows → shared state). Canonical source: `data/backlog.json`; human-readable mirror: this file. Live view: Basecamp "DesiSaga" project to-do lists + Hill Charts. **Last audit 2026-09-01 v1.1.1 — www→apex 301 redirect shipped (DS-406), Hetzner CX23 nbg1 DEPLOYED, Stripe/deploy stubbed, EPIC-6 added (Basecamp-mimic tech).**
 
 ## Priority Legend
 
@@ -74,6 +74,7 @@ tags: [backlog, moscow, epics, basecamp]
 | DS-403 | As a user, I see the year of festivals | Must | ✅ Done (2026-08-31) | YearCalendar lists all dated festivals chronologically | calendar → render | 14 bases, variant badges, next-year rollover |
 | DS-404 | As a user, I see "occasions, not dates" rituals | Should | ✅ Done (2026-08-31) | Anytime rituals render in separate section | rituals → render | `ANYTIME_RITUALS` (Wedding/Housewarming/Puja) |
 | DS-405 | As a user, I can jump from a festival to its products | Must | ✅ Done (2026-08-23) | Card links to filtered product catalog | calendar → link → catalog | Calendar + hero CTA → `products?category=` (preserves filters 2026-09-01) |
+| DS-406 | As a user, www.desisaga.com redirects to desisaga.com | Must | ✅ Done (2026-09-01) | www/ 301 → apex; www/* 301 preserves path; SAN cert | dns → proxy → routes → redirect | Kamal proxy `hosts: [apex, www]` + `routes.rb` `constraints(host: /\Awww\./)`; `curl -I https://www.desisaga.com/` → 301 |
 
 ## EPIC-5: Admin & Order Management — **STUB ONLY**
 
@@ -100,9 +101,9 @@ tags: [backlog, moscow, epics, basecamp]
 
 ---
 
-## 2026-09-01 Audit Summary (Backlog vs Reality v1.1.0)
+## 2026-09-01 Audit Summary (Backlog vs Reality v1.1.1)
 
-- **Shipped (✅ 14)**: DS-101,103,104,105,201,202,203,204,305,401,402,403,404,405. Catalog 23 hampers (paise), 17 categories, 13 regions, Pagy 12/20, Option B Panchang 14 bases.
+- **Shipped (✅ 15)**: DS-101,103,104,105,201,202,203,204,305,401,402,403,404,405,406. Catalog 23 hampers (paise), 17 categories, 13 regions, Pagy 12/20, Option B Panchang 14 bases, **Hetzner CX23 nbg1 DEPLOYED**, **www→apex 301**.
 - **Won't / Postponed (⏸️ 7)**: DS-301,302,303,304 (Stripe) + DS-501,502,503 (orders) — stubs only until host chosen. Per PO 2026-09-01.
 - **Backlog (⬜ 5+4)**: DS-102 price slider + DS-601-604 tech (Basecamp mimic).
 - **Hill Charts**: EPIC-1 shipped, EPIC-2 shipped, EPIC-3 gray, EPIC-4 shipped, EPIC-5 gray, EPIC-6 gray (new).

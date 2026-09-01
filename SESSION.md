@@ -1,19 +1,22 @@
-# Session — 2026-09-01: Hetzner CX22 Majestic (SGP1) + Basecamp mimic + Backlog v1.1.0 — Stripe/deploy stubbed
+# Session — 2026-09-01: Hetzner CX23 Nuremberg `nbg1` DEPLOYED + www→apex 301 + Basecamp sync + Backlog v1.1.1
 
 ## ⚡ RESUME HERE — current state
 
-**Dev server live** at `http://localhost:3000` (Puma 8.1.3, Rails 8.1, PID 150662). Hero + 14-base calendar (variant-aware), `bin/rails test` 12/48 green, `brakeman` 0, `rubocop` 0. **No Stripe/ActiveStorage deploy until host chosen** per PO 2026-09-01.
+**Production live at `https://desisaga.com`** (Hetzner CX23 Nuremberg `nbg1`, IP `2.28.69.167`, Kamal + Docker + Puma 8.1.3, Rails 8.1). `bin/rails test` 12/48 green, `brakeman` 0, `rubocop` 0. **No Stripe/ActiveStorage** per PO 2026-09-01.
 
-**Infra decision 2026-09-01 (in-repo, CORRECTED 19:45 UTC, WIRED 20:15 UTC):** **Tier 1 Hetzner Cloud CX23 Nuremberg `nbg1` ~€5.49/mo (~₹500+VAT) + €0.60 IPv4 + Cloudflare free** — Majestic Monolith (Kamal, SQLite `config/database.yml:26` 4 DBs, `docs/plans/hetzner-cx23-majestic-2026-09-01.md:1` canonical, `okf/technical-architecture.md:1` chassis). CX22 deprecated; Singapore CX not available (only CPX/CCX). `config/deploy.yml:10` **wired to `2.28.69.167`** (verified `ssh root@2.28.69.167` `ubuntu-4gb-nbg1-2`, Docker not yet — `kamal setup` will install).
+**Infra decision 2026-09-01 (DEPLOYED 20:15 UTC):** **Tier 1 Hetzner Cloud CX23 Nuremberg `nbg1` ~€5.49/mo (~₹500+VAT) + €0.60 IPv4 + Cloudflare free** — Majestic Monolith (Kamal, SQLite `config/database.yml:26` 4 DBs, `docs/plans/hetzner-cx23-majestic-2026-09-01.md:1` canonical, `okf/technical-architecture.md:1` chassis). CX22 deprecated; Singapore CX unavailable (only CPX/CCX). `config/deploy.yml:10` **wired to `2.28.69.167`** (`kamal setup` + `kamal deploy` done, container `ff35259` healthy).
 
 **ARM hunt still live** — systemd `desisaga-hunt` (Round 6+, 600+ denials, see `scripts/oci/hunt.log`). **Confirmed `us-chicago-1` (not ap-mumbai-1)** — revisit Step 5 later per PO. Runs in parallel to Hetzner Tier 1.
 
-**Backlog v1.1.0 synced 2026-09-01:** `data/backlog.json:4` + `okf/product-backlog.md:4` + Basecamp `48475118` 6 epics 26 todos (EPIC-3 `gray`/`Won't` Stripe stub, EPIC-6 Majestic Hardening new). `EPIC-1/2/4 shipped`, `EPIC-3/5/6 gray`. `node scripts/basecamp-sync.mjs --dry-run` `skipped 26` in sync.
+**Backlog v1.1.1 synced 2026-09-01:** `data/backlog.json:4` + `okf/product-backlog.md:4` + Basecamp `48475118` 6 epics 27 todos (EPIC-3 `gray`/`Won't` Stripe stub, EPIC-6 Majestic Hardening new, DS-406 www→apex shipped). `EPIC-1/2/4 shipped`, `EPIC-3/5/6 gray`. `node scripts/basecamp-sync.mjs` synced.
 **Token refreshed 2026-09-01:** `BASECAMP_ACCESS_TOKEN` `BAhbB…2026-09-15` + `BASECAMP_REFRESH_TOKEN` `…2036-09-01…` via `public/basecamp-callback.html:1` + `app/controllers/basecamp_callbacks_controller.rb:1`.
 
 **Last commits pushed to `origin/main`:**
+- `c697411` fix: root route naming conflict in www constraint
+- `077cfef` add explicit root redirect in www constraint
+- `ff35259` add www→apex 301 redirect constraint
 - `9f7dfcd` ui: calendar to navbar + festival hero image
-- `17d015b` option B: own Panchang engine — pre-compute 2026-2030 + 14 bases + regional variants (Sankranti/Pongal/Uttarayan/Maghi, Ugadi/Yugadi/Gudi Padwa, Vaisakhi/Puthandu/Vishu, etc.) + 23 hampers
+- `17d015b` option B: own Panchang engine — pre-compute 2026-2030 + 14 bases + regional variants + 23 hampers
 - `d80f7f8` fix: Ganesh 2026-08-26→2026-09-14, Raksha 2026-08-22→2026-08-28, Navratri 2026-10-15→2026-10-11, Holi 2027-03-04→2027-03-22 (all Drik-verified)
 - `ab81ed3` wave2: pagy (12 storefront / 20 admin, overflow→p1) + full dedup of Product callbacks
 - `e4c715e` dev: storefront fixes (Tailwind arbitrary `text-[$ss]`, sort `price.desc`), DB indices, model callbacks, Vercel `ci-cd.yml` removal
@@ -51,12 +54,42 @@
 - Navbar: added **Calendar** item `app/views/shared/_navbar.html.erb:4` (`["Calendar","/#calendar"]` desktop + mobile) linking to `id="calendar"` (works from any page via `/#calendar`)
 - Hero image: new partial `_festival_hero_image.html.erb` — `hidden lg:block absolute right-6 top-1/2 w-[420px] xl:w-[520px] h-[480px]`, per-category Pexels map (Diwali, Ganesh, Janmashtami etc.), `opacity-[0.22]` + night gradients, `animate-float 14s`, `Up next` label, diya accent, `pointer-events-none` — verified `src …236149… Janmashtami` on home 200
 
-**Verification this session**
+**Verification this session (2026-08-31)**
 - `bin/rails test` → 12 runs, 48 assertions, 0 failures (×5 runs)
 - `brakeman -q` → 0 warnings, `rubocop` → 0 style offenses after ` -a`
 - Smoke `curl http://localhost:3000` → `home 200`, `products 200`, `cart 200`, `admin 302→200`, `sort price 1,299→3,499 ASC vs 3,499→1,299 DESC`, `pagy 12+8 split` with 20 fixtures, `next Jan 10 2027 default Makara vs tamil-nadu Thai Pongal` variant alias
 
-### Next steps for 2026-08-31+
+### What was done this session (2026-09-01, ~2h, 4 commits)
+
+**1. Hetzner CX23 Nuremberg production deploy**
+- `config/deploy.yml:10` wired to `2.28.69.167` (Hetzner `nbg1` `ubuntu-4gb-nbg1-2`)
+- `bin/kamal setup` — Docker installed, image `ghcr.io/dilipm1/desisaga` built/pushed
+- `bin/kamal deploy` — container `c697411` healthy on port 80, `kamal-proxy` up with SAN cert for `desisaga.com` + `www.desisaga.com`
+- `config/environments/production.rb:89` `host_authorization` exclude `/up` for Kamal proxy health check (committed `a977a5b`)
+- `bin/kamal app exec --reuse "bin/rails db:seed"` → `Products: 23` + `Users: 1 admin@desisaga.com`
+- DNS propagated: `https://desisaga.com/up` returns HTTP/2 200; `https://desisaga.com/` full page 200
+
+**2. www → apex 301 redirect (industry standard)**
+- `config/deploy.yml:18-22` proxy `hosts: [desisaga.com, www.desisaga.com]` — single SAN cert via Let's Encrypt
+- `config/routes.rb:2-6` constraint `host: /\Awww\./` with explicit `root` redirect + glob `*path` redirect (preserves full path + query)
+- Deploy `c697411`: `curl -I https://www.desisaga.com/` → `301 location: https://desisaga.com/`; `curl -I https://www.desisaga.com/products` → `301 location: https://desisaga.com/products`
+- Verified `desisaga.com` → `200 OK`, `www.desisaga.com` → `301 → desisaga.com`
+
+**3. Backlog + Basecamp sync**
+- `data/backlog.json:4` → `v1.1.1` + `okf/product-backlog.md:4` mirrored
+- Basecamp `48475118` synced: 6 epics 27 todos, DS-406 www→apex shipped, Hill charts updated
+- `node scripts/basecamp-sync.mjs` executed successfully
+
+### Files changed this session (for next reader)
+```
+config/deploy.yml (hosts + proxy SAN)
+config/routes.rb (www constraint redirect)
+data/backlog.json (v1.1.1 + DS-406)
+SESSION.md + AGENTS.md (infra status + www redirect)
+docs/plans/hetzner-cx23-majestic-2026-09-01.md (canonical plan)
+```
+
+### Next steps for 2026-09-01+
 
 1. **Live Meeus stubs** — fill `PanchangCalculator#solar_longitude` / `tithi_at_sunrise` and cross-check vs table in `test/services/panchang_calculator_test.rb`
 2. **Oracle hunt** — still Round 6+, now Day 7 — consider GH Actions hunter for 24/7 if desktop off; Day 14 PAYG upgrade still option
@@ -64,7 +97,7 @@
 4. **Images** — replace Pexels placeholders with real photos via Active Storage
 5. Optional: customer accounts, automated `bin/rails r FestivalSeeder.refresh` via `solid_queue`
 
-### Files changed this session (for next reader)
+### Files changed this session (for next reader — 2026-08-31)
 ```
 data/festivals_generated_2026_2030.json + lib/panchang_calculator.rb (new)
 lib/festivals.rb (variant-aware) + app/models/product.rb (17 cats + region + callbacks)
