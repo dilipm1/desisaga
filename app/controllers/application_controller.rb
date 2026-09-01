@@ -1,12 +1,16 @@
 class ApplicationController < ActionController::Base
   include Pagy::Backend
-  # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
-  allow_browser versions: :modern
+  # Allow all browsers (Indian market has older devices) — was `allow_browser versions: :modern` which blocked Chrome <120 with 406
+  # allow_browser versions: :modern
 
   # Changes to the importmap will invalidate the etag for HTML responses
   stale_when_importmap_changes
 
   helper_method :current_user, :authenticated?, :cart_items, :cart_subtotal, :cart_count, :shipping_for
+
+  def not_found
+    render "errors/not_found", status: :not_found
+  end
 
   private
     def current_user
@@ -45,9 +49,5 @@ class ApplicationController < ActionController::Base
 
     def add_to_cart(product_id, quantity = 1)
       cart[product_id.to_s] = cart[product_id.to_s].to_i + quantity
-    end
-
-    def not_found
-      render "errors/not_found", status: :not_found
     end
 end
