@@ -6,13 +6,16 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
       <div class="aspect-square bg-gradient-to-br from-ember to-ember-light rounded-xl overflow-hidden warm-shadow-lg">
-        <img src="<%= @product.primary_image %>" alt="<%= @product.name %>" class="w-full h-full object-cover">
+        <img src="<%= @product.primary_image %>" alt="<%= @product.name %>" loading="eager" onerror="this.onerror=null;this.src='https://images.pexels.com/photos/1303092/pexels-photo-1303092.jpeg?auto=compress&cs=tinysrgb&w=800'" class="w-full h-full object-cover">
       </div>
 
       <div class="pt-4">
         <span class="inline-block text-[10px] font-semibold px-2.5 py-1 rounded-full border mb-3 <%= category_badge_class(@product.category) %>">
           <%= @product.category %>
         </span>
+        <% if @product.region.present? && @product.region != "default" %>
+          <span class="inline-block text-[10px] font-semibold px-2.5 py-1 rounded-full border mb-3 ml-2 bg-ember-light border-line text-parchment-dim"><%= @product.region.humanize %></span>
+        <% end %>
         <h1 class="font-display text-3xl md:text-4xl tracking-tight text-parchment mb-4"><%= @product.name %></h1>
 
         <div class="flex items-center gap-3 mb-6">
@@ -36,7 +39,7 @@
         <% end %>
 
         <div class="flex flex-wrap gap-2 mb-8">
-          <% @product.tags.each do |tag| %>
+          <% Array(@product.tags).each do |tag| %>
             <span class="px-3 py-1.5 bg-ember-light text-parchment-dim text-xs font-medium rounded-full border border-line"><%= tag %></span>
           <% end %>
         </div>

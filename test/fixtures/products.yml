@@ -4,7 +4,7 @@ diwali_hamper:
   name: Diwali Delight Hamper
   slug: diwali-delight-hamper
   description: Curated Diwali hamper
-  price: 2499
+  price: 249900
   currency: INR
   category: Diwali
   images: []
@@ -17,7 +17,7 @@ puja_kit:
   name: Complete Puja Kit
   slug: complete-puja-kit
   description: Traditional puja kit
-  price: 1899
+  price: 189900
   currency: INR
   category: Puja
   images: []

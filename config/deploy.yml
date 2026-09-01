@@ -7,7 +7,8 @@ image: ghcr.io/dilipm1/desisaga
 # Deploy to these servers.
 servers:
   web:
-    - 192.168.0.1  # TODO: replace with the VPS IP once provisioned
+    hosts:
+      - 2.28.69.167  # Hetzner CX23 nbg1 (Nuremberg) — live 2026-09-01, Majestic Tier 1
 
 # Enable SSL auto certification via Let's Encrypt and allow for multiple apps on a single web server.
 #

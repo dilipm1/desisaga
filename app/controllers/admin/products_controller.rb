@@ -2,9 +2,9 @@ class Admin::ProductsController < Admin::BaseController
   before_action :set_product, only: %i[show edit update destroy]
 
   def index
-    @pagy, @products = pagy(Product.order(:name), limit: 20)
+    @pagy, @products = pagy(Product.order(:name), limit: 20, params: request.query_parameters)
   rescue Pagy::OverflowError
-    @pagy, @products = pagy(Product.order(:name), limit: 20, page: 1)
+    @pagy, @products = pagy(Product.order(:name), limit: 20, page: 1, params: request.query_parameters)
   end
 
   def show
@@ -44,7 +44,7 @@ class Admin::ProductsController < Admin::BaseController
 
     def product_params
       params.require(:product).permit(
-        :name, :slug, :description, :price, :category, :region, :in_stock, :featured,
+        :name, :slug, :description, :price_in_rupees, :category, :region, :in_stock, :featured,
         :images, :tags, :ritual_contents
       )
     end

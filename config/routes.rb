@@ -15,6 +15,9 @@ Rails.application.routes.draw do
   post "checkout", to: "checkouts#create"
   get "checkout/success", to: "checkouts#success", as: :checkout_success
 
+  post "basecamp/capture", to: "basecamp_callbacks#create"
+  get "basecamp/capture", to: "basecamp_callbacks#show"
+
   namespace :admin do
     root to: "products#index", as: :root
     resources :products

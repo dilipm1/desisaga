@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Basecamp OAuth — Token Capture</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    body{font-family:ui-monospace,monospace;max-width:780px;margin:40px auto;padding:0 20px;background:#1A0B0A;color:#F7EEDC}
+    h1{color:#E9B44C}
+    code{background:#2E1210;padding:2px 6px;border-radius:4px;word-break:break-all}
+    .box{background:#2E1210;border:1px solid #422A1C;border-radius:10px;padding:20px;margin:16px 0}
+    .ok{color:#8FAE6B}.err{color:#C2322E}
+    input{width:100%;padding:10px;border-radius:6px;border:1px solid #422A1C;background:#1A0B0A;color:#F7EEDC;font-family:monospace}
+    button{background:#E9B44C;color:#1A0B0A;border:0;padding:10px 16px;border-radius:6px;font-weight:600;cursor:pointer}
+    a{color:#E9B44C}
+  </style>
+</head>
+<body>
+<h1>Basecamp OAuth — Capture New Access Token</h1>
+<p>This static page (served from <code>public/basecamp-callback.html</code>) reads <code>?code</code> or <code>#access_token</code> from the URL after Basecamp redirects, shows it here, and lets you copy it to <code>.env</code>.</p>
+
+<div class="box" id="status">Waiting for redirect…</div>
+
+<div class="box">
+  <h3>Raw URL</h3>
+  <p><code id="rawUrl"></code></p>
+  <h3>Authorization Code</h3>
+  <input id="code" readonly placeholder="(none)">
+  <h3>Access Token (if present in fragment)</h3>
+  <input id="token" readonly placeholder="(none)">
+  <p><button onclick="copy('code')">Copy Code</button> <button onclick="copy('token')">Copy Token</button> <button onclick="copyEnv()">Copy .env line</button></p>
+  <p id="envLine" style="margin-top:12px"></p>
+</div>
+
+<div class="box">
+  <h3>Next steps</h3>
+  <ol>
+    <li>Paste the <code>BASECAMP_ACCESS_TOKEN</code> value into <code>.env</code> at <code>/home/dilipm/Projects/desisaga/.env:7</code>.</li>
+    <li>Run <code>node scripts/basecamp-sync.mjs --dry-run</code> then <code>node scripts/basecamp-sync.mjs</code> to push <code>data/backlog.json</code>.</li>
+  </ol>
+  <p><a href="/">← Back to Desi Saga</a> · <a href="/products">Products</a></p>
+</div>
+
+<script>
+function qs(name){ return new URLSearchParams(location.search).get(name) }
+function hashParam(name){
+  const h = location.hash.startsWith('#') ? location.hash.slice(1) : location.hash;
+  return new URLSearchParams(h).get(name);
+}
+const raw = location.href;
+document.getElementById('rawUrl').textContent = raw;
+const code = qs('code') || '';
+const token = qs('access_token') || hashParam('access_token') || qs('token') || hashParam('token') || '';
+document.getElementById('code').value = code;
+document.getElementById('token').value = token;
+const st = document.getElementById('status');
+if(code || token){
+  st.innerHTML = '<span class="ok">✓ Captured.</span> Code/token found in URL. Use the copy buttons below.';
+  if(token) document.getElementById('envLine').innerHTML = 'For <code>.env</code>: <code>BASECAMP_ACCESS_TOKEN=' + token + '</code>';
+  else if(code) document.getElementById('envLine').innerHTML = 'You got a <code>code</code>. Exchange it for a token at <code>https://launchpad.37signals.com/authorization/token</code> with your client_id/secret, or use the implicit flow that returns <code>access_token</code> directly.';
+} else {
+  st.innerHTML = '<span class="err">No code/token yet.</span> After you authorize in Basecamp you will be redirected here with <code>?code=...</code> or <code>#access_token=...</code>. If testing, try <code>/basecamp-callback.html?code=TEST123</code>';
+}
+function copy(id){
+  const el=document.getElementById(id);
+  el.select(); document.execCommand('copy');
+  const s=document.getElementById('status');
+  s.innerHTML='<span class="ok">Copied '+id+' to clipboard.</span> Paste it where you need it.';
+}
+function copyEnv(){
+  const token=document.getElementById('token').value;
+  const code=document.getElementById('code').value;
+  const val= token || code;
+  if(!val) return;
+  const line='BASECAMP_ACCESS_TOKEN='+val;
+  navigator.clipboard.writeText(line).then(()=>{document.getElementById('envLine').innerHTML='<span class="ok">Copied:</span> <code>'+line+'</code>'});
+}
+async function autoCapture(){
+  const code=document.getElementById('code').value;
+  const token=document.getElementById('token').value;
+  const val = token || code;
+  if(!val) return;
+  try{
+    const res = await fetch('/basecamp/capture?code='+encodeURIComponent(code)+'&access_token='+encodeURIComponent(token), {method:'GET'});
+    const j = await res.json();
+    if(j.ok) {
+      document.getElementById('status').innerHTML = '<span class="ok">✓ Auto-captured to .env</span> ('+j.stored+') — sync can now run.';
+      document.getElementById('envLine').innerHTML = '<span class="ok">Saved to .env</span> — <code>'+j.env_path+'</code>';
+    }
+  } catch(e){ console.error(e); }
+}
+if(code || token){ setTimeout(autoCapture, 400); }
+console.log('Basecamp callback capture page ready', {code, token, href: raw});
+</script>
+</body>
+</html>

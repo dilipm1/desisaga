@@ -5,83 +5,83 @@
 ## Component Dependency Map
 
 ```
-src/app/layout.tsx ──→ Providers (SessionProvider client wrapper) │ state: NextAuth session
-src/app/layout.tsx ──→ CartProvider (cart context)          │ state: cart in localStorage
-src/lib/cart.tsx ────→ localStorage (persisted across reloads)  │ state: cart items + total
-src/lib/festivals.ts ─→ useNextFestival (live countdown)    │ state: today (30-min tick)
-src/components/YearCalendar ─→ useToday (30-min tick clock) │ state: daysLeft per festival
-src/components/FestivalHero ─→ useNextFestival (daysLeft)   │ state: next festival
-src/lib/products.ts ───→ data/products.json (8 hampers)     │ state: product catalog
-src/components/ProductCard ─→ CATEGORY_BG (category styling)│ state: category → style map
-src/app/checkout/page.tsx ─→ Stripe Checkout Session        │ state: session id
-src/app/success/page.tsx ──→ Webhook confirmation           │ state: order status
-src/lib/authOptions.ts ─→ Google + admin Credentials providers │ state: JWT w/ role claim
-src/app/api/auth/[...nextauth]/route.ts ─→ authOptions      │ state: session cookie
-src/components/Navbar.tsx ─→ useSession (auth state UI)      │ state: session.user + role
-src/app/admin/login ─→ signIn("admin") ─→ Credentials provider │ state: role=admin session
-src/app/admin/products ─→ src/lib/api/products.ts ─→ /api/admin/products │ state: product list
-src/app/api/admin/products/route.ts ─→ data/products.json (fs) │ state: product catalog (read/write)
+app/views/layouts/application.html.erb ──→ shared/_navbar (auth + cart badge)   │ state: current_user via cookies.signed[:session_id]
+app/controllers/application_controller.rb ─→ session[:cart] (server-side)        │ state: cart hash product_id → quantity
+app/models/product.rb ──→ products table (SQLite, 17 categories + region)       │ state: catalog (images/tags/ritual_contents as JSON)
+lib/panchang_calculator.rb ─→ data/festivals_generated_2026_2030.json (Option B) │ state: 14 bases × 5y Lahiri table + variant aliases
+lib/festivals.rb ──→ PanchangCalculator (delegates + region alias)               │ state: Festival structs, days_left, next_festival
+app/controllers/pages_controller.rb ─→ Festivals.next_festival + featured        │ state: hero countdown + year calendar (14 bases)
+app/views/shared/_year_calendar.html.erb ─→ Festivals.build_dated_for(year)     │ state: dated cards + variant badges
+app/views/pages/home.html.erb ─→ _festival_hero_image (per-category Pexels map) │ state: next_festival.category → hero image
+app/controllers/products_controller.rb ─→ Product scopes + Pagy (12)             │ state: filtered grid, preserved params
+app/views/shared/_product_card.html.erb ─→ ApplicationHelper#category_badge_class│ state: category → badge style + featured badge
+app/controllers/carts_controller.rb + cart_items_controller.rb ─→ session[:cart] │ state: cart_items + cart_subtotal + shipping_for
+app/controllers/checkouts_controller.rb ─→ session[:cart] → checkout/success     │ state: demo order (clears cart, no Stripe yet)
+app/controllers/sessions_controller.rb + app/models/session.rb ─→ users table    │ state: bcrypt session cookie
+app/controllers/admin/products_controller.rb ─→ Product CRUD + Pagy (20)         │ state: inventory grid, region select
+app/helpers/application_helper.rb ─→ format_price (paise→₹), category_emoji/badge │ state: price/category display
+app/helpers/icons_helper.rb ─→ inline lucide SVGs                                │ state: no icon gem
 ```
 
 ## Graph Representation
 
 ```mermaid
 graph LR
-    A[layout.tsx] --> AP[providers.tsx SessionProvider]
-    AP --> B[CartProvider]
-    B --> C[cart.tsx]
-    C -->|localStorage| D[Cart State]
-    E[festivals.ts] --> F[useNextFestival]
-    E --> G[useToday]
-    G -->|30-min tick| H[daysLeft]
-    F --> I[FestivalHero]
-    H --> J[YearCalendar]
-    K[products.ts] --> L[data/products.json]
-    K --> M[ProductCard]
-    L -->|catalog| N[Category styles]
-    O[checkout/page.tsx] --> P[Stripe Session]
-    Q[success/page.tsx] --> R[Webhook Confirmation]
-    AO[authOptions.ts] --> AR[api/auth/[...nextauth]]
-    AR -->|session cookie| AU[useSession]
-    AU --> NB[Navbar auth UI]
-    AL[admin/login] -->|signIn admin| AO
-    APG[admin/products] --> APIP[api/admin/products]
-    AAD[admin/add] -->|POST| APIP
-    APIP -->|fs read/write| L
+    A[application.html.erb] --> NB[shared/_navbar]
+    NB -->|cookies.signed| S[Session/User]
+    AC[ApplicationController] -->|session cart| C[Cart State]
+    C -->|cart_items| Cart[Cart Page]
+    C -->|cart_count| NB
+    C --> CH[Checkout]
+    P[Product model] -->|SQLite| CAT[Catalog]
+    PC[ProductsController] -->|scopes + Pagy| CAT
+    CAT --> Card[_product_card]
+    PAN[PanchangCalculator] -->|JSON table| F[Festivals]
+    F -->|next_festival| Hero[pages#home Hero]
+    F -->|build_dated_for| Cal[_year_calendar]
+    Hero --> Cal
+    F -->|variant alias| Hero
+    AC -->|shipping_for| Cart
+    CH -->|demo clear| Succ[checkout/success]
+    S -->|admin?| AP[Admin::Products]
+    AP -->|CRUD| P
 ```
 
 ## Shared State Inventory
 
 | State | Source | Consumers | Persistence |
 |---|---|---|---|
-| Cart items + total | `src/lib/cart.tsx` | Navbar badge, Cart page | localStorage (`desisaga-cart`) |
-| Today (30-min tick) | `src/lib/festivals.ts` `useToday` | YearCalendar, FestivalHero | ephemeral (client clock) |
-| Next festival + days left | `getNextFestival` | Navbar chip, FestivalHero, countdown | computed at render |
-| Product catalog | `data/products.json` | products page, ProductCard, detail page | static import (read) |
-| Product catalog (admin writes) | `/api/admin/products` route | admin grid, add form | fs write to products.json |
-| Category → style/emoji/gradient | `src/lib/constants.ts` | ProductCard, category filters | static import |
-| Checkout session | Stripe (test mode) | checkout page, success page | Stripe-hosted |
-| Auth session (user + role) | NextAuth (`authOptions`) | Navbar, admin pages | JWT session cookie |
-| Admin credentials | `.env` (ADMIN_EMAIL/ADMIN_PASSWORD) | Credentials provider | env vars |
+| Cart items + qty | `ApplicationController#cart` (`session[:cart]`) | Navbar badge (`cart_count`), `carts#show`, `checkouts#show` | signed cookie session (4KB) |
+| Cart totals + shipping | `cart_subtotal` + `shipping_for(≥₹999 free else ₹99)` | `carts/show`, `checkouts/show` | computed per request |
+| Product catalog (23 hampers) | `products` table (`images/tags/ritual_contents` JSON, `region`) | `products#index` (Pagy 12), `products#show`, `pages#home` featured (4), `admin/products#index` (Pagy 20) | SQLite |
+| Festival table (14 bases × 5y) | `data/festivals_generated_2026_2030.json` (Lahiri) via `PanchangCalculator` | `Festivals.next_festival`, `build_dated_for`, `_year_calendar` | JSON file |
+| Next festival + days_left | `Festivals.next_festival(region:)` → `PanchangCalculator.next_festival` | Hero countdown (`pages/home`), navbar chip (`_navbar`), `Festivals.days_left` | computed daily |
+| Category → badge/emoji | `ApplicationHelper#category_badge_class` / `category_emoji` | `_product_card`, `products/show`, `products/index` chips | helper hash |
+| Auth session | `Session` model + `cookies.signed[:session_id]` via `Authentication` concern | `ApplicationController#current_user`, `_navbar` (Sign in/out + Admin), `Admin::BaseController` | DB + signed cookie |
+| Admin credentials | `.env` (`ADMIN_EMAIL`/`ADMIN_PASSWORD`) → `db/seeds.rb` | `User#admin?` | env + `users` table |
+| Pagination state | `Pagy` (`include Pagy::Backend/Frontend`) | `products#index` (12, overflow→p1), `admin/products#index` (20) | query params `?page=` + preserved `?category=&region=&q=&sort=` |
 
 ## Arrows (Handoffs)
 
 | From | To | Trigger |
 |---|---|---|
-| Browse products → Detail | `products/[slug]/page.tsx` | click product card |
-| Detail → Cart | `addItem(product)` | click "Add to cart" |
-| Cart → Checkout | `/checkout` | click "Proceed to checkout" |
-| Checkout → Stripe | `createCheckoutSession` | submit checkout form |
-| Stripe → Success | webhook `checkout.session.completed` | payment succeeds |
-| Festival calendar → Category | `?category=<name>` link | click festival/ritual card |
-| Footer/Navbar → Google login | `/login` → Google OAuth → callback | click "Sign in" |
-| Admin login → Inventory | `/admin/login` → Credentials → `/admin/products` | successful admin auth |
-| Add form → Catalog | POST `/api/admin/products` → products.json | submit add-product form |
-| Inventory → Catalog removal | DELETE `/api/admin/products?id=` | click delete + confirm |
+| Browse grid → Detail | `GET /products/:slug` (`products#show`) | click `_product_card` |
+| Detail → Cart | `POST /cart_items` (`cart_items#create` → `add_to_cart`) | “Add to Cart” `button_to` |
+| Cart qty → Cart | `PATCH /cart_items/:id` / `DELETE /cart_items/:id` | +/- / Remove `button_to` |
+| Cart → Checkout | `GET /checkout` (`checkouts#show`) | “Checkout” link (redirects if empty with alert) |
+| Checkout → Success | `POST /checkout` (`checkouts#create` clears `session[:cart]`) | “Place Order (Demo)” |
+| Festival calendar → Catalog | `GET /products?category=` | click `_year_calendar` card |
+| Hero “Shop <festival>” → Catalog | `GET /products?category=<next_festival.category>` | hero CTA |
+| Catalog filters → Catalog | `GET /products?category=&region=&q=&sort=&page=` (Pagy preserves params) | category/region chips, search form, sort select, pagy nav |
+| Navbar → Auth | `GET /login` (`sessions#new`) → `POST /session` | “Sign in” |
+| Auth → Admin | `GET /admin` → `Admin::BaseController#require_admin` | “Admin” link (if `User#admin?`) |
+| Admin form → Catalog | `POST /admin/products` / `PATCH /admin/products/:id` | create/update with `region`, `price_in_rupees` |
+| Admin delete → Catalog | `DELETE /admin/products/:id` | “Delete” `turbo_confirm` |
 
 ## Change Log
 
 | Date | Change | Author |
 |---|---|---|
+| 2026-09-01 | Rails rewrite: session cart, Pagy, Option B Panchang (14 bases + variants), region column, shipping parity, param preservation | — |
 | 2026-08-19 | Added auth graph (authOptions → NextAuth route → session → Navbar) and admin inventory graph (admin pages → CRUD API → products.json) | — |
 | 2026-08-12 | Initial knowledge graph created from existing components | — |

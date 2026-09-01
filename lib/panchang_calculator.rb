@@ -78,7 +78,7 @@ module PanchangCalculator
     # Cross-year list for countdown (e.g., from 2026-08-31 need to wrap to 2027)
     # Collect current year + next year, sort, find next >= from
     def next_festival(from: Date.current, region: nil)
-      years = [from.year, from.year + 1]
+      years = [ from.year, from.year + 1 ]
       candidates = years.flat_map do |y|
         festivals.filter_map do |f|
           date_str = observation_date(f["id"], y, region: region)
@@ -98,9 +98,9 @@ module PanchangCalculator
           # pick most relevant variant for region or default
           variant = if region
                       base["variants"]&.find { |v| v["region"] == region.to_s } || base["variants"]&.first
-                    else
+          else
                       base["variants"]&.find { |v| v["region"] == "default" } || base["variants"]&.first
-                    end
+          end
           festival_struct = Festivals::Festival.new(
             id: base["id"],
             name: variant ? variant["alias"] : base["base_name"],

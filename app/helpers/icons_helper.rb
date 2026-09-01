@@ -17,7 +17,8 @@ module IconsHelper
     "trash" => '<path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/>',
     "plus" => '<path d="M5 12h14"/><path d="M12 5v14"/>',
     "minus" => '<path d="M5 12h14"/>',
-    "check" => '<path d="M20 6 9 17l-5-5"/>'
+    "check" => '<path d="M20 6 9 17l-5-5"/>',
+    "chevron-down" => '<path d="m6 9 6 6 6-6"/>'
   }.freeze
 
   def icon(name, css_class: "w-5 h-5", **)

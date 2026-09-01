@@ -1,6 +1,7 @@
 <%
   next_festival = Festivals.next_festival
-  category_links = [["Shop", products_path], ["Diwali", products_path(category: "Diwali")], ["Wedding", products_path(category: "Wedding")], ["Puja", products_path(category: "Puja")], ["Calendar", "/#calendar"]]
+  category_links = [["Shop", products_path], ["Calendar", "/#calendar"]]
+  navbar_categories = Product::CATEGORIES.first(8)
 %>
 <nav data-controller="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-night/90 backdrop-blur-md border-b border-line">
   <div class="max-w-7xl mx-auto px-6 lg:px-8">
@@ -9,10 +10,23 @@
         <span class="font-display text-xl tracking-tight text-parchment">DESI SAGA</span>
       <% end %>
 
-      <div class="hidden md:flex items-center gap-8" data-navbar-target="links">
+      <div class="hidden md:flex items-center gap-6" data-navbar-target="links">
         <% category_links.each do |label, href| %>
           <%= link_to label, href, class: "text-sm font-medium text-parchment-dim hover:text-flame transition-colors" %>
         <% end %>
+        <div class="relative group">
+          <button type="button" class="inline-flex items-center gap-1 text-sm font-medium text-parchment-dim hover:text-flame transition-colors" aria-haspopup="true">
+            Categories <%= icon("chevron-down", css_class: "w-3 h-3") %>
+          </button>
+          <div class="absolute left-0 top-full pt-2 hidden group-hover:block group-focus-within:block z-50">
+            <div class="bg-ember border border-line rounded-lg warm-shadow py-2 min-w-[180px]">
+              <% navbar_categories.each do |cat| %>
+                <%= link_to cat, products_path(category: cat), class: "block px-4 py-2 text-sm text-parchment-dim hover:text-flame hover:bg-ember-light transition-colors" %>
+              <% end %>
+              <%= link_to "All categories →", products_path, class: "block px-4 py-2 text-xs font-mono uppercase tracking-[0.15em] text-flame hover:bg-ember-light" %>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="flex items-center gap-3">
@@ -61,10 +75,15 @@
 
     <div data-navbar-target="mobileMenu" class="hidden md:hidden pb-6 pt-2 space-y-1 bg-night border border-line rounded-b-2xl shadow-2xl animate-fade-in">
       <%= link_to "Shop All", products_path, class: "block py-2.5 px-4 text-sm font-medium text-parchment-dim hover:text-flame hover:bg-ember rounded-md transition-colors" %>
-      <%= link_to "Diwali", products_path(category: "Diwali"), class: "block py-2.5 px-4 text-sm font-medium text-parchment-dim hover:text-flame hover:bg-ember rounded-md transition-colors" %>
-      <%= link_to "Wedding", products_path(category: "Wedding"), class: "block py-2.5 px-4 text-sm font-medium text-parchment-dim hover:text-flame hover:bg-ember rounded-md transition-colors" %>
-      <%= link_to "Puja", products_path(category: "Puja"), class: "block py-2.5 px-4 text-sm font-medium text-parchment-dim hover:text-flame hover:bg-ember rounded-md transition-colors" %>
       <%= link_to "Calendar", "/#calendar", class: "block py-2.5 px-4 text-sm font-medium text-parchment-dim hover:text-flame hover:bg-ember rounded-md transition-colors" %>
+      <div class="px-4 pt-2">
+        <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-parchment-dim mb-2">Categories</p>
+        <div class="flex flex-wrap gap-1.5">
+          <% navbar_categories.each do |cat| %>
+            <%= link_to cat, products_path(category: cat), class: "text-xs px-3 py-1.5 rounded-full border border-line text-parchment-dim hover:border-flame/40 hover:text-flame" %>
+          <% end %>
+        </div>
+      </div>
       <% if authenticated? %>
         <div class="pt-2 px-4 space-y-2">
           <p class="text-sm text-parchment-dim">Signed in as <span class="text-flame"><%= current_user.display_name %></span></p>

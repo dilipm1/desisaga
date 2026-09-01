@@ -40,7 +40,7 @@ class ApplicationController < ActionController::Base
     end
 
     def shipping_for(subtotal)
-      subtotal.zero? || subtotal >= 999 ? 0 : 99
+      subtotal.zero? || subtotal >= 99_900 ? 0 : 9_900
     end
 
     def add_to_cart(product_id, quantity = 1)

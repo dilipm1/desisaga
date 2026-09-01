@@ -2,6 +2,7 @@
   <div class="h-full bg-ember border border-line rounded-lg overflow-hidden warm-shadow transition-all duration-300 hover:border-flame/50 hover:warm-shadow-lg hover:-translate-y-1">
     <div class="aspect-[4/3] bg-gradient-to-br from-ember to-ember-light flex items-center justify-center relative overflow-hidden">
       <img src="<%= product.primary_image %>" alt="<%= product.name %>"
+        loading="lazy" onerror="this.onerror=null;this.src='https://images.pexels.com/photos/1303092/pexels-photo-1303092.jpeg?auto=compress&cs=tinysrgb&w=800'"
         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
       <% if product.featured? %>
         <span class="absolute top-3 left-3 bg-flame text-night text-[11px] font-semibold px-2.5 py-1 rounded-full">Featured</span>

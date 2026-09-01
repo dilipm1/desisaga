@@ -10,26 +10,40 @@
       <div class="festive-divider mt-4 w-24"></div>
     </div>
 
-    <%= form_with url: products_path, method: :get, local: true, class: "mb-6" do |form| %>
+    <%= form_with url: products_path, method: :get, local: true, class: "mb-6 flex flex-col sm:flex-row gap-4 items-start sm:items-end" do |form| %>
       <% if @selected_category %><%= form.hidden_field :category, value: @selected_category %><% end %>
-      <%= form.text_field :q, value: params[:q], placeholder: "Search hampers...",
-            class: "w-full max-w-sm border-b-2 border-line pb-2 text-sm focus:outline-none focus:border-flame transition-colors bg-transparent text-parchment placeholder:text-parchment-dim/50" %>
-
-      <select name="sort" class="text-sm font-medium transition-all px-4 py-2 rounded-full border bg-transparent text-parchment-dim hover:text-flame border-line hover:border-flame/50 w-48" onchange="this.form.submit()">
-        <option value="name" <%= @selected_sort == "name" ? "selected" : "" %>">Name (A-Z)</option>
-        <option value="price" <%= @selected_sort == "price" ? "selected" : "" %>">Price (Low-High)</option>
-        <option value="price.desc" <%= @selected_sort == "price.desc" ? "selected" : "" %>">Price (High-Low)</option>
-      </select>
+      <% if @selected_region.present? %><%= form.hidden_field :region, value: @selected_region %><% end %>
+      <div class="flex-1 max-w-sm w-full">
+        <%= form.text_field :q, value: params[:q], placeholder: "Search hampers...",
+              class: "w-full border-b-2 border-line pb-2 text-sm focus:outline-none focus:border-flame transition-colors bg-transparent text-parchment placeholder:text-parchment-dim/50" %>
+      </div>
+      <%= form.select :sort,
+            [["Name (A-Z)", "name"], ["Price (Low-High)", "price"], ["Price (High-Low)", "price.desc"]],
+            { selected: @selected_sort }, { onchange: "this.form.submit()", class: "text-sm font-medium transition-all px-4 py-2 rounded-full border bg-transparent text-parchment-dim hover:text-flame border-line hover:border-flame/50 w-48" } %>
     <% end %>
 
-    <div class="flex gap-2 flex-wrap mb-10">
-      <%= link_to "All", products_path(params[:q].present? ? { q: params[:q] } : {}),
+    <div class="flex gap-2 flex-wrap mb-3">
+      <% base_params = {}.tap { |h| h[:q] = params[:q] if params[:q].present?; h[:region] = params[:region] if params[:region].present?; h[:sort] = params[:sort] if params[:sort].present? } %>
+      <%= link_to "All", products_path(base_params),
             class: "text-sm font-medium transition-all px-4 py-2 rounded-full border #{!@selected_category ? 'bg-flame text-night border-transparent' : 'text-parchment-dim hover:text-parchment border-line hover:border-flame/50 bg-ember'}" %>
       <% Product::CATEGORIES.each do |cat| %>
-        <%= link_to cat, products_path((params[:q].present? ? { q: params[:q] } : {}).merge(category: cat)),
+        <%= link_to cat, products_path(base_params.merge(category: cat)),
               class: "text-sm font-medium transition-all px-4 py-2 rounded-full border #{@selected_category == cat ? 'bg-flame text-night border-transparent' : "#{category_badge_class(cat)} hover:opacity-80"}" %>
       <% end %>
     </div>
+
+    <% if Product::REGIONS.reject { |r| r == "default" }.any? %>
+      <div class="flex gap-2 flex-wrap mb-10 items-center">
+        <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-parchment-dim mr-1">Region:</span>
+        <% region_base = {}.tap { |h| h[:q] = params[:q] if params[:q].present?; h[:category] = params[:category] if params[:category].present?; h[:sort] = params[:sort] if params[:sort].present? } %>
+        <%= link_to "All regions", products_path(region_base),
+              class: "text-xs font-medium transition-all px-3 py-1.5 rounded-full border #{!@selected_region ? 'bg-ember-light text-parchment border-flame/40' : 'text-parchment-dim border-line hover:border-flame/30'}" %>
+        <% Product::REGIONS.reject { |r| r == "default" }.each do |reg| %>
+          <%= link_to reg.humanize, products_path(region_base.merge(region: reg)),
+                class: "text-xs font-medium transition-all px-3 py-1.5 rounded-full border #{@selected_region == reg ? 'bg-flame text-night border-transparent' : 'text-parchment-dim border-line hover:border-flame/30 hover:text-parchment'}" %>
+        <% end %>
+      </div>
+    <% end %>
 
     <% if @products.any? %>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">

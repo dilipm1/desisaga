@@ -56,9 +56,9 @@ module Festivals
       # pick regional alias if requested
       variant = if region
                   h["variants"]&.find { |v| v["region"] == region.to_s || v["state_code"] == region.to_s.upcase } || h["variants"]&.first
-                else
+      else
                   h["variants"]&.find { |v| v["region"] == "default" } || h["variants"]&.first
-                end
+      end
       date = variant && variant["observation_date_override"]&.[](year.to_s) || h["date"]
       Festival.new(
         id: h["id"],
@@ -77,7 +77,7 @@ module Festivals
   # Public constant now delegates to calculator for current + next year (sorted)
   # Keeps backward compat for `Festivals::DATED_FESTIVALS`
   def self.dated_festivals(region: nil, from: Date.current)
-    years = [from.year, from.year + 1]
+    years = [ from.year, from.year + 1 ]
     years.flat_map { |y| build_dated_for(y, region: region) }
          .select { |f| f.date.present? }
          .sort_by { |f| f.date }

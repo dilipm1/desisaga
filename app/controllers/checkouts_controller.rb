@@ -15,6 +15,8 @@ class CheckoutsController < ApplicationController
 
   private
     def require_cart_items
-      redirect_to products_path if cart_items.empty?
+      if cart_items.empty?
+        redirect_to products_path, alert: "Your cart is empty — add a hamper first."
+      end
     end
 end

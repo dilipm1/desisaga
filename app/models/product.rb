@@ -36,20 +36,35 @@ class Product < ApplicationRecord
   scope :in_category, ->(category) { where(category: category) }
   scope :in_region, ->(region) { where(region: region) if region.present? }
   scope :search, ->(query) {
-    q = "%#{query.to_s.downcase}%"
-    where("lower(name) LIKE :q OR lower(description) LIKE :q OR lower(tags) LIKE :q", q: q)
+    escaped = ActiveRecord::Base.sanitize_sql_like(query.to_s.downcase)
+    q = "%#{escaped}%"
+    where("lower(name) LIKE :q ESCAPE '\\' OR lower(description) LIKE :q ESCAPE '\\' OR lower(tags) LIKE :q ESCAPE '\\'", q: q)
   }
 
   def self.find_by_slug!(slug)
     find_by!(slug: slug)
   end
 
+  FALLBACK_IMAGE = "https://images.pexels.com/photos/1303092/pexels-photo-1303092.jpeg?auto=compress&cs=tinysrgb&w=800".freeze
+
   def primary_image
-    images&.first
+    img = images&.first
+    img.present? ? img : FALLBACK_IMAGE
   end
 
   def to_param
     slug
+  end
+
+  # Virtual attribute for admin form (rupees with optional paise, e.g. "2499" or "2499.50")
+  def price_in_rupees
+    return nil if price.nil?
+    price % 100 == 0 ? (price / 100).to_s : sprintf("%.2f", price / 100.0)
+  end
+
+  def price_in_rupees=(val)
+    return if val.blank?
+    self.price = (BigDecimal(val.to_s) * 100).to_i
   end
 
   private

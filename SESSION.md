@@ -1,10 +1,15 @@
-# Session — 2026-08-31: Option B Panchang (2026-2030) + regional variants + pagy + Vercel removal + hero polish
+# Session — 2026-09-01: Hetzner CX22 Majestic (SGP1) + Basecamp mimic + Backlog v1.1.0 — Stripe/deploy stubbed
 
 ## ⚡ RESUME HERE — current state
 
-**Dev server live** at `http://localhost:3000` (Puma 8.1.3, Rails 8.1). Hero shows festival countdown with subtle animated image on right + calendar moved to navbar + 14-base year calendar (variant-aware). `bin/rails test` 12/48 green, `brakeman` 0, `rubocop` 0.
+**Dev server live** at `http://localhost:3000` (Puma 8.1.3, Rails 8.1, PID 150662). Hero + 14-base calendar (variant-aware), `bin/rails test` 12/48 green, `brakeman` 0, `rubocop` 0. **No Stripe/ActiveStorage deploy until host chosen** per PO 2026-09-01.
 
-**ARM hunt still live** — systemd `desisaga-hunt` (Round 6+, 600+ denials, see `scripts/oci/hunt.log`). Same `us-chicago-1` wiring as 2026-08-24 below. No IP yet — Day 7 checkpoint today, PAYG option still at Day 14 if desired.
+**Infra decision 2026-09-01 (in-repo, CORRECTED 19:45 UTC, WIRED 20:15 UTC):** **Tier 1 Hetzner Cloud CX23 Nuremberg `nbg1` ~€5.49/mo (~₹500+VAT) + €0.60 IPv4 + Cloudflare free** — Majestic Monolith (Kamal, SQLite `config/database.yml:26` 4 DBs, `docs/plans/hetzner-cx23-majestic-2026-09-01.md:1` canonical, `okf/technical-architecture.md:1` chassis). CX22 deprecated; Singapore CX not available (only CPX/CCX). `config/deploy.yml:10` **wired to `2.28.69.167`** (verified `ssh root@2.28.69.167` `ubuntu-4gb-nbg1-2`, Docker not yet — `kamal setup` will install).
+
+**ARM hunt still live** — systemd `desisaga-hunt` (Round 6+, 600+ denials, see `scripts/oci/hunt.log`). **Confirmed `us-chicago-1` (not ap-mumbai-1)** — revisit Step 5 later per PO. Runs in parallel to Hetzner Tier 1.
+
+**Backlog v1.1.0 synced 2026-09-01:** `data/backlog.json:4` + `okf/product-backlog.md:4` + Basecamp `48475118` 6 epics 26 todos (EPIC-3 `gray`/`Won't` Stripe stub, EPIC-6 Majestic Hardening new). `EPIC-1/2/4 shipped`, `EPIC-3/5/6 gray`. `node scripts/basecamp-sync.mjs --dry-run` `skipped 26` in sync.
+**Token refreshed 2026-09-01:** `BASECAMP_ACCESS_TOKEN` `BAhbB…2026-09-15` + `BASECAMP_REFRESH_TOKEN` `…2036-09-01…` via `public/basecamp-callback.html:1` + `app/controllers/basecamp_callbacks_controller.rb:1`.
 
 **Last commits pushed to `origin/main`:**
 - `9f7dfcd` ui: calendar to navbar + festival hero image

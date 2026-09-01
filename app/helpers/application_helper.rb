@@ -1,8 +1,25 @@
 module ApplicationHelper
   include Pagy::Frontend
-  def format_price(amount, currency: "INR")
-    symbol = currency == "INR" ? "&#8377;".html_safe : currency
-    "#{symbol}#{number_with_delimiter(amount)}"
+  def format_price(amount_cents, currency: "INR")
+    return "" if amount_cents.nil?
+    symbol = currency == "INR" ? "&#8377;".html_safe : currency.to_s.html_safe
+    # amount is stored as paise (integer). Show paise only when non-zero, never .00
+    has_paise = amount_cents % 100 != 0
+    formatted = if has_paise
+                  rupees = amount_cents / 100.0
+                  # sprintf keeps 2 decimals (e.g., 2499.50 not 2499.5), number_with_delimiter handles commas
+                  number_with_delimiter(sprintf("%.2f", rupees))
+    else
+                  rupees = amount_cents / 100
+                  number_with_delimiter(rupees)
+    end
+    "#{symbol}#{formatted}".html_safe
+  end
+
+  # Convenience for forms: paise ↔ rupees (keeps 2 decimals when paise present)
+  def price_in_rupees(cents)
+    return "" if cents.nil?
+    cents % 100 == 0 ? (cents / 100).to_s : sprintf("%.2f", cents / 100.0)
   end
 
   def category_emoji(category)

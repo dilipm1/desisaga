@@ -10,12 +10,12 @@ class ProductsController < ApplicationController
     scope = scope.in_category(params[:category]) if params[:category].in?(Product::CATEGORIES)
     scope = scope.in_region(params[:region]) if params[:region].present? && params[:region].in?(Product::REGIONS)
     scope = scope.search(params[:q]) if params[:q].present?
-    @pagy, @products = pagy(scope, limit: 12)
+    @pagy, @products = pagy(scope, limit: 12, params: request.query_parameters)
     @selected_category = params[:category]
     @selected_region = params[:region]
     @selected_sort = sort
   rescue Pagy::OverflowError
-    @pagy, @products = pagy(scope, limit: 12, page: 1)
+    @pagy, @products = pagy(scope, limit: 12, page: 1, params: request.query_parameters)
   end
 
   def show

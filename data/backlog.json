@@ -1,7 +1,7 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "source": "desisaga-product-backlog",
-  "last_updated": "2026-08-12",
+  "last_updated": "2026-09-01",
   "tool": "Basecamp 4",
   "project_name": "DesiSaga",
   "sync": {
@@ -15,8 +15,8 @@
       "graph": "browse → filter → detail → cart → checkout",
       "description": "Core storefront experience: browsing, filtering, and viewing hampers.",
       "hill_chart": {
-        "status": "gray",
-        "note": "Early shaping; L1 graph drawn in docs/knowledge-graph.md"
+        "status": "shipped",
+        "note": "2026-09-01: Category + region + search + sort + pagy (12) shipped. Price slider still backlog (DS-102). Filter param preservation fixed 2026-09-01."
       },
       "stories": [
         {
@@ -29,7 +29,10 @@
             "Shows correct count"
           ],
           "graph_nodes": "catalog → filter → grid",
-          "status": "backlog"
+          "status": "done",
+          "shipped_at": "2026-08-23",
+          "verified": "ProductsController 17 Categories + 13 regions; chips + Pagy preserve ?category=&region=&q=&sort=&page= ; index preserves params 2026-09-01",
+          "implementation": "app/controllers/products_controller.rb + app/views/products/index.html.erb + lib/festivals.rb"
         },
         {
           "id": "DS-102",
@@ -40,7 +43,8 @@
             "Slider updates product grid in real time"
           ],
           "graph_nodes": "catalog → price → grid",
-          "status": "backlog"
+          "status": "backlog",
+          "note": "Sort by price exists; range slider not yet built — next in Wave 1"
         },
         {
           "id": "DS-103",
@@ -51,7 +55,10 @@
             "Search matches name/description/tags"
           ],
           "graph_nodes": "catalog → search → grid",
-          "status": "backlog"
+          "status": "done",
+          "shipped_at": "2026-08-23",
+          "verified": "Product.search scope (sanitize_sql_like) + form in products/index 2026-09-01",
+          "implementation": "app/models/product.rb:search + app/views/products/index.html.erb"
         },
         {
           "id": "DS-104",
@@ -63,7 +70,10 @@
             "Section populated"
           ],
           "graph_nodes": "catalog → featured → landing",
-          "status": "backlog"
+          "status": "done",
+          "shipped_at": "2026-08-23",
+          "verified": "PagesController#home Product.featured.limit(4) + _product_card Featured badge",
+          "implementation": "app/controllers/pages_controller.rb + app/views/pages/home.html.erb + app/views/shared/_product_card.html.erb"
         },
         {
           "id": "DS-105",
@@ -74,7 +84,10 @@
             "Sort control reorders grid"
           ],
           "graph_nodes": "grid → sort → grid",
-          "status": "backlog"
+          "status": "done",
+          "shipped_at": "2026-08-31",
+          "verified": "whitelist name/price/price.desc → Arel.sql + select; preserves filters 2026-09-01",
+          "implementation": "app/controllers/products_controller.rb + app/views/products/index.html.erb"
         }
       ]
     },
@@ -84,8 +97,8 @@
       "graph": "ritual data → product mapping → verification loop → display",
       "description": "Ensure every hamper tells the customer which rituals it serves.",
       "hill_chart": {
-        "status": "gray",
-        "note": "Need ritual item taxonomy"
+        "status": "shipped",
+        "note": "2026-09-01: Ritual contents + region variant hamper mapping shipped (23 hampers). Detail guard + fallback image 2026-09-01."
       },
       "stories": [
         {
@@ -97,7 +110,10 @@
             "Product card shows ritual icons"
           ],
           "graph_nodes": "ritual data → mapping → card",
-          "status": "backlog"
+          "status": "done",
+          "shipped_at": "2026-08-23",
+          "verified": "category_emoji + category_badge_class + _product_card; 17 categories",
+          "implementation": "app/helpers/application_helper.rb + app/views/shared/_product_card.html.erb"
         },
         {
           "id": "DS-202",
@@ -108,7 +124,10 @@
             "Detail page lists items + quantities"
           ],
           "graph_nodes": "mapping → detail",
-          "status": "backlog"
+          "status": "done",
+          "shipped_at": "2026-08-23",
+          "verified": "ritual_contents grid with check icons; Array(tags) nil-safe; region badge added 2026-09-01",
+          "implementation": "app/views/products/show.html.erb + app/models/product.rb"
         },
         {
           "id": "DS-203",
@@ -119,7 +138,10 @@
             "Ritual-check note on detail page"
           ],
           "graph_nodes": "verification → display",
-          "status": "backlog"
+          "status": "done",
+          "shipped_at": "2026-08-31",
+          "verified": "\"Built for the ritual\" 3 pillars + trust bar + detail note; could add per-item verification tick later",
+          "implementation": "app/views/pages/home.html.erb (rituals) + app/views/products/show.html.erb"
         },
         {
           "id": "DS-204",
@@ -127,10 +149,13 @@
           "story": "As the PO, I can add new festival ritual data",
           "priority": "Should",
           "acceptance_criteria": [
-            "data/festivals.json is source for calendar"
+            "data/festivals_generated_2026_2030.json is source for calendar (Lahiri) + region variants"
           ],
           "graph_nodes": "ritual data → calendar",
-          "status": "backlog"
+          "status": "done",
+          "shipped_at": "2026-08-31",
+          "verified": "Option B pre-compute 14 bases 2026-2030 + variants; Rama Navami dates corrected 2026-09-01 (03-26→04-15/04-03/04-22/04-12)",
+          "implementation": "data/festivals_generated_2026_2030.json + lib/panchang_calculator.rb + lib/festivals.rb + db/seeds.rb"
         }
       ]
     },
@@ -138,60 +163,65 @@
       "id": "EPIC-3",
       "title": "Stripe Payment Integration",
       "graph": "cart → session → webhook → confirm → notify",
-      "description": "Checkout and payment: test mode now; India + international later.",
+      "description": "Checkout and payment — STUB ONLY per 2026-09-01 decision (Stripe/ActiveStorage/deploy postponed until host chosen).",
       "hill_chart": {
         "status": "gray",
-        "note": "Merchant activation is the human gate"
+        "note": "2026-09-01: Moved to gray/Won't — stub demo checkout only; real Stripe not prioritized per PO. Shipping parity kept."
       },
       "stories": [
         {
           "id": "DS-301",
           "title": "Stripe test mode checkout",
           "story": "As a user, I can complete checkout in test mode",
-          "priority": "Must",
+          "priority": "Won't",
           "acceptance_criteria": [
             "Order appears in Stripe dashboard",
             "Success page loads"
           ],
           "graph_nodes": "session → webhook → success",
-          "status": "backlog"
+          "status": "backlog",
+          "note": "Stub: demo Place Order (clears cart) only; real Stripe Checkout Session postponed until host chosen (2026-09-01).",
+          "implementation": "app/controllers/checkouts_controller.rb (stub) + app/views/checkouts/show.html.erb"
         },
         {
           "id": "DS-302",
           "title": "Stripe India INR/UPI",
           "story": "As an Indian customer, I can pay INR via UPI/cards",
-          "priority": "Should",
+          "priority": "Won't",
           "acceptance_criteria": [
             "Stripe India connected",
             "2% fee applied"
           ],
           "graph_nodes": "session → UPI → confirm",
           "human_gate": "Merchant activation",
-          "status": "backlog"
+          "status": "backlog",
+          "note": "Postponed — gateway stubs only (2026-09-01)"
         },
         {
           "id": "DS-303",
           "title": "Stripe international USD/GBP",
           "story": "As an international customer, I can pay USD/GBP",
-          "priority": "Should",
+          "priority": "Won't",
           "acceptance_criteria": [
             "Stripe international enabled",
             "2.9% + $0.30 fee applied"
           ],
           "graph_nodes": "session → cards → confirm",
-          "status": "backlog"
+          "status": "backlog",
+          "note": "Postponed — gateway stubs only (2026-09-01)"
         },
         {
           "id": "DS-304",
           "title": "Payment success notifications",
           "story": "As a merchant, I get notified of successful payments",
-          "priority": "Should",
+          "priority": "Won't",
           "acceptance_criteria": [
             "Webhook updates order status",
             "Email notification sent"
           ],
           "graph_nodes": "webhook → notify",
-          "status": "backlog"
+          "status": "backlog",
+          "note": "Postponed — needs real Stripe + host (2026-09-01)"
         },
         {
           "id": "DS-305",
@@ -202,7 +232,10 @@
             "Success page shows order summary"
           ],
           "graph_nodes": "confirm → success",
-          "status": "backlog"
+          "status": "done",
+          "shipped_at": "2026-08-23",
+          "verified": "checkout/success 'Shubh Labh!' page; checkout/show shows subtotal+shipping+total parity 2026-09-01",
+          "implementation": "app/views/checkouts/success.html.erb + app/views/checkouts/show.html.erb"
         }
       ]
     },
@@ -212,8 +245,8 @@
       "graph": "festival calendar → countdown state → hero render → calendar loop",
       "description": "The signature ritual-themed hero and live festival countdown.",
       "hill_chart": {
-        "status": "white",
-        "note": "Design proven; implementation in progress"
+        "status": "shipped",
+        "note": "2026-09-01: Toran + countdown + 14-base calendar + anytime rituals + hero image (subtle float) + navbar Calendar shipped. Next: Meeus live stubs (Wave 2b)."
       },
       "stories": [
         {
@@ -226,7 +259,10 @@
             "Matches YearCalendar"
           ],
           "graph_nodes": "calendar → countdown → hero",
-          "status": "backlog"
+          "status": "done",
+          "shipped_at": "2026-08-23",
+          "verified": "PanchangCalculator.next_festival(year-wrap, region alias) + Festivals.days_left; Rama Navami corrected 2026-09-01",
+          "implementation": "lib/panchang_calculator.rb + lib/festivals.rb + app/controllers/pages_controller.rb + app/views/pages/home.html.erb"
         },
         {
           "id": "DS-402",
@@ -238,7 +274,9 @@
             "Animates continuously"
           ],
           "graph_nodes": "design → component → hero",
-          "status": "backlog"
+          "status": "done",
+          "shipped_at": "2026-08-07",
+          "implementation": "app/views/shared/_toran_garland.html.erb + app/views/pages/home.html.erb"
         },
         {
           "id": "DS-403",
@@ -249,7 +287,10 @@
             "YearCalendar lists all dated festivals chronologically"
           ],
           "graph_nodes": "calendar → render",
-          "status": "backlog"
+          "status": "done",
+          "shipped_at": "2026-08-31",
+          "verified": "build_dated_for(14 bases) sorted; variant alias badges; rolls to next year if all past",
+          "implementation": "app/views/shared/_year_calendar.html.erb + lib/festivals.rb"
         },
         {
           "id": "DS-404",
@@ -260,7 +301,9 @@
             "Anytime rituals render in separate section"
           ],
           "graph_nodes": "rituals → render",
-          "status": "backlog"
+          "status": "done",
+          "shipped_at": "2026-08-31",
+          "implementation": "app/views/shared/_year_calendar.html.erb (Anytime) + lib/festivals.rb ANYTIME_RITUALS"
         },
         {
           "id": "DS-405",
@@ -271,7 +314,10 @@
             "Card links to filtered product catalog"
           ],
           "graph_nodes": "calendar → link → catalog",
-          "status": "backlog"
+          "status": "done",
+          "shipped_at": "2026-08-23",
+          "verified": "Calendar cards → products?category= + hero CTA → products?category=next; preserves region/q/sort 2026-09-01",
+          "implementation": "app/views/shared/_year_calendar.html.erb + app/views/pages/home.html.erb + app/views/shared/_navbar.html.erb"
         }
       ]
     },
@@ -279,10 +325,10 @@
       "id": "EPIC-5",
       "title": "Admin & Order Management",
       "graph": "order capture → status → dispatch → deliver",
-      "description": "Post-purchase order tracking and admin tools (mostly post-MVP).",
+      "description": "Post-purchase order tracking and admin tools — stub only until Stripe/host chosen (2026-09-01).",
       "hill_chart": {
         "status": "gray",
-        "note": "Deferred until Stripe live"
+        "note": "2026-09-01: Admin CRUD shipped; Order/ refunds postponed (no Stripe/host)."
       },
       "stories": [
         {
@@ -317,6 +363,70 @@
           ],
           "graph_nodes": "status → refund",
           "human_gate": "PO approval",
+          "status": "backlog"
+        }
+      ]
+    },
+    {
+      "id": "EPIC-6",
+      "title": "Majestic Monolith Hardening (Basecamp-inspired)",
+      "graph": "buckets → recordings → recordables → events → copy/move → timeline",
+      "description": "Technical architecture to make Desi Saga a Basecamp-style majestic monolith: delegated types, immutable recordables, events, bucket access, Solid stack. No Stripe/deploy until host chosen.",
+      "hill_chart": {
+        "status": "gray",
+        "note": "2026-09-01: New EPIC per PO — tech focus, Stripe/deploy stubs. Cycle 1: recordings slice."
+      },
+      "stories": [
+        {
+          "id": "DS-601",
+          "title": "Recording + ProductRecordable delegated type",
+          "story": "As a dev, I can store products as recordings delegating to product recordables (immutable)",
+          "priority": "Must",
+          "acceptance_criteria": [
+            "Recording model with delegated_type :recordable (ProductRecordable)",
+            "Bucket scoping: bucket.recordings.products returns catalog",
+            "Existing /products page works via recording scope, dual-write kept"
+          ],
+          "graph_nodes": "buckets → recordings → recordables → catalog",
+          "status": "backlog"
+        },
+        {
+          "id": "DS-602",
+          "title": "Bucket + bucketable access",
+          "story": "As a dev, I can scope access by bucket (region/shop) not global admin?",
+          "priority": "Should",
+          "acceptance_criteria": [
+            "Bucket model with bucketable types (Shop, Region)",
+            "Bucket has many recordings, access via bucket membership",
+            "Region filter uses bucket, not Product.region string"
+          ],
+          "graph_nodes": "bucket → access → recordings",
+          "status": "backlog"
+        },
+        {
+          "id": "DS-603",
+          "title": "Events + immutable version history",
+          "story": "As a PO, I can see product/festival change history and roll back",
+          "priority": "Should",
+          "acceptance_criteria": [
+            "Event model (recording_id, recordable_id, actor)",
+            "Every recordable create writes Event",
+            "History compare view"
+          ],
+          "graph_nodes": "recording → events → history",
+          "status": "backlog"
+        },
+        {
+          "id": "DS-604",
+          "title": "Solid Queue polish + Mission Control",
+          "story": "As a dev, I can run festival refresh + jobs via Solid Queue in separate DB",
+          "priority": "Could",
+          "acceptance_criteria": [
+            "Queue job for PanchangCalculator refresh",
+            "Mission Control mounted at /jobs (admin only)",
+            "Polling stays isolated in queue DB (4 DBs already)"
+          ],
+          "graph_nodes": "queue → job → poll",
           "status": "backlog"
         }
       ]

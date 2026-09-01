@@ -30,8 +30,9 @@
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <%= form.label :price, "Price (INR)", class: "block text-sm font-medium mb-2 text-parchment-dim" %>
-          <%= form.number_field :price, min: 1, required: true, placeholder: "1999", class: input_cls %>
+          <%= form.label :price_in_rupees, "Price (INR)", class: "block text-sm font-medium mb-2 text-parchment-dim" %>
+          <%= form.number_field :price_in_rupees, min: 0.01, step: 0.01, required: true, placeholder: "1999", value: @product.price_in_rupees, class: input_cls %>
+          <p class="text-parchment-dim/60 text-xs mt-1">Enter as rupees, e.g. 2499 or 2499.50 — stored as paise</p>
         </div>
         <div>
           <%= form.label :category, "Category", class: "block text-sm font-medium mb-2 text-parchment-dim" %>
