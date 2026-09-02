@@ -32,4 +32,4 @@ bin/rails test
 
 ## Deployment
 
-Kamal is preconfigured (`config/deploy.yml`) for **Hetzner CX23 Nuremberg `nbg1` ~€5.49/mo (~₹500+VAT) + Cloudflare** — Majestic Monolith per `docs/plans/hetzner-cx23-majestic-2026-09-01.md:1` and `okf/technical-architecture.md:1`. CX22→CX23 June 15 2026; Singapore CX unavailable (EU-only). VPS IP placeholder at `config/deploy.yml:10` until purchase; `us-chicago-1` ARM hunt runs in parallel. Stripe/ActiveStorage remain stubs until host chosen.
+**Production live at `https://desisaga.com`** (Hetzner CX23 Nuremberg `nbg1` `2.28.69.167`) via Kamal. Kamal preconfigured (`config/deploy.yml:10`) for **Hetzner CX23 Nuremberg `nbg1` ~€5.49/mo (~₹500+VAT) + Cloudflare** — Majestic Monolith per `docs/plans/hetzner-cx23-majestic-2026-09-01.md:1` and `okf/technical-architecture.md:1` (SAN cert `desisaga.com + www` with www→apex 301 at `config/routes.rb:2`). CX22→CX23 June 15 2026; Singapore CX unavailable. `us-chicago-1` ARM hunt runs in parallel. Stripe/ActiveStorage remain stubs until prioritized in `grooming.md:1`. Backlog `data/backlog.json:1` v1.1.1.

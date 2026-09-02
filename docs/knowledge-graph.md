@@ -21,6 +21,8 @@ app/controllers/sessions_controller.rb + app/models/session.rb ─→ users tabl
 app/controllers/admin/products_controller.rb ─→ Product CRUD + Pagy (20)         │ state: inventory grid, region select
 app/helpers/application_helper.rb ─→ format_price (paise→₹), category_emoji/badge │ state: price/category display
 app/helpers/icons_helper.rb ─→ inline lucide SVGs                                │ state: no icon gem
+config/routes.rb ──→ constraints(host: /\Awww\./) → 301 → apex                   │ state: www→apex redirect (path preserved)
+config/deploy.yml ─→ kamal-proxy hosts [apex, www] + SAN cert                   │ state: TLS + proxy routing
 ```
 
 ## Graph Representation
@@ -82,6 +84,7 @@ graph LR
 
 | Date | Change | Author |
 |---|---|---|
+| 2026-09-01 | Production deploy: Hetzner CX23 `nbg1` `2.28.69.167`, Kamal SAN `desisaga.com + www`, www→apex 301 (`config/routes.rb:2`), grooming plan `grooming.md:1` (Phase 1 EPIC-6) | — |
 | 2026-09-01 | Rails rewrite: session cart, Pagy, Option B Panchang (14 bases + variants), region column, shipping parity, param preservation | — |
 | 2026-08-19 | Added auth graph (authOptions → NextAuth route → session → Navbar) and admin inventory graph (admin pages → CRUD API → products.json) | — |
 | 2026-08-12 | Initial knowledge graph created from existing components | — |

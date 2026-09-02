@@ -9,9 +9,11 @@
 **ARM hunt still live** — systemd `desisaga-hunt` (Round 6+, 600+ denials, see `scripts/oci/hunt.log`). **Confirmed `us-chicago-1` (not ap-mumbai-1)** — revisit Step 5 later per PO. Runs in parallel to Hetzner Tier 1.
 
 **Backlog v1.1.1 synced 2026-09-01:** `data/backlog.json:4` + `okf/product-backlog.md:4` + Basecamp `48475118` 6 epics 27 todos (EPIC-3 `gray`/`Won't` Stripe stub, EPIC-6 Majestic Hardening new, DS-406 www→apex shipped). `EPIC-1/2/4 shipped`, `EPIC-3/5/6 gray`. `node scripts/basecamp-sync.mjs` synced.
+**Grooming 2026-09-01:** `grooming.md:1` created — post-MVP prioritization (Phase 1: EPIC-6 DS-601–604, Phase 2: DS-102 price slider, Phase 3: checkout polish). Awaiting review.
 **Token refreshed 2026-09-01:** `BASECAMP_ACCESS_TOKEN` `BAhbB…2026-09-15` + `BASECAMP_REFRESH_TOKEN` `…2036-09-01…` via `public/basecamp-callback.html:1` + `app/controllers/basecamp_callbacks_controller.rb:1`.
 
 **Last commits pushed to `origin/main`:**
+- `11e1b15` docs: v1.1.1 backlog + session + agents — Hetzner deployed, www→apex 301 shipped
 - `c697411` fix: root route naming conflict in www constraint
 - `077cfef` add explicit root redirect in www constraint
 - `ff35259` add www→apex 301 redirect constraint
@@ -89,13 +91,14 @@ SESSION.md + AGENTS.md (infra status + www redirect)
 docs/plans/hetzner-cx23-majestic-2026-09-01.md (canonical plan)
 ```
 
-### Next steps for 2026-09-01+
+### Next steps for 2026-09-01+ (see `grooming.md:1` for prioritized plan)
 
-1. **Live Meeus stubs** — fill `PanchangCalculator#solar_longitude` / `tithi_at_sunrise` and cross-check vs table in `test/services/panchang_calculator_test.rb`
-2. **Oracle hunt** — still Round 6+, now Day 7 — consider GH Actions hunter for 24/7 if desktop off; Day 14 PAYG upgrade still option
-3. **Stripe** — wire real checkout (demo place-order → Stripe)
-4. **Images** — replace Pexels placeholders with real photos via Active Storage
-5. Optional: customer accounts, automated `bin/rails r FestivalSeeder.refresh` via `solid_queue`
+1. **Grooming review** — read `grooming.md:1`; confirm Phase 1 order (EPIC-6 DS-601 delegated types → DS-602 buckets → DS-603 events → DS-604 Solid Queue) vs DS-102 slider
+2. **Live Meeus stubs** — fill `PanchangCalculator#solar_longitude` / `tithi_at_sunrise` and cross-check vs table in `test/services/panchang_calculator_test.rb`
+3. **Oracle hunt** — still Round 6+, now Day 7 — consider GH Actions hunter for 24/7 if desktop off; Day 14 PAYG upgrade still option (parallel to Hetzner)
+4. **Stripe** — wire real checkout (demo place-order → Stripe) — still `Won't` until reviewed in grooming
+5. **Images** — replace Pexels placeholders with real photos via Active Storage
+6. Optional: customer accounts, automated `bin/rails r FestivalSeeder.refresh` via `solid_queue`
 
 ### Files changed this session (for next reader — 2026-08-31)
 ```

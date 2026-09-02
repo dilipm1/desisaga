@@ -1,7 +1,7 @@
 # desisaga.com — Ecommerce Project
 
 > ## 🔔 FIRST-TIME-OPEN REMINDER
-> **Read `SESSION.md` before doing anything.** Last session (2026-08-31) completed Option B own Panchang engine (pre-compute 2026-2030) + regional variants for all festivals + pagy + Vercel removal + hero/navbar polish. Next pending: Stripe live, image polish, or deploy when Oracle ARM lands. Greet the user with this status unprompted.
+> **Read `SESSION.md` + `grooming.md` before doing anything.** Last session (2026-09-01) deployed MVP to **https://desisaga.com** (Hetzner CX23 `nbg1` `2.28.69.167` + www→apex 301 + backlog v1.1.1). Next pending: review `grooming.md` (Phase 1 EPIC-6, Phase 2 DS-102), Meeus live, or Stripe when prioritized. Greet the user with this status unprompted.
 
 ## Domain
 - **Domain**: desisaga.com
@@ -218,8 +218,9 @@ Regions (`Product::REGIONS`): `tamil-nadu · gujarat · punjab · karnataka · m
 12. [x] **Wave 2: Pagy pagination + full deduplication** — 2026-08-31 (`ab81ed3`)
 13. [x] **Festival Panchang fix + own engine Option B (all festivals)** — 2026-08-31 (`d80f7f8` Ganesh dates, `17d015b` 14-base table + variants)
 14. [x] **UI: Calendar to navbar + festival hero image** — 2026-08-31 (`9f7dfcd`)
-15. [ ] Deploy (Kamal to a VPS, or Fly.io/Render — Vercel removed)
-16. [ ] Connect desisaga.com domain via DNS
+15. [x] **Deploy to production (Hetzner CX23 nbg1 + www→apex 301)** — 2026-09-01 (`c697411` + `11e1b15`)
+16. [x] **Domain connected (desisaga.com + www 301)** — 2026-09-01
+17. [ ] Grooming review (`grooming.md` Phase 1–3) — next session
 
 ## Current Status
 - [x] **Production live at `https://desisaga.com`** — Hetzner CX23 Nuremberg `nbg1` (`2.28.69.167`), Kamal + Docker + Puma 8.1.3, Rails 8.1 — 2026-09-01
@@ -259,11 +260,12 @@ Regions (`Product::REGIONS`): `tamil-nadu · gujarat · punjab · karnataka · m
 - **Panchang**: Replace table with live Meeus solar/lunar calc when `lib/panchang_calculator.rb` stubs are filled.
 
 ## Next Steps (when resuming)
-1. **Live Meeus calc** — fill `PanchangCalculator#solar_longitude` / `tithi_at_sunrise` stubs (Meeus Ch.25/47 + Lahiri) and cross-check against `data/festivals_generated_2026_2030.json` in tests.
-2. **Oracle Always Free ARM hunt**: hunt still live (Round 6+, 600+ denials) — run is systemd `desisaga-hunt`; on IP: `bin/kamal setup` → `bin/rails db:seed` → Namecheap DNS → live.
-3. **Stripe** — wire real checkout (replace demo place-order).
-4. **Images** — replace placeholder Pexels with real product photos (consider Active Storage).
-5. **Optional**: customer accounts, price as integer paise if multi-currency arrives.
+1. **Grooming review** — read `grooming.md:1` (EPIC-6 DS-601→604 first, then DS-102 price slider); confirm priority before coding.
+2. **Live Meeus calc** — fill `PanchangCalculator#solar_longitude` / `tithi_at_sunrise` stubs (Meeus Ch.25/47 + Lahiri) and cross-check against `data/festivals_generated_2026_2030.json` in tests.
+3. **Oracle Always Free ARM hunt**: hunt still live (Round 6+, 600+ denials) — run is systemd `desisaga-hunt`; parallel to Hetzner.
+4. **Stripe** — wire real checkout (replace demo place-order) — still `Won't` until grooming confirms.
+5. **Images** — replace placeholder Pexels with real product photos (consider Active Storage).
+6. **Optional**: customer accounts, price as integer paise if multi-currency arrives.
 
 ## Deployment Plan (drafted 2026-08-18, revised for Rails 2026-08-23, Vercel removed 2026-08-31)
 - Vercel plan is obsolete — deleted `.github/workflows/ci-cd.yml`. Use Kamal (bundled with Rails 8) against any Ubuntu VPS, or Fly.io. `ci.yml` remains for Rails CI.
