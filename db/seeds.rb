@@ -168,7 +168,7 @@ products = [
     price: 239900,
     category: "Sankranti",
     region: "telangana",
-    images: [ "https://images.pexels.com/photos/4887163/pexels-photo-4887163.jpeg?auto=compress&cs=tinysrgb&w=800" ],
+    images: [ "https://images.pexels.com/photos/35668104/pexels-photo-35668104.jpeg?auto=compress&cs=tinysrgb&w=800" ],
     in_stock: true,
     featured: true,
     tags: [ "sankranti", "telangana", "kanuma", "gobbemmalu", "gangireddu", "muggu" ],
