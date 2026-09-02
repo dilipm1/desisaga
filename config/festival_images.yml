@@ -1,8 +1,8 @@
 # Festival → hero/product image map
 # Source of truth for hero + product fallbacks.
 # For now CDN URLs (Pexels/Wikimedia). Long-term: ActiveStorage key with fallback to this.
-# Rule: image MUST depict the ritual samagri, not generic AI/child/mic. Janmashtami = makhan handi / Bal Krishna / flute / peacock, not singing kid.
-# Review quarterly. Last curated: 2026-09-02 (fix Janmashtami 236149 kid+mic → makhan matki)
+# Rule: image MUST depict the ritual samagri, not generic. Janmashtami = Krishna flute/peacock/matki; Sankranti = Pongal pot/kite/bonfire/sugarcane — not generic field.
+# Review quarterly. Last curated: 2026-09-02 (Janmashtami 236149→38731156, Sankranti variants → pongal/kite/bonfire/sugarcane for demo)
 default: "https://images.pexels.com/photos/1303092/pexels-photo-1303092.jpeg?auto=compress&cs=tinysrgb&w=800"
 festivals:
   Diwali: "https://images.pexels.com/photos/10182772/pexels-photo-10182772.jpeg?auto=compress&cs=tinysrgb&w=800"
@@ -10,7 +10,7 @@ festivals:
   Holi: "https://images.pexels.com/photos/2041707/pexels-photo-2041707.jpeg?auto=compress&cs=tinysrgb&w=800"
   Navratri: "https://images.pexels.com/photos/17264037/pexels-photo-17264037.jpeg?auto=compress&cs=tinysrgb&w=800"
   Raksha Bandhan: "https://images.pexels.com/photos/15474159/pexels-photo-15474159.jpeg?auto=compress&cs=tinysrgb&w=800"
-  Sankranti: "https://images.pexels.com/photos/594607/pexels-photo-594607.jpeg?auto=compress&cs=tinysrgb&w=800"
+  Sankranti: "https://images.pexels.com/photos/35763759/pexels-photo-35763759.jpeg?auto=compress&cs=tinysrgb&w=800"
   Ugadi: "https://images.pexels.com/photos/3650438/pexels-photo-3650438.jpeg?auto=compress&cs=tinysrgb&w=800"
   Vaisakhi: "https://images.pexels.com/photos/326333/pexels-photo-326333.jpeg?auto=compress&cs=tinysrgb&w=800"
   Onam: "https://images.pexels.com/photos/6157052/pexels-photo-6157052.jpeg?auto=compress&cs=tinysrgb&w=800"
