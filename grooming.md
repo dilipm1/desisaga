@@ -79,7 +79,8 @@
 ### Phase 2: User Experience (Weeks 5–8)
 1. DS-102 price range slider
 2. DS-203 ritual verification enhancement
-3. Polish hero/calendar (DS-406 done)
+3. DS-107 festival images inventory (NEW 2026-09-02: Janmashtami 236149 slop → 1448136 matki; config/festival_images.yml + ActiveStorage) — see `docs/plans/images-inventory-2026-09-02.md:1`
+4. Polish hero/calendar (DS-406 done)
 
 ### Phase 3: Payment Enhancement (Weeks 9–12)
 1. DS-301 demo checkout flow
@@ -125,4 +126,4 @@
 2. DS-604 Mission Control — nice to have
 
 ---
-*Backlog refs: `data/backlog.json:1` v1.1.1, `okf/product-backlog.md:1`, `SESSION.md:1`, `AGENTS.md` Current Status. Infra: Hetzner CX23 `nbg1` `2.28.69.167` (`config/deploy.yml:10`), Kamal SAN `desisaga.com + www` (`config/deploy.yml:18`), `config/routes.rb:2` www→apex 301.*
+*Backlog refs: `data/backlog.json:1` v1.1.1, `okf/product-backlog.md:1`, `SESSION.md:1`, `AGENTS.md` Current Status. Infra: Hetzner CX23 `nbg1` `2.28.69.167` (`config/deploy.yml:10`), Kamal SAN `desisaga.com + www` (`config/deploy.yml:18`), `config/routes.rb:2` www→apex 301. Images: `config/festival_images.yml:1` (Janmashtami fix 2026-09-02) + `docs/plans/images-inventory-2026-09-02.md:1` long plan.*

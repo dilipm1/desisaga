@@ -49,7 +49,17 @@ class Product < ApplicationRecord
 
   def primary_image
     img = images&.first
-    img.present? ? img : FALLBACK_IMAGE
+    return img if img.present?
+    # category-aware fallback so Janmashtami etc never shows generic diya if missing
+    cfg_path = Rails.root.join("config/festival_images.yml")
+    if File.exist?(cfg_path)
+      cfg = YAML.load_file(cfg_path)
+      cfg.dig("festivals", category) || FALLBACK_IMAGE
+    else
+      FALLBACK_IMAGE
+    end
+  rescue
+    FALLBACK_IMAGE
   end
 
   def to_param

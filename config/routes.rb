@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  constraints(host: /\Awww\./) do
+  constraints(host: "www.desisaga.com") do
     get "/", to: redirect("https://desisaga.com/", status: 301)
     get "*path", to: redirect { |params, req| "https://desisaga.com#{req.fullpath}" }, status: 301
   end

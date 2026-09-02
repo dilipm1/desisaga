@@ -1,28 +1,7 @@
-<%# Subtle animated background image for upcoming festival — right side of hero %>
+<%# Subtle animated background image for upcoming festival — right side of hero (config/festival_images.yml is source) %>
 <% festival_category = local_assigns[:festival]&.category
    festival_name = local_assigns[:festival]&.name
-
-   # Map festival category/region to curated background image (Pexels, warmed)
-   image_map = {
-     "Diwali"           => "https://images.pexels.com/photos/10182772/pexels-photo-10182772.jpeg?auto=compress&cs=tinysrgb&w=800",
-     "Ganesh Chaturthi" => "https://images.pexels.com/photos/1485015/pexels-photo-1485015.jpeg?auto=compress&cs=tinysrgb&w=800",
-     "Holi"             => "https://images.pexels.com/photos/2041707/pexels-photo-2041707.jpeg?auto=compress&cs=tinysrgb&w=800",
-     "Navratri"         => "https://images.pexels.com/photos/17264037/pexels-photo-17264037.jpeg?auto=compress&cs=tinysrgb&w=800",
-     "Raksha Bandhan"   => "https://images.pexels.com/photos/15474159/pexels-photo-15474159.jpeg?auto=compress&cs=tinysrgb&w=800",
-     "Sankranti"        => "https://images.pexels.com/photos/594607/pexels-photo-594607.jpeg?auto=compress&cs=tinysrgb&w=800",
-     "Ugadi"            => "https://images.pexels.com/photos/3650438/pexels-photo-3650438.jpeg?auto=compress&cs=tinysrgb&w=800",
-     "Vaisakhi"         => "https://images.pexels.com/photos/326333/pexels-photo-326333.jpeg?auto=compress&cs=tinysrgb&w=800",
-     "Onam"             => "https://images.pexels.com/photos/6157052/pexels-photo-6157052.jpeg?auto=compress&cs=tinysrgb&w=800",
-     "Dussehra"         => "https://images.pexels.com/photos/2294341/pexels-photo-2294341.jpeg?auto=compress&cs=tinysrgb&w=800",
-     "Shivratri"        => "https://images.pexels.com/photos/1258865/pexels-photo-1258865.jpeg?auto=compress&cs=tinysrgb&w=800",
-     "Rama Navami"      => "https://images.pexels.com/photos/289587/pexels-photo-289587.jpeg?auto=compress&cs=tinysrgb&w=800",
-     "Janmashtami"      => "https://images.pexels.com/photos/236149/pexels-photo-236149.jpeg?auto=compress&cs=tinysrgb&w=800",
-     "Chhath Puja"      => "https://images.pexels.com/photos/1704486/pexels-photo-1704486.jpeg?auto=compress&cs=tinysrgb&w=800",
-     "Puja"             => "https://images.pexels.com/photos/35407778/pexels-photo-35407778.jpeg?auto=compress&cs=tinysrgb&w=800",
-     "Wedding"          => "https://images.pexels.com/photos/18897125/pexels-photo-18897125.jpeg?auto=compress&cs=tinysrgb&w=800",
-     "Housewarming"     => "https://images.pexels.com/photos/18849556/pexels-photo-18849556.jpeg?auto=compress&cs=tinysrgb&w=800"
-   }
-   hero_image = image_map[festival_category] || image_map["Diwali"]
+   hero_image = FestivalImagesHelper.image_for(festival_category) || FestivalImagesHelper.festival_images_config["default"]
 %>
 
 <div class="hidden lg:block absolute right-6 xl:right-10 top-1/2 -translate-y-1/2 w-[420px] xl:w-[520px] h-[480px] xl:h-[560px] pointer-events-none select-none" aria-hidden="true">

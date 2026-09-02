@@ -246,7 +246,7 @@ products = [
     description: "Krishna Janmashtami — makhan, flute, peacock feather, curd pot, Gokulashtami handi. Bhadrapada Krishna Ashtami.",
     price: 209900,
     category: "Janmashtami",
-    images: [ "https://images.pexels.com/photos/236149/pexels-photo-236149.jpeg?auto=compress&cs=tinysrgb&w=800" ],
+    images: [ "https://images.pexels.com/photos/38731156/pexels-photo-38731156.jpeg?auto=compress&cs=tinysrgb&w=800" ],
     in_stock: true,
     featured: false,
     tags: [ "janmashtami", "krishna", "makhan", "gokulashtami" ],
