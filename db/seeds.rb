@@ -148,6 +148,32 @@ products = [
     tags: [ "sankranti", "karnataka", "ellu bella", "jaggery" ],
     ritual_contents: [ "ellu bella", "sugarcane", "banana", "coconut", "jaggery" ]
   },
+  {
+    slug: "sankranti-bhogi-andhra",
+    name: "Bhogi Sankranti Hamper (Andhra Pradesh)",
+    description: "Andhra Sankranti — 4-day Pedda Panduga: Bhogi mantalu, gobbemmalu (cow-dung with pasupu-kumkuma & marigold), haridasu, basavanna (gangireddu), big muggulu, ariselu & pulagam. Sugarcane + banana + ellu.",
+    price: 239900,
+    category: "Sankranti",
+    region: "andhra-pradesh",
+    images: [ "https://images.pexels.com/photos/37791040/pexels-photo-37791040.jpeg?auto=compress&cs=tinysrgb&w=800" ],
+    in_stock: true,
+    featured: true,
+    tags: [ "sankranti", "andhra", "bhogi", "gobbemmalu", "muggu", "haridasu", "ariselu" ],
+    ritual_contents: [ "gobbemmalu kit", "pasupu-kumkuma", "marigold", "ariselu", "pulagam mix", "sugarcane", "banana" ]
+  },
+  {
+    slug: "sankranti-kanuma-telangana",
+    name: "Kanuma Sankranti Hamper (Telangana)",
+    description: "Telangana Sankranti — Bhogi, Makara Sankranti, Kanuma: gobbemmalu, haridasu & gangireddu (decorated Nandi), muggulu, polelu, sakinalu, garelu, sugarcane. Same sun-transit, Telugu ritual.",
+    price: 239900,
+    category: "Sankranti",
+    region: "telangana",
+    images: [ "https://images.pexels.com/photos/4887163/pexels-photo-4887163.jpeg?auto=compress&cs=tinysrgb&w=800" ],
+    in_stock: true,
+    featured: true,
+    tags: [ "sankranti", "telangana", "kanuma", "gobbemmalu", "gangireddu", "muggu" ],
+    ritual_contents: [ "gobbemmalu", "muggu powder", "polelu", "sakinalu", "garelu", "sugarcane" ]
+  },
   # === Ugadi / Yugadi / Gudi Padwa variants (Chaitra Shukla Pratipada) ===
   {
     slug: "yugadi-pachadi-karnataka",
