@@ -138,15 +138,15 @@ products = [
   {
     slug: "sankranti-ellu-bella-karnataka",
     name: "Ellu Bella Sankranti Hamper (Karnataka)",
-    description: "Karnataka Sankranti — ellu bella, sugarcane, banana, coconut, jaggery. Celebrate Sankranti with the Karnataka tradition.",
+    description: "Karnataka Sankranti (Kanuma / Mattu Pongal) — cattle puja: turmeric & kumkum for cow/bull forehead, oil for horns, mango leaves & marigold thoranams around sheds, bright horn paint, plus cleaned agri implements, ellu bella & sugarcane.",
     price: 219900,
     category: "Sankranti",
     region: "karnataka",
-    images: [ "https://images.pexels.com/photos/1295572/pexels-photo-1295572.jpeg?auto=compress&cs=tinysrgb&w=800" ],
+    images: [ "https://images.pexels.com/photos/34443083/pexels-photo-34443083.jpeg?auto=compress&cs=tinysrgb&w=800" ],
     in_stock: true,
     featured: false,
-    tags: [ "sankranti", "karnataka", "ellu bella", "jaggery" ],
-    ritual_contents: [ "ellu bella", "sugarcane", "banana", "coconut", "jaggery" ]
+    tags: [ "sankranti", "karnataka", "ellu bella", "kanuma", "mattu pongal", "cattle" ],
+    ritual_contents: [ "turmeric", "kumkum", "oil (horn/body)", "mango leaves", "marigold flowers", "horn paint", "agricultural implements", "ellu bella", "sugarcane", "coconut" ]
   },
   {
     slug: "sankranti-bhogi-andhra",
