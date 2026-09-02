@@ -23,8 +23,10 @@ festivals:
   Puja: "https://images.pexels.com/photos/35407778/pexels-photo-35407778.jpeg?auto=compress&cs=tinysrgb&w=800"
   Wedding: "https://images.pexels.com/photos/18897125/pexels-photo-18897125.jpeg?auto=compress&cs=tinysrgb&w=800"
   Housewarming: "https://images.pexels.com/photos/18849556/pexels-photo-18849556.jpeg?auto=compress&cs=tinysrgb&w=800"
-# Optional per-region override (future):
-# regions:
-#   Sankranti:
-#     tamil-nadu: "…thai-pongal…"
-#     gujarat: "…uttarayan…"
+# Per-region overrides (ritual-accurate for demo — 2026-09-02)
+regions:
+  Sankranti:
+    tamil-nadu: "https://images.pexels.com/photos/35763759/pexels-photo-35763759.jpeg?auto=compress&cs=tinysrgb&w=800"
+    gujarat: "https://images.pexels.com/photos/35671431/pexels-photo-35671431.jpeg?auto=compress&cs=tinysrgb&w=800"
+    punjab: "https://images.pexels.com/photos/3885021/pexels-photo-3885021.jpeg?auto=compress&cs=tinysrgb&w=800"
+    karnataka: "https://images.pexels.com/photos/1295572/pexels-photo-1295572.jpeg?auto=compress&cs=tinysrgb&w=800"

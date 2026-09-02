@@ -142,7 +142,7 @@ products = [
     price: 219900,
     category: "Sankranti",
     region: "karnataka",
-    images: [ "https://images.pexels.com/photos/2254100/pexels-photo-2254100.jpeg?auto=compress&cs=tinysrgb&w=800" ],
+    images: [ "https://images.pexels.com/photos/1295572/pexels-photo-1295572.jpeg?auto=compress&cs=tinysrgb&w=800" ],
     in_stock: true,
     featured: false,
     tags: [ "sankranti", "karnataka", "ellu bella", "jaggery" ],
