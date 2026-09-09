@@ -11,6 +11,9 @@ Rails.application.routes.draw do
 
   root "pages#home"
 
+  get "coming-soon", to: "pages#coming_soon", as: :coming_soon
+  get "about", to: "pages#about", as: :about
+
   get "up" => "rails/health#show", as: :rails_health_check
 
   resources :products, only: %i[index show], param: :slug

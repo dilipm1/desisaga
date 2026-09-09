@@ -1,6 +1,6 @@
 <%
   next_festival = Festivals.next_festival
-  category_links = [["Shop", products_path], ["Calendar", "/#calendar"]]
+  category_links = [["Shop", products_path], ["Calendar", "/#calendar"], ["About", about_path]]
   navbar_categories = Product::CATEGORIES.first(8)
 %>
 <nav data-controller="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-night/90 backdrop-blur-md border-b border-line">
@@ -39,7 +39,7 @@
           <% end %>
         <% end %>
 
-        <%= link_to cart_path,
+        <%= link_to coming_soon_path,
               class: "relative p-2 rounded-md transition-colors text-parchment hover:text-flame hover:bg-ember",
               aria: { label: cart_count > 0 ? "Cart with #{cart_count} items" : "Cart" } do %>
           <%= icon("shopping-bag") %>

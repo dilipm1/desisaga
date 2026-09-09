@@ -5,4 +5,8 @@ class PagesController < ApplicationController
     @featured_products = Product.featured.limit(4)
     @featured_products = @featured_products.where(region: @selected_region) if @selected_region.present?
   end
+
+  def coming_soon; end
+
+  def about; end
 end
