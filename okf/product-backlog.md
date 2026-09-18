@@ -1,16 +1,16 @@
 ---
 title: Desi Saga — Product Backlog
 kind: okf/product-backlog
-version: 1.1.1
+version: 1.2.0
 owner: Product Owner
-last_updated: 2026-09-01
+last_updated: 2026-09-10
 status: active
 tags: [backlog, moscow, epics, basecamp]
 ---
 
 # Desi Saga — Product Backlog
 
-> Maintained from a **Product Owner perspective** (MoSCoW). Each Epic is designed as a **graph** (jobs → arrows → shared state). Canonical source: `data/backlog.json`; human-readable mirror: this file. Live view: Basecamp "DesiSaga" project to-do lists + Hill Charts. **Last audit 2026-09-01 v1.1.1 — www→apex 301 redirect shipped (DS-406), Hetzner CX23 nbg1 DEPLOYED, Stripe/deploy stubbed, EPIC-6 added (Basecamp-mimic tech).**
+> Maintained from a **Product Owner perspective** (MoSCoW). Each Epic is designed as a **graph** (jobs → arrows → shared state). Canonical source: `data/backlog.json`; human-readable mirror: this file. Live view: Basecamp "DesiSaga" project to-do lists + Hill Charts. **Last audit 2026-09-10 v1.2.0 — DS-102 FULL slider groomed (Stimulus+Turbo), DS-601 split into DS-601a/b, Basecamp synced (DS-601a/b created).**
 
 ## Priority Legend
 
@@ -30,12 +30,12 @@ tags: [backlog, moscow, epics, basecamp]
 
 ## EPIC-1: Festival Hampers Marketplace
 
-**Graph**: `browse → filter → detail → cart → checkout` — **Hill: shipped** (category+region+search+sort+pagy 12 live; price slider backlog)
+**Graph**: `browse → filter → detail → cart → checkout` — **Hill: shipped** (category+region+search+sort+pagy 12 live; DS-102 FULL slider groomed 2026-09-10)
 
 | ID | Story (PROMPT) | Priority | Status | Acceptance Criteria (DELIVER) | Nodes | Notes |
 |---|---|---|---|---|---|---|
 | DS-101 | As a user, I can filter hampers by festival (Diwali, Wedding, etc.) | Must | ✅ Done (2026-08-23) | Filter persists across pages, shows correct count | catalog → filter → grid | 17 `CATEGORIES`, 13 `REGIONS`, chips + Pagy preserve `?category=&region=&q=&sort=&page=` (fixed 2026-09-01) |
-| DS-102 | As a user, I can set min/max price | Should | ⬜ Backlog | Slider updates grid in real time | catalog → price → grid | Sort exists; range slider → Cycle 1 (tech does not need Stripe) |
+| DS-102 | As a user, I can set min/max price | Should | ⬜ Backlog | Dual slider filters grid via Turbo Frame (no reload); preserves category/region/q/sort/page + Pagy overflow to p1; URL `?min_price=&max_price=` + No results block | catalog → price → grid | Groomed 2026-09-10 FULL slider (Stimulus + Turbo Frame, debounce 200ms, Pagy params); Basecamp description needs manual update (skipped by sync) |
 | DS-103 | As a user, I can search by keyword | Could | ✅ Done (2026-08-23) | Search matches name/description/tags | catalog → search → grid | `Product.search` with `sanitize_sql_like` (fixed 2026-09-01) |
 | DS-104 | As a user, I see featured hampers on the landing page | Must | ✅ Done (2026-08-23) | Featured badges render, section populated | catalog → featured → landing | `Product.featured.limit(4)` + hero |
 | DS-105 | As a user, I can sort by price/name | Could | ✅ Done (2026-08-31) | Sort control reorders grid | grid → sort → grid | `name` / `price` / `price.desc` whitelist |
@@ -86,27 +86,28 @@ tags: [backlog, moscow, epics, basecamp]
 | DS-502 | As an admin, I can list orders | Won't | ⬜ Backlog | Admin route lists orders by date | capture → list | Postponed |
 | DS-503 | As an admin, I can issue refunds | Won't | ⬜ Backlog | Refund action + Stripe sync | status → refund *(human gate)* | Postponed |
 
-## EPIC-6: Majestic Monolith Hardening (Basecamp-inspired) — **NEW TECH FOCUS**
+## EPIC-6: Majestic Monolith Hardening (Basecamp-inspired) — **TECH FOCUS**
 
-**Graph**: `buckets → recordings → recordables → events → copy/move → timeline` — **Hill: gray** (figuring out, Cycle 1 next) — *Per 2026-09-01 decision to mimic Basecamp chassis instead of Stripe/deploy*
+**Graph**: `buckets → recordings → recordables → events → copy/move → timeline` — **Hill: gray** (Cycle 1: DS-601a skeleton ~3d + DS-601b dual-write ~4d, groomed 2026-09-10)
 
 > See `okf/technical-architecture.md:1` for full Basecamp mimic: delegated types, immutable recordables, buckets, events, Solid Queue/Cache/Cable, Majestic Monolith.
 
 | ID | Story (PROMPT) | Priority | Status | Acceptance Criteria (DELIVER) | Nodes | Notes |
 |---|---|---|---|---|---|---|
-| DS-601 | As a dev, I can store products as recordings delegating to product recordables (immutable) | Must | ⬜ Backlog | Recording model with `delegated_type :recordable`; `bucket.recordings.products`; existing `/products` works via recording scope | buckets → recordings → recordables → catalog | Cycle 1 |
-| DS-602 | As a dev, I can scope access by bucket (region/shop) not global admin? | Should | ⬜ Backlog | Bucket `bucketable` types (Shop, Region); `bucket.accesses`; region filter via bucket not `Product.region` string | bucket → access → recordings | Cycle 1 |
-| DS-603 | As a PO, I can see product/festival change history and roll back | Should | ⬜ Backlog | Event `recording_id, recordable_id, actor`; every create writes Event; history compare view | recording → events → history | Cycle 2 |
-| DS-604 | As a dev, I can run festival refresh + jobs via Solid Queue in separate DB | Could | ⬜ Backlog | Queue job for `PanchangCalculator` refresh; `Mission Control` at `/jobs` (admin); 4 DBs already `config/database.yml:26` | queue → job → poll | Cycle 3 |
+| DS-601a | As a dev, I can create a Recording with delegated_type recordable (ProductRecordable skeleton) | Must | ⬜ Backlog | Recording model with `delegated_type :recordable` exists; ProductRecordable migrates clean; tests green, no catalog change | buckets -> recordings -> recordables | Groomed 2026-09-10: split from DS-601, ~3d; Basecamp created 2026-09-10 |
+| DS-601b | As a dev, the /products catalog reads via recording scope with dual-write kept | Must | ⬜ Backlog | `bucket.recordings.products` returns catalog; `/products` works via recording scope; dual-write + backfill 23 hampers | recordings -> catalog -> dual-write | Groomed 2026-09-10: split from DS-601, ~4d; Basecamp created 2026-09-10 |
+| DS-602 | As a dev, I can scope access by bucket (region/shop) not global admin? | Should | ⬜ Backlog | Bucket `bucketable` types (Shop, Region); `bucket.accesses`; region filter via bucket not `Product.region` string | bucket → access → recordings | Groomed 2026-09-10: bucket access after dual-write, about 4d |
+| DS-603 | As a PO, I can see product/festival change history and roll back | Should | ⬜ Backlog | Event `recording_id, recordable_id, actor`; every create writes Event; history compare view | recording → events → history | Groomed 2026-09-10: events and history after buckets, about 3d |
+| DS-604 | As a dev, I can run festival refresh + jobs via Solid Queue in separate DB | Could | ⬜ Backlog | Queue job for `PanchangCalculator` refresh; `Mission Control` at `/jobs` (admin); 4 DBs already `config/database.yml:26` | queue → job → poll | Groomed 2026-09-10: queue polish last, about 2d |
 
 ---
 
-## 2026-09-01 Audit Summary (Backlog vs Reality v1.1.1)
+## 2026-09-10 Audit Summary (Backlog vs Reality v1.2.0)
 
 - **Shipped (✅ 15)**: DS-101,103,104,105,201,202,203,204,305,401,402,403,404,405,406. Catalog 23 hampers (paise), 17 categories, 13 regions, Pagy 12/20, Option B Panchang 14 bases, **Hetzner CX23 nbg1 DEPLOYED**, **www→apex 301**.
 - **Won't / Postponed (⏸️ 7)**: DS-301,302,303,304 (Stripe) + DS-501,502,503 (orders) — stubs only until host chosen. Per PO 2026-09-01.
-- **Backlog (⬜ 5+4)**: DS-102 price slider + DS-601-604 tech (Basecamp mimic).
-- **Hill Charts**: EPIC-1 shipped, EPIC-2 shipped, EPIC-3 gray, EPIC-4 shipped, EPIC-5 gray, EPIC-6 gray (new).
+- **Backlog (⬜ 6)**: DS-102 FULL slider + DS-601a/b + DS-602/603/604 tech (Basecamp mimic). Old DS-601 archived in Basecamp (split); DS-102 Basecamp description pending manual update (skipped by sync).
+- **Hill Charts**: EPIC-1 shipped, EPIC-2 shipped, EPIC-3 gray, EPIC-4 shipped, EPIC-5 gray, EPIC-6 gray (Cycle 1 groomed 2026-09-10).
 
 ## Sizing & Cycles (Kept at 2 weeks per PO 2026-09-01)
 
@@ -121,4 +122,3 @@ tags: [backlog, moscow, epics, basecamp]
 3. Reviewers must be **non-authors** (writer/checker separation).
 4. Priority is MoSCoW — re-validate each grooming.
 5. Sync `data/backlog.json` → Basecamp with `npm run sync:basecamp` after backlog changes.
-

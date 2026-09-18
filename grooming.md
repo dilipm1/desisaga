@@ -127,3 +127,11 @@
 
 ---
 *Backlog refs: `data/backlog.json:1` v1.1.1, `okf/product-backlog.md:1`, `SESSION.md:1`, `AGENTS.md` Current Status. Infra: Hetzner CX23 `nbg1` `2.28.69.167` (`config/deploy.yml:10`), Kamal SAN `desisaga.com + www` (`config/deploy.yml:18`), `config/routes.rb:2` www→apex 301. Images: `config/festival_images.yml:1` (Janmashtami fix 2026-09-02) + `docs/plans/images-inventory-2026-09-02.md:1` long plan.*
+
+## Next Steps — v1.2.0 Cycle 1 (added 2026-09-10)
+
+- [ ] TODO-601a Recording skeleton (~3d, Must): migrations buckets/product_recordables/recordings + models Bucket/Recording(delegated_type)/ProductRecordable — app/models/recording.rb:1 — no controller change
+- [ ] TODO-601b Dual-write catalog (~4d, Must): admin dual-write + rake recordings:backfill (23 hampers) + ProductsController#index:9 via bucket.recordings scope
+- [ ] TODO-102 FULL slider (~3d, Should): Stimulus price_slider_controller + Turbo Frame products-grid, ?min_price=&max_price= — app/views/products/index.html.erb:13
+- [ ] TODO-602 (~4d) → TODO-603 (~3d) → TODO-604 (~2d)
+- [ ] Cleanup: archive old DS-601 + update DS-102 description in Basecamp UI (EPIC-6 10259550244 / EPIC-1 10196585556)

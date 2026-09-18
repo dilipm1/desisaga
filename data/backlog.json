@@ -1,7 +1,7 @@
 {
-  "version": "1.1.1",
+  "version": "1.2.0",
   "source": "desisaga-product-backlog",
-  "last_updated": "2026-09-01",
+  "last_updated": "2026-09-10",
   "tool": "Basecamp 4",
   "project_name": "DesiSaga",
   "sync": {
@@ -12,11 +12,11 @@
     {
       "id": "EPIC-1",
       "title": "Festival Hampers Marketplace",
-      "graph": "browse → filter → detail → cart → checkout",
+      "graph": "browse \u2192 filter \u2192 detail \u2192 cart \u2192 checkout",
       "description": "Core storefront experience: browsing, filtering, and viewing hampers.",
       "hill_chart": {
         "status": "shipped",
-        "note": "2026-09-01: Category + region + search + sort + pagy (12) shipped. Price slider still backlog (DS-102). Filter param preservation fixed 2026-09-01."
+        "note": "2026-09-01: Category + region + search + sort + pagy (12) shipped. Price slider still backlog (DS-102). Filter param preservation fixed 2026-09-01. 2026-09-10: FULL slider decision (Stimulus + Turbo Frame, not simple select)."
       },
       "stories": [
         {
@@ -28,7 +28,7 @@
             "Filter persists across page filters",
             "Shows correct count"
           ],
-          "graph_nodes": "catalog → filter → grid",
+          "graph_nodes": "catalog \u2192 filter \u2192 grid",
           "status": "done",
           "shipped_at": "2026-08-23",
           "verified": "ProductsController 17 Categories + 13 regions; chips + Pagy preserve ?category=&region=&q=&sort=&page= ; index preserves params 2026-09-01",
@@ -40,11 +40,13 @@
           "story": "As a user, I can set min/max price",
           "priority": "Should",
           "acceptance_criteria": [
-            "Slider updates product grid in real time"
+            "Turbo Frame realtime filtering with Stimulus slider (min/max rupees, debounced)",
+            "Preserves category/region/search/sort filters; Pagy overflow resets to page 1",
+            "Shareable URL with min/max params; No results state renders"
           ],
-          "graph_nodes": "catalog → price → grid",
+          "graph_nodes": "catalog \u2192 price \u2192 grid",
           "status": "backlog",
-          "note": "Sort by price exists; range slider not yet built — next in Wave 1"
+          "note": "Groomed 2026-09-10: FULL slider (Stimulus + Turbo Frame, min/max rupees, debounce, preserves filters, Pagy params, overflow to p1)"
         },
         {
           "id": "DS-103",
@@ -54,7 +56,7 @@
           "acceptance_criteria": [
             "Search matches name/description/tags"
           ],
-          "graph_nodes": "catalog → search → grid",
+          "graph_nodes": "catalog \u2192 search \u2192 grid",
           "status": "done",
           "shipped_at": "2026-08-23",
           "verified": "Product.search scope (sanitize_sql_like) + form in products/index 2026-09-01",
@@ -69,7 +71,7 @@
             "Featured badges render",
             "Section populated"
           ],
-          "graph_nodes": "catalog → featured → landing",
+          "graph_nodes": "catalog \u2192 featured \u2192 landing",
           "status": "done",
           "shipped_at": "2026-08-23",
           "verified": "PagesController#home Product.featured.limit(4) + _product_card Featured badge",
@@ -83,10 +85,10 @@
           "acceptance_criteria": [
             "Sort control reorders grid"
           ],
-          "graph_nodes": "grid → sort → grid",
+          "graph_nodes": "grid \u2192 sort \u2192 grid",
           "status": "done",
           "shipped_at": "2026-08-31",
-          "verified": "whitelist name/price/price.desc → Arel.sql + select; preserves filters 2026-09-01",
+          "verified": "whitelist name/price/price.desc \u2192 Arel.sql + select; preserves filters 2026-09-01",
           "implementation": "app/controllers/products_controller.rb + app/views/products/index.html.erb"
         }
       ]
@@ -94,7 +96,7 @@
     {
       "id": "EPIC-2",
       "title": "Ritual Validation & Samagri Coverage",
-      "graph": "ritual data → product mapping → verification loop → display",
+      "graph": "ritual data \u2192 product mapping \u2192 verification loop \u2192 display",
       "description": "Ensure every hamper tells the customer which rituals it serves.",
       "hill_chart": {
         "status": "shipped",
@@ -109,7 +111,7 @@
           "acceptance_criteria": [
             "Product card shows ritual icons"
           ],
-          "graph_nodes": "ritual data → mapping → card",
+          "graph_nodes": "ritual data \u2192 mapping \u2192 card",
           "status": "done",
           "shipped_at": "2026-08-23",
           "verified": "category_emoji + category_badge_class + _product_card; 17 categories",
@@ -123,7 +125,7 @@
           "acceptance_criteria": [
             "Detail page lists items + quantities"
           ],
-          "graph_nodes": "mapping → detail",
+          "graph_nodes": "mapping \u2192 detail",
           "status": "done",
           "shipped_at": "2026-08-23",
           "verified": "ritual_contents grid with check icons; Array(tags) nil-safe; region badge added 2026-09-01",
@@ -137,7 +139,7 @@
           "acceptance_criteria": [
             "Ritual-check note on detail page"
           ],
-          "graph_nodes": "verification → display",
+          "graph_nodes": "verification \u2192 display",
           "status": "done",
           "shipped_at": "2026-08-31",
           "verified": "\"Built for the ritual\" 3 pillars + trust bar + detail note; could add per-item verification tick later",
@@ -151,10 +153,10 @@
           "acceptance_criteria": [
             "data/festivals_generated_2026_2030.json is source for calendar (Lahiri) + region variants"
           ],
-          "graph_nodes": "ritual data → calendar",
+          "graph_nodes": "ritual data \u2192 calendar",
           "status": "done",
           "shipped_at": "2026-08-31",
-          "verified": "Option B pre-compute 14 bases 2026-2030 + variants; Rama Navami dates corrected 2026-09-01 (03-26→04-15/04-03/04-22/04-12)",
+          "verified": "Option B pre-compute 14 bases 2026-2030 + variants; Rama Navami dates corrected 2026-09-01 (03-26\u219204-15/04-03/04-22/04-12)",
           "implementation": "data/festivals_generated_2026_2030.json + lib/panchang_calculator.rb + lib/festivals.rb + db/seeds.rb"
         }
       ]
@@ -162,11 +164,11 @@
     {
       "id": "EPIC-3",
       "title": "Stripe Payment Integration",
-      "graph": "cart → session → webhook → confirm → notify",
-      "description": "Checkout and payment — STUB ONLY per 2026-09-01 decision (Stripe/ActiveStorage/deploy postponed until host chosen).",
+      "graph": "cart \u2192 session \u2192 webhook \u2192 confirm \u2192 notify",
+      "description": "Checkout and payment \u2014 STUB ONLY per 2026-09-01 decision (Stripe/ActiveStorage/deploy postponed until host chosen).",
       "hill_chart": {
         "status": "gray",
-        "note": "2026-09-01: Moved to gray/Won't — stub demo checkout only; real Stripe not prioritized per PO. Shipping parity kept."
+        "note": "2026-09-01: Moved to gray/Won't \u2014 stub demo checkout only; real Stripe not prioritized per PO. Shipping parity kept."
       },
       "stories": [
         {
@@ -178,7 +180,7 @@
             "Order appears in Stripe dashboard",
             "Success page loads"
           ],
-          "graph_nodes": "session → webhook → success",
+          "graph_nodes": "session \u2192 webhook \u2192 success",
           "status": "backlog",
           "note": "Stub: demo Place Order (clears cart) only; real Stripe Checkout Session postponed until host chosen (2026-09-01).",
           "implementation": "app/controllers/checkouts_controller.rb (stub) + app/views/checkouts/show.html.erb"
@@ -192,10 +194,10 @@
             "Stripe India connected",
             "2% fee applied"
           ],
-          "graph_nodes": "session → UPI → confirm",
+          "graph_nodes": "session \u2192 UPI \u2192 confirm",
           "human_gate": "Merchant activation",
           "status": "backlog",
-          "note": "Postponed — gateway stubs only (2026-09-01)"
+          "note": "Postponed \u2014 gateway stubs only (2026-09-01)"
         },
         {
           "id": "DS-303",
@@ -206,9 +208,9 @@
             "Stripe international enabled",
             "2.9% + $0.30 fee applied"
           ],
-          "graph_nodes": "session → cards → confirm",
+          "graph_nodes": "session \u2192 cards \u2192 confirm",
           "status": "backlog",
-          "note": "Postponed — gateway stubs only (2026-09-01)"
+          "note": "Postponed \u2014 gateway stubs only (2026-09-01)"
         },
         {
           "id": "DS-304",
@@ -219,9 +221,9 @@
             "Webhook updates order status",
             "Email notification sent"
           ],
-          "graph_nodes": "webhook → notify",
+          "graph_nodes": "webhook \u2192 notify",
           "status": "backlog",
-          "note": "Postponed — needs real Stripe + host (2026-09-01)"
+          "note": "Postponed \u2014 needs real Stripe + host (2026-09-01)"
         },
         {
           "id": "DS-305",
@@ -231,7 +233,7 @@
           "acceptance_criteria": [
             "Success page shows order summary"
           ],
-          "graph_nodes": "confirm → success",
+          "graph_nodes": "confirm \u2192 success",
           "status": "done",
           "shipped_at": "2026-08-23",
           "verified": "checkout/success 'Shubh Labh!' page; checkout/show shows subtotal+shipping+total parity 2026-09-01",
@@ -242,11 +244,11 @@
     {
       "id": "EPIC-4",
       "title": "Hero Experience & Festival Calendar",
-      "graph": "festival calendar → countdown state → hero render → calendar loop",
+      "graph": "festival calendar \u2192 countdown state \u2192 hero render \u2192 calendar loop",
       "description": "The signature ritual-themed hero and live festival countdown.",
       "hill_chart": {
         "status": "shipped",
-        "note": "2026-09-01: Toran + countdown + 14-base calendar + anytime rituals + hero image (subtle float) + navbar Calendar + www→apex 301 redirect shipped. Next: Meeus live stubs (Wave 2b)."
+        "note": "2026-09-01: Toran + countdown + 14-base calendar + anytime rituals + hero image (subtle float) + navbar Calendar + www\u2192apex 301 redirect shipped. Next: Meeus live stubs (Wave 2b)."
       },
       "stories": [
         {
@@ -258,7 +260,7 @@
             "Countdown updates daily",
             "Matches YearCalendar"
           ],
-          "graph_nodes": "calendar → countdown → hero",
+          "graph_nodes": "calendar \u2192 countdown \u2192 hero",
           "status": "done",
           "shipped_at": "2026-08-23",
           "verified": "PanchangCalculator.next_festival(year-wrap, region alias) + Festivals.days_left; Rama Navami corrected 2026-09-01",
@@ -273,7 +275,7 @@
             "Renders at hero top",
             "Animates continuously"
           ],
-          "graph_nodes": "design → component → hero",
+          "graph_nodes": "design \u2192 component \u2192 hero",
           "status": "done",
           "shipped_at": "2026-08-07",
           "implementation": "app/views/shared/_toran_garland.html.erb + app/views/pages/home.html.erb"
@@ -286,7 +288,7 @@
           "acceptance_criteria": [
             "YearCalendar lists all dated festivals chronologically"
           ],
-          "graph_nodes": "calendar → render",
+          "graph_nodes": "calendar \u2192 render",
           "status": "done",
           "shipped_at": "2026-08-31",
           "verified": "build_dated_for(14 bases) sorted; variant alias badges; rolls to next year if all past",
@@ -300,39 +302,39 @@
           "acceptance_criteria": [
             "Anytime rituals render in separate section"
           ],
-          "graph_nodes": "rituals → render",
+          "graph_nodes": "rituals \u2192 render",
           "status": "done",
           "shipped_at": "2026-08-31",
           "implementation": "app/views/shared/_year_calendar.html.erb (Anytime) + lib/festivals.rb ANYTIME_RITUALS"
         },
         {
           "id": "DS-405",
-          "title": "Festival → product linking",
+          "title": "Festival \u2192 product linking",
           "story": "As a user, I can jump from a festival to its products",
           "priority": "Must",
           "acceptance_criteria": [
             "Card links to filtered product catalog"
           ],
-          "graph_nodes": "calendar → link → catalog",
+          "graph_nodes": "calendar \u2192 link \u2192 catalog",
           "status": "done",
           "shipped_at": "2026-08-23",
-          "verified": "Calendar cards → products?category= + hero CTA → products?category=next; preserves region/q/sort 2026-09-01",
+          "verified": "Calendar cards \u2192 products?category= + hero CTA \u2192 products?category=next; preserves region/q/sort 2026-09-01",
           "implementation": "app/views/shared/_year_calendar.html.erb + app/views/pages/home.html.erb + app/views/shared/_navbar.html.erb"
         },
         {
           "id": "DS-406",
-          "title": "www → apex 301 redirect",
+          "title": "www \u2192 apex 301 redirect",
           "story": "As a user, www.desisaga.com redirects to desisaga.com",
           "priority": "Must",
           "acceptance_criteria": [
-            "www.desisaga.com/ 301 → desisaga.com/",
-            "www.desisaga.com/products 301 → desisaga.com/products (path preserved)",
+            "www.desisaga.com/ 301 \u2192 desisaga.com/",
+            "www.desisaga.com/products 301 \u2192 desisaga.com/products (path preserved)",
             "Single SAN cert covers both hosts"
           ],
-          "graph_nodes": "dns → proxy → routes → redirect",
+          "graph_nodes": "dns \u2192 proxy \u2192 routes \u2192 redirect",
           "status": "done",
           "shipped_at": "2026-09-01",
-          "verified": "Kamal proxy hosts: [desisaga.com, www.desisaga.com] SAN cert; routes.rb constraint(host: /\\Awww\\./) redirect 301; curl -I https://www.desisaga.com/ → 301 location: https://desisaga.com/; curl -I https://www.desisaga.com/products → 301 location: https://desisaga.com/products",
+          "verified": "Kamal proxy hosts: [desisaga.com, www.desisaga.com] SAN cert; routes.rb constraint(host: /\\Awww\\./) redirect 301; curl -I https://www.desisaga.com/ \u2192 301 location: https://desisaga.com/; curl -I https://www.desisaga.com/products \u2192 301 location: https://desisaga.com/products",
           "implementation": "config/deploy.yml proxy.hosts + config/routes.rb www constraint + kamal deploy c697411"
         }
       ]
@@ -340,8 +342,8 @@
     {
       "id": "EPIC-5",
       "title": "Admin & Order Management",
-      "graph": "order capture → status → dispatch → deliver",
-      "description": "Post-purchase order tracking and admin tools — stub only until Stripe/host chosen (2026-09-01).",
+      "graph": "order capture \u2192 status \u2192 dispatch \u2192 deliver",
+      "description": "Post-purchase order tracking and admin tools \u2014 stub only until Stripe/host chosen (2026-09-01).",
       "hill_chart": {
         "status": "gray",
         "note": "2026-09-01: Admin CRUD shipped; Order/ refunds postponed (no Stripe/host)."
@@ -355,7 +357,7 @@
           "acceptance_criteria": [
             "Order ID links to Stripe payment status"
           ],
-          "graph_nodes": "order → status → view",
+          "graph_nodes": "order \u2192 status \u2192 view",
           "status": "backlog"
         },
         {
@@ -366,7 +368,7 @@
           "acceptance_criteria": [
             "Admin route lists orders by date"
           ],
-          "graph_nodes": "capture → list",
+          "graph_nodes": "capture \u2192 list",
           "status": "backlog"
         },
         {
@@ -377,7 +379,7 @@
           "acceptance_criteria": [
             "Refund action + Stripe sync"
           ],
-          "graph_nodes": "status → refund",
+          "graph_nodes": "status \u2192 refund",
           "human_gate": "PO approval",
           "status": "backlog"
         }
@@ -386,25 +388,40 @@
     {
       "id": "EPIC-6",
       "title": "Majestic Monolith Hardening (Basecamp-inspired)",
-      "graph": "buckets → recordings → recordables → events → copy/move → timeline",
+      "graph": "buckets \u2192 recordings \u2192 recordables \u2192 events \u2192 copy/move \u2192 timeline",
       "description": "Technical architecture to make Desi Saga a Basecamp-style majestic monolith: delegated types, immutable recordables, events, bucket access, Solid stack. No Stripe/deploy until host chosen.",
       "hill_chart": {
         "status": "gray",
-        "note": "2026-09-01: New EPIC per PO — tech focus, Stripe/deploy stubs. Cycle 1: recordings slice."
+        "note": "2026-09-01: New EPIC per PO \u2014 tech focus, Stripe/deploy stubs. Cycle 1: recordings slice."
       },
       "stories": [
         {
-          "id": "DS-601",
-          "title": "Recording + ProductRecordable delegated type",
-          "story": "As a dev, I can store products as recordings delegating to product recordables (immutable)",
+          "id": "DS-601a",
+          "title": "Recording skeleton",
+          "story": "As a dev, I can create a Recording with delegated_type recordable (ProductRecordable skeleton)",
           "priority": "Must",
           "acceptance_criteria": [
-            "Recording model with delegated_type :recordable (ProductRecordable)",
-            "Bucket scoping: bucket.recordings.products returns catalog",
-            "Existing /products page works via recording scope, dual-write kept"
+            "Recording model with delegated_type :recordable exists",
+            "ProductRecordable table with immutable snapshot fields migrates clean",
+            "Model tests green; no catalog behavior change yet"
           ],
-          "graph_nodes": "buckets → recordings → recordables → catalog",
-          "status": "backlog"
+          "graph_nodes": "buckets -> recordings -> recordables",
+          "status": "backlog",
+          "note": "Groomed 2026-09-10: split from DS-601; skeleton first, about 3d"
+        },
+        {
+          "id": "DS-601b",
+          "title": "Dual-write catalog",
+          "story": "As a dev, the /products catalog reads via recording scope with dual-write kept",
+          "priority": "Must",
+          "acceptance_criteria": [
+            "Bucket scoping: bucket.recordings.products returns catalog",
+            "Existing /products page works via recording scope",
+            "Dual-write Product to Recording kept with sync test"
+          ],
+          "graph_nodes": "recordings -> catalog -> dual-write",
+          "status": "backlog",
+          "note": "Groomed 2026-09-10: dual-write slice after skeleton, about 4d"
         },
         {
           "id": "DS-602",
@@ -416,8 +433,9 @@
             "Bucket has many recordings, access via bucket membership",
             "Region filter uses bucket, not Product.region string"
           ],
-          "graph_nodes": "bucket → access → recordings",
-          "status": "backlog"
+          "graph_nodes": "bucket \u2192 access \u2192 recordings",
+          "status": "backlog",
+          "note": "Groomed 2026-09-10: bucket access after dual-write, about 4d"
         },
         {
           "id": "DS-603",
@@ -429,8 +447,9 @@
             "Every recordable create writes Event",
             "History compare view"
           ],
-          "graph_nodes": "recording → events → history",
-          "status": "backlog"
+          "graph_nodes": "recording \u2192 events \u2192 history",
+          "status": "backlog",
+          "note": "Groomed 2026-09-10: events and history after buckets, about 3d"
         },
         {
           "id": "DS-604",
@@ -442,8 +461,9 @@
             "Mission Control mounted at /jobs (admin only)",
             "Polling stays isolated in queue DB (4 DBs already)"
           ],
-          "graph_nodes": "queue → job → poll",
-          "status": "backlog"
+          "graph_nodes": "queue \u2192 job \u2192 poll",
+          "status": "backlog",
+          "note": "Groomed 2026-09-10: queue polish last, about 2d"
         }
       ]
     }
