@@ -6,7 +6,7 @@
 default: "https://images.pexels.com/photos/1303092/pexels-photo-1303092.jpeg?auto=compress&cs=tinysrgb&w=800"
 festivals:
   Diwali: "https://images.pexels.com/photos/10182772/pexels-photo-10182772.jpeg?auto=compress&cs=tinysrgb&w=800"
-  Ganesh Chaturthi: "https://images.pexels.com/photos/5435579/pexels-photo-5435579.jpeg?auto=compress&cs=tinysrgb&w=800"
+  Ganesh Chaturthi: "/images/festivals/ganesh_idol.jpg"
   Holi: "https://images.pexels.com/photos/2041707/pexels-photo-2041707.jpeg?auto=compress&cs=tinysrgb&w=800"
   Navratri: "https://images.pexels.com/photos/17264037/pexels-photo-17264037.jpeg?auto=compress&cs=tinysrgb&w=800"
   Raksha Bandhan: "https://images.pexels.com/photos/15474159/pexels-photo-15474159.jpeg?auto=compress&cs=tinysrgb&w=800"
