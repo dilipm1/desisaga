@@ -1,18 +1,16 @@
-# Session — 2026-09-01: Hetzner CX23 Nuremberg `nbg1` DEPLOYED + www→apex 301 + Basecamp sync + Backlog v1.1.1
+# Session — 2026-09-20: Ahoy Analytics + Blazer BI + Auth/Authz Consolidation DEPLOYED to Production
 
 ## ⚡ RESUME HERE — current state
 
-**Production live at `https://desisaga.com`** (Hetzner CX23 Nuremberg `nbg1`, IP `2.28.69.167`, Kamal + Docker + Puma 8.1.3, Rails 8.1). `bin/rails test` 12/48 green, `brakeman` 0, `rubocop` 0. **No Stripe/ActiveStorage** per PO 2026-09-01.
-
-**Infra decision 2026-09-01 (DEPLOYED 20:15 UTC):** **Tier 1 Hetzner Cloud CX23 Nuremberg `nbg1` ~€5.49/mo (~₹500+VAT) + €0.60 IPv4 + Cloudflare free** — Majestic Monolith (Kamal, SQLite `config/database.yml:26` 4 DBs, `docs/plans/hetzner-cx23-majestic-2026-09-01.md:1` canonical, `okf/technical-architecture.md:1` chassis). CX22 deprecated; Singapore CX unavailable (only CPX/CCX). `config/deploy.yml:10` **wired to `2.28.69.167`** (`kamal setup` + `kamal deploy` done, container `ff35259` healthy).
-
-**ARM hunt still live** — systemd `desisaga-hunt` (Round 6+, 600+ denials, see `scripts/oci/hunt.log`). **Confirmed `us-chicago-1` (not ap-mumbai-1)** — revisit Step 5 later per PO. Runs in parallel to Hetzner Tier 1.
-
-**Backlog v1.1.1 synced 2026-09-01:** `data/backlog.json:4` + `okf/product-backlog.md:4` + Basecamp `48475118` 6 epics 27 todos (EPIC-3 `gray`/`Won't` Stripe stub, EPIC-6 Majestic Hardening new, DS-406 www→apex shipped). `EPIC-1/2/4 shipped`, `EPIC-3/5/6 gray`. `node scripts/basecamp-sync.mjs` synced.
-**Grooming 2026-09-01:** `grooming.md:1` created — post-MVP prioritization (Phase 1: EPIC-6 DS-601–604, Phase 2: DS-102 price slider, Phase 3: checkout polish). Awaiting review.
-**Token refreshed 2026-09-01:** `BASECAMP_ACCESS_TOKEN` `BAhbB…2026-09-15` + `BASECAMP_REFRESH_TOKEN` `…2036-09-01…` via `public/basecamp-callback.html:1` + `app/controllers/basecamp_callbacks_controller.rb:1`.
+**Production live at `https://desisaga.com`** (Hetzner CX23 Nuremberg `nbg1`, IP `2.28.69.167`, Kamal + Docker + Puma 8.0.2, Rails 8.1.3.1). Container `85c0d28c` healthy.
+- **Full E2E suite**: 20 runs, 113 assertions, 0 failures, 0 errors, 0 skips green (`docs/test-reports/2026-09-20-e2e-regression-analytics-report.md`).
+- **Brakeman**: 0 warnings.
+- **RuboCop**: 0 offenses across 73 files.
+- **Analytics & BI**: `ahoy_matey` (5.5) + `blazer` (3.5) live with 8 starter SQL queries seeded in production. Blazer mounted at `/admin/blazer` (admin authentication required).
+- **Auth/Authz**: Unified `Authentication` concern in `ApplicationController`, route helpers consolidated to `/login`, seeds explicitly assign `admin` role.
 
 **Last commits pushed to `origin/main`:**
+- `85c0d28` feat: ahoy analytics + blazer bi dashboards + auth/authz fixes
 - `11e1b15` docs: v1.1.1 backlog + session + agents — Hetzner deployed, www→apex 301 shipped
 - `c697411` fix: root route naming conflict in www constraint
 - `077cfef` add explicit root redirect in www constraint
