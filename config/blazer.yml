@@ -1,0 +1,43 @@
+# Blazer — SQL analytics dashboard for Desi Saga admins
+# see https://github.com/ankane/blazer for more info
+
+data_sources:
+  main:
+    url: <%= ENV.fetch("BLAZER_DATABASE_URL", "sqlite3:#{Rails.root}/storage/#{Rails.env}.sqlite3") %>
+
+    # Note: timeout is not supported by SQLite adapter, leave unset
+    # timeout: 15
+
+    # cache slow queries for 60 min
+    cache:
+      mode: slow
+      expires_in: 60
+      slow_threshold: 5
+
+    smart_variables:
+      category: "SELECT DISTINCT category FROM products ORDER BY category ASC"
+      region: "SELECT DISTINCT region FROM products WHERE region IS NOT NULL ORDER BY region ASC"
+
+    linked_columns:
+      # product_id: "/products/{value}"
+
+    smart_columns:
+      # product_id: "SELECT id, name FROM products WHERE id IN {value}"
+
+# audit all query runs
+audit: true
+
+# IST timezone
+time_zone: "Mumbai"
+
+# tie into Rails auth
+user_class: User
+user_method: current_user
+user_name: email_address
+
+# lock down to admin users via before_action
+before_action_method: require_blazer_access
+
+check_schedules:
+  - "1 day"
+  - "1 hour"

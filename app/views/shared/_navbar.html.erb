@@ -59,7 +59,7 @@
             <% end %>
           </div>
         <% else %>
-          <%= link_to new_session_path, class: "hidden md:inline-flex items-center gap-1.5 p-2 rounded-md transition-colors text-parchment hover:text-flame hover:bg-ember text-sm font-medium", aria: { label: "Sign in" } do %>
+          <%= link_to login_path, class: "hidden md:inline-flex items-center gap-1.5 p-2 rounded-md transition-colors text-parchment hover:text-flame hover:bg-ember text-sm font-medium", aria: { label: "Sign in" } do %>
             <%= icon("user", css_class: "w-4 h-4") %> Sign in
           <% end %>
         <% end %>
@@ -94,7 +94,7 @@
         </div>
       <% else %>
         <div class="pt-2 px-4">
-          <%= link_to "Sign in", new_session_path, class: "block w-full text-center bg-flame text-night py-2 px-4 rounded-md text-sm font-medium hover:opacity-90 transition-opacity" %>
+          <%= link_to "Sign in", login_path, class: "block w-full text-center bg-flame text-night py-2 px-4 rounded-md text-sm font-medium hover:opacity-90 transition-opacity" %>
         </div>
       <% end %>
     </div>

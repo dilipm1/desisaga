@@ -1,4 +1,6 @@
 class PagesController < ApplicationController
+  allow_unauthenticated_access
+
   def home
     @selected_region = params[:region]
     @next_festival = Festivals.next_festival(region: @selected_region)

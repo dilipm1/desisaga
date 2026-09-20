@@ -1,28 +1,24 @@
 class ApplicationController < ActionController::Base
+  include Authentication
   include Pagy::Backend
-  # Allow all browsers (Indian market has older devices) — was `allow_browser versions: :modern` which blocked Chrome <120 with 406
-  # allow_browser versions: :modern
+  include Ahoy::Controller
 
   # Changes to the importmap will invalidate the etag for HTML responses
   stale_when_importmap_changes
 
-  helper_method :current_user, :authenticated?, :cart_items, :cart_subtotal, :cart_count, :shipping_for
+  helper_method :cart_items, :cart_subtotal, :cart_count, :shipping_for
 
   def not_found
     render "errors/not_found", status: :not_found
   end
 
+  # Used by blazer.yml before_action_method — must live in ApplicationController
+  # so Blazer::QueriesController (which inherits from it) can find it
+  def require_blazer_access
+    redirect_to "/login", alert: "Admin access only." unless current_user&.admin?
+  end
+
   private
-    def current_user
-      return nil unless cookies.signed[:session_id]
-      Current.session ||= Session.find_by(id: cookies.signed[:session_id])
-      Current.session&.user
-    end
-
-    def authenticated?
-      current_user.present?
-    end
-
     def cart
       session[:cart] ||= {}
     end

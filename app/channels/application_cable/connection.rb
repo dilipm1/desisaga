@@ -9,6 +9,7 @@ module ApplicationCable
     private
       def set_current_user
         if session = Session.find_by(id: cookies.signed[:session_id])
+          Current.session = session
           self.current_user = session.user
         end
       end

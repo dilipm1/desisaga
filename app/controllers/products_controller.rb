@@ -1,4 +1,6 @@
 class ProductsController < ApplicationController
+  allow_unauthenticated_access
+
   def index
     sort = params[:sort].in?(%w[name price price.desc]) ? params[:sort] : "name"
     order_sql = case sort
@@ -20,6 +22,13 @@ class ProductsController < ApplicationController
 
   def show
     @product = Product.find_by_slug!(params[:slug])
+    ahoy.track "product_viewed", {
+      product_id: @product.id,
+      name: @product.name,
+      category: @product.category,
+      region: @product.region,
+      price: @product.price
+    }
   rescue ActiveRecord::RecordNotFound
     not_found
   end

@@ -327,5 +327,139 @@ end
 admin_email = ENV.fetch("ADMIN_EMAIL", "admin@desisaga.com")
 User.find_or_create_by!(email_address: admin_email) do |user|
   user.name = "Desi Saga Admin"
+  user.role = "admin"
   user.password = ENV.fetch("ADMIN_PASSWORD", "desisaga-admin-2026")
 end
+
+# ── Blazer starter queries ──────────────────────────────────────────────────
+puts "Seeding Blazer analytics queries..."
+
+blazer_queries = [
+  {
+    name: "📈 Daily visits (last 30 days)",
+    description: "Unique visitors per day",
+    statement: <<~SQL
+      SELECT DATE(started_at) AS day, COUNT(*) AS visits
+      FROM ahoy_visits
+      WHERE started_at >= DATE('now', '-30 days')
+      GROUP BY day
+      ORDER BY day DESC
+    SQL
+  },
+  {
+    name: "🛍️ Most viewed products (last 30 days)",
+    description: "product_viewed events sorted by count",
+    statement: <<~SQL
+      SELECT
+        json_extract(properties, '$.name') AS product,
+        json_extract(properties, '$.category') AS category,
+        json_extract(properties, '$.region') AS region,
+        COUNT(*) AS views
+      FROM ahoy_events
+      WHERE name = 'product_viewed'
+        AND time >= DATE('now', '-30 days')
+      GROUP BY product, category, region
+      ORDER BY views DESC
+      LIMIT 20
+    SQL
+  },
+  {
+    name: "🛒 Add-to-cart events (last 30 days)",
+    description: "Products added to cart most often",
+    statement: <<~SQL
+      SELECT
+        json_extract(properties, '$.name') AS product,
+        json_extract(properties, '$.category') AS category,
+        COUNT(*) AS add_to_cart_count
+      FROM ahoy_events
+      WHERE name = 'add_to_cart'
+        AND time >= DATE('now', '-30 days')
+      GROUP BY product, category
+      ORDER BY add_to_cart_count DESC
+      LIMIT 20
+    SQL
+  },
+  {
+    name: "💰 Orders placed (last 30 days)",
+    description: "Demo checkout completions with subtotals",
+    statement: <<~SQL
+      SELECT
+        DATE(time) AS day,
+        COUNT(*) AS orders,
+        SUM(json_extract(properties, '$.subtotal')) / 100.0 AS total_rupees
+      FROM ahoy_events
+      WHERE name = 'order_placed'
+        AND time >= DATE('now', '-30 days')
+      GROUP BY day
+      ORDER BY day DESC
+    SQL
+  },
+  {
+    name: "🔄 Funnel: view → cart → checkout → order",
+    description: "Conversion funnel counts (last 30 days)",
+    statement: <<~SQL
+      SELECT
+        'product_viewed'   AS step, COUNT(*) AS count FROM ahoy_events WHERE name = 'product_viewed'   AND time >= DATE('now', '-30 days')
+      UNION ALL
+      SELECT
+        'add_to_cart'      AS step, COUNT(*) AS count FROM ahoy_events WHERE name = 'add_to_cart'      AND time >= DATE('now', '-30 days')
+      UNION ALL
+      SELECT
+        'checkout_started' AS step, COUNT(*) AS count FROM ahoy_events WHERE name = 'checkout_started' AND time >= DATE('now', '-30 days')
+      UNION ALL
+      SELECT
+        'order_placed'     AS step, COUNT(*) AS count FROM ahoy_events WHERE name = 'order_placed'     AND time >= DATE('now', '-30 days')
+    SQL
+  },
+  {
+    name: "📊 Events by category (last 30 days)",
+    description: "Which festival categories get the most engagement",
+    statement: <<~SQL
+      SELECT
+        json_extract(properties, '$.category') AS category,
+        name AS event,
+        COUNT(*) AS count
+      FROM ahoy_events
+      WHERE name IN ('product_viewed', 'add_to_cart')
+        AND time >= DATE('now', '-30 days')
+        AND json_extract(properties, '$.category') IS NOT NULL
+      GROUP BY category, event
+      ORDER BY count DESC
+    SQL
+  },
+  {
+    name: "🌍 Traffic by device type (last 30 days)",
+    description: "Desktop vs mobile split",
+    statement: <<~SQL
+      SELECT device_type, COUNT(*) AS visits
+      FROM ahoy_visits
+      WHERE started_at >= DATE('now', '-30 days')
+        AND device_type IS NOT NULL
+      GROUP BY device_type
+      ORDER BY visits DESC
+    SQL
+  },
+  {
+    name: "🔗 Top referrers (last 30 days)",
+    description: "Where visitors are coming from",
+    statement: <<~SQL
+      SELECT referrer, COUNT(*) AS visits
+      FROM ahoy_visits
+      WHERE started_at >= DATE('now', '-30 days')
+        AND referrer IS NOT NULL AND referrer != ''
+      GROUP BY referrer
+      ORDER BY visits DESC
+      LIMIT 20
+    SQL
+  }
+]
+
+blazer_queries.each do |attrs|
+  Blazer::Query.find_or_create_by!(name: attrs[:name]) do |q|
+    q.statement   = attrs[:statement]
+    q.description = attrs[:description]
+    q.data_source = "main"
+  end
+end
+
+puts "Blazer queries seeded: #{Blazer::Query.count} total"

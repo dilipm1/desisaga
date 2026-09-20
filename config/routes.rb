@@ -31,6 +31,9 @@ Rails.application.routes.draw do
     resources :products
   end
 
+  # Blazer analytics — admin only (auth via blazer.yml before_action_method)
+  mount Blazer::Engine, at: "/admin/blazer"
+
   match "*unmatched", to: "application#not_found", via: :all, constraints: lambda { |req|
     req.path.exclude? "rails/active_storage"
   }

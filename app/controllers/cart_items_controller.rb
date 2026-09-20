@@ -1,7 +1,16 @@
 class CartItemsController < ApplicationController
+  allow_unauthenticated_access
+
   def create
     product = Product.find(params[:product_id])
     add_to_cart(product.id)
+    ahoy.track "add_to_cart", {
+      product_id: product.id,
+      name: product.name,
+      category: product.category,
+      region: product.region,
+      price: product.price
+    }
     redirect_back fallback_location: product_path(product), notice: "#{product.name} added to your cart."
   rescue ActiveRecord::RecordNotFound
     redirect_to products_path, alert: "Product not found."

@@ -6,7 +6,7 @@ class CreateBuckets < ActiveRecord::Migration[8.1]
       t.bigint :bucketable_id
       t.timestamps
     end
-    add_index :buckets, [:bucketable_type, :bucketable_id]
+    add_index :buckets, [ :bucketable_type, :bucketable_id ]
     add_index :buckets, :name, unique: true
   end
 end

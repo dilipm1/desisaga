@@ -10,7 +10,7 @@ class CreateRecordings < ActiveRecord::Migration[8.1]
       t.string :status, default: "active"
       t.timestamps
     end
-    add_index :recordings, [:recordable_type, :recordable_id]
-    add_index :recordings, [:bucket_id, :recordable_type]
+    add_index :recordings, [ :recordable_type, :recordable_id ]
+    add_index :recordings, [ :bucket_id, :recordable_type ]
   end
 end

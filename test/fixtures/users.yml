@@ -2,8 +2,10 @@
 
 one:
   email_address: one@example.com
+  role: admin
   password_digest: <%= password_digest %>
 
 two:
   email_address: two@example.com
+  role: customer
   password_digest: <%= password_digest %>
