@@ -89,7 +89,7 @@ products = [
     description: "Welcome Lord Ganesha with this complete kit including an eco-friendly Ganesh idol, puja samagri, modak ingredients, durva grass, red flowers, and aarti book. Sustainable and traditional.",
     price: 219900,
     category: "Ganesh Chaturthi",
-    images: [ "https://images.pexels.com/photos/1485015/pexels-photo-1485015.jpeg?auto=compress&cs=tinysrgb&w=800" ],
+    images: [ "https://images.pexels.com/photos/5435579/pexels-photo-5435579.jpeg?auto=compress&cs=tinysrgb&w=800" ],
     in_stock: true,
     featured: false,
     tags: [ "ganesh chaturthi", "ganesh", "eco-friendly", "modak", "puja" ],
